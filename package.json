@@ -1,0 +1,34 @@
+{
+  "name": "vendospace.com",
+  "version": "1.0.0",
+  "description": "A platform for renting ad spaces",
+  "main": "index.js",
+  "scripts": {
+    "start": "",
+    "serverdev": "nodemon ./backend/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fdvmoreira/vendospace.com.git"
+  },
+  "keywords": [],
+  "author": "Flavio Moreira",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fdvmoreira/vendospace.com/issues"
+  },
+  "homepage": "https://github.com/fdvmoreira/vendospace.com#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-async-handler": "^1.2.0",
+    "express-validator": "^6.14.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.2.4"
+  }
+}
