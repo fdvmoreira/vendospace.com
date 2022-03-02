@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "",
-    "serverdev": "nodemon ./backend/server.js",
+    "devserver": "nodemon ./backend/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/fdvmoreira/vendospace.com#readme",
   "devDependencies": {
+    "colors": "^1.4.0",
     "nodemon": "^2.0.15"
   },
   "dependencies": {
