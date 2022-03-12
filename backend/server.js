@@ -9,6 +9,10 @@ const PORT = process.env.PORT || 5000;
 // database connection
 //require('./config/db')();
 
+// parse the incoming request and respost to json format
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 // use custom error handler 'errorHandler' middleware
 app.use(require('./middlewares/errorHandler'));
 
