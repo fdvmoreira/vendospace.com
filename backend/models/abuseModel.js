@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const abuseSchema = new mongoose.Schema({
-    abuseId: String,
     itemReportedId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
