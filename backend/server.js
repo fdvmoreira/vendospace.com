@@ -13,6 +13,8 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+
+
 // use custom error handler 'errorHandler' middleware
 app.use(require('./middlewares/errorHandler'));
 
