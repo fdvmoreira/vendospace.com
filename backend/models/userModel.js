@@ -10,16 +10,13 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    password: {
-        type: String,
-        required: true
-    },
+    passwordHash: String,
     signUpMethod: {
         type: String,
         required: true,
         enum: {
-            values: ['Google', 'Facebook', 'LinkedIn', 'Microsoft'], // todo - signup methods here
-            message: '{VALUE not supported here}'
+            values: ['Google', 'Facebook', 'LinkedIn', 'Microsoft', 'Email'], // todo - signup methods here
+            message: '{VALUE} not supported here'
         }
     }
 }, { timestamps: true });
