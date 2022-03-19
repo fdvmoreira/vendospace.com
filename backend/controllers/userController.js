@@ -5,13 +5,11 @@ const User = require('../models/accountModel');
 
 // find a user by its _id
 const getUser = asyncHandler(async (req, res) => {
-    User.findById(req.params.id, (error, result) => {
+    User.findById(req.params.id, (error, doc) => {
         if (error) {
             res.status(404).json({ message: `${error.message}` });
-
-            // throw new Error('User not found');
         }
-        res.status(200).json(result);
+        res.status(200).json(doc);
     });
 });
 
@@ -24,9 +22,9 @@ const setUser = asyncHandler(async (req, res) => {
 
     if (signUpMethod == "Email") {
         // create password hash
-        const passwordHash = await bcrypt.hash(password, HASH_ROUND);
+        passwordHash = await bcrypt.hash(password, HASH_ROUND);
         if (!passwordHash) {
-            res.status(400).json({ message: `${err.message}` });
+            res.status(400).json({ message: `${passwordHash}` });
         }
     }
 
@@ -35,10 +33,10 @@ const setUser = asyncHandler(async (req, res) => {
         email,
         passwordHash,
         signUpMethod
-    }, (error, result) => {
+    }, (error, doc) => {
         if (error) res.status(404).json({ message: `${error.message}` }); //throw new Error('Could not create user');
 
-        res.status(201).json({ message: " User created successfuly", user: result });
+        res.status(201).json({ message: " User created successfuly" });
     });
 });
 
@@ -53,9 +51,8 @@ const deleteUser = asyncHandler(async (req, res) => {
         if (!doc) return res.status(404).json({ message: `${id} not found.` });
 
         res.status(200).json({
-            message: `User ${doc?._id} removed.`, result: `${1 + 1}`
+            message: `User ${doc?._id} removed.`, doc: `${1 + 1}`
         });
-
     });
 });
 

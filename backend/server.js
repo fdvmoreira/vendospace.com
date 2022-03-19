@@ -1,7 +1,6 @@
 const express = require("express");
 require("colors");
 const { listen } = require("express/lib/application");
-const req = require("express/lib/request");
 require("dotenv").config();
 const PORT = process.env.PORT || 5000;
 
@@ -14,6 +13,7 @@ require('./config/db')();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.use(require('./routes/vendoSpaceRoutes'));
 app.use('/api/v1/users', require('./routes/api/userRoutes'));
 
 // use custom error handler 'errorHandler' middleware
