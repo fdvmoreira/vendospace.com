@@ -11,6 +11,8 @@ router.route("/").get(asynHandler(async (req, res) => { // todo - remove this ro
 
 })).post(setUser);
 
+// todo -remove delete route because the database must keep history 
+// only deactive the account when the use requests delete account
 router.route('/:id').get(getUser).delete(deleteUser);
 
 module.exports = router;
