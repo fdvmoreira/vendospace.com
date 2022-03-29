@@ -14,6 +14,7 @@ const Bid = require('./../models/bidModel');
 // Which parameters will be used to get the bids info ?
 const getBid = asynHandler(async (req, res) => {
     Bid.findById(req.body.id, (err, doc) => {
+
         if (err) res.status(404).json({ message: `${err.message}` });
 
         res.status(200).json(doc);
@@ -22,7 +23,13 @@ const getBid = asynHandler(async (req, res) => {
 
 // create bid
 const setBid = asynHandler(async (req, res) => {
-    const { id, } = req.body;
+    const { id, userId, auctionId, bidPrice } = req.body;
+    Bid.create({ userId, auctionId, bidPrice }, (error, doc) => {
+
+        if (error) res.json({ message: `Error ${error.message}` });
+
+        res.status(201).json({ message: `${doc.id} create successfuly` });
+    });
 });
 
 // update bid
