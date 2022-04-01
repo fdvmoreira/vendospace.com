@@ -24,6 +24,14 @@ const setSpace = asyncHandler(async (req, res) => {
 });
 
 // update ad-space
+const updateSpace = asyncHandler(async (req, res) => {
+    const { id } = req.body;
 
+    Space.findByIdAndUpdate(id, {}, (err, doc) => {
+        if (err) res.status(400).json({ message: `${err.message}` });
+
+        res.status(200).json({ message: `Ad-Space ${doc} updated` });
+    });
+});
 
 module.exports = { getSpace, setSpace }
