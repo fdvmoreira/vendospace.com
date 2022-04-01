@@ -13,5 +13,17 @@ const getSpace = asyncHandler(async (req, res) => {
 });
 
 // create space
+const setSpace = asyncHandler(async (req, res) => {
+    const { type, location, dimension, imagesURL, address } = req.body;
 
-module.exports = { getSpace }
+    Space.create({}, (err, doc) => {
+        if (err) res.status(400).json({ message: `${err.message}` });
+
+        res.status(201).json({ message: `Ad-Space created successfully: ${doc._id}` });
+    });
+});
+
+// update ad-space
+
+
+module.exports = { getSpace, setSpace }
