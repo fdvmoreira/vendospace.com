@@ -36,7 +36,7 @@ const setUser = asyncHandler(async (req, res) => {
     }, (error, doc) => {
         if (error) res.status(404).json({ message: `${error.message}` }); //throw new Error('Could not create user');
 
-        res.status(201).json({ message: " User created successfuly" });
+        res.status(201).json({ message: ` User created successfuly with id ${doc.id}` });
     });
 });
 

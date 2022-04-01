@@ -1,5 +1,4 @@
 const asynHandler = require('express-async-handler');
-const mongoose = require('mongoose');
 const Bid = require('./../models/bidModel');
 
 /** bid fields **
