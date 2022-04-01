@@ -26,12 +26,25 @@ const setSpace = asyncHandler(async (req, res) => {
 // update ad-space
 const updateSpace = asyncHandler(async (req, res) => {
     const { id } = req.body;
+    const { doc } = req.body; // TODO - field to update
 
-    Space.findByIdAndUpdate(id, {}, (err, doc) => {
+    Space.findByIdAndUpdate(id, { doc }, (err, doc) => {
         if (err) res.status(400).json({ message: `${err.message}` });
 
         res.status(200).json({ message: `Ad-Space ${doc} updated` });
     });
 });
 
-module.exports = { getSpace, setSpace }
+// delete ad-space
+// private - only admin can delete
+const deleteSpace = asyncHandler(async (req, res) => {
+    const { id } = req.body;
+
+    Space.findByIdAndDelete(id, (err, doc) => {
+        if (err) res.status(400).json({ message: `${err.message}` });
+
+        res.status(200).json({ message: `Ad-Space deleted` });
+    });
+});
+
+module.exports = { getSpace, setSpace, updateSpace, deleteSpace }
