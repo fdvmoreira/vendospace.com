@@ -12,7 +12,7 @@ const Bid = require('./../models/bidModel');
 // get bid - 
 // Which parameters will be used to get the bids info ?
 const getBid = asynHandler(async (req, res) => {
-    Bid.findById(req.body.id, (err, doc) => {
+    Bid.findById(req.params.id, (err, doc) => {
 
         if (err) res.status(404).json({ message: `${err.message}` });
 
