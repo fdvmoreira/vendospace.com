@@ -27,7 +27,11 @@ const updateAbuse = asyncHandler(async (req, res) => {
 
 // delete abuse
 const deleteAbuse = asyncHandler(async (req, res) => {
+    Abuse.findByIdAndDelete(req.params.id, (err, doc) => {
+        if (err) res.status(400).json({ Error: `${err.message}` });
 
+        res.status().json({ message: `Item ${doc?.id} deleted` });
+    });
 });
 module.exports = {
     getAbuse,
