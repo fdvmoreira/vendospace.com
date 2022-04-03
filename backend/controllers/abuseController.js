@@ -22,7 +22,12 @@ const setAbuse = asyncHandler(async (req, res) => {
 
 //update  abuse
 const updateAbuse = asyncHandler(async (req, res) => {
+    const body = req.body;
+    Abuse.findByIdAndUpdate(req.params.id, { body }, (err, doc) => {
+        if (err) res.status(400).json({ Error: `${err.message}` });
 
+        res.status(201).json({ message: `Abuse ${doc._id} Update` });
+    });
 });
 
 // delete abuse

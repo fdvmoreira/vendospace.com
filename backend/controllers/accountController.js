@@ -3,6 +3,8 @@ const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcrypt');
 const Account = require('../models/AccountModel');
 
+// TODO - implement this controller with its data
+
 // find a user by its _id
 const getAccount = asyncHandler(async (req, res) => {
     Account.findById(req.params.id, (error, result) => {
