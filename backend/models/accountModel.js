@@ -9,14 +9,14 @@ const accountSchema = new mongoose.Schema({
     type: {
         type: String,
         enum: {
-            values: [''], // todo - types of accounts
+            values: ['Personal', 'Professional', 'Business'], // types of accounts
             message: '{VALUES} not supported here'
         }
     },
     status: {
         type: String,
         enum: {
-            values: [], // todo - status of account here
+            values: ['Active', 'Disabled', 'Pending', 'Frozen', 'Deleted'], // status of account here
             message: '{VALUE} not supported here'
         }
     }
