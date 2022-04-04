@@ -27,7 +27,7 @@ const auctionSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: {
-            values: [''], // todo - auction status here
+            values: ['Open', 'Closed', 'Pending'],
             message: '{VALUE} not supported here'
         }
     }
