@@ -16,11 +16,11 @@ const abuseSchema = new mongoose.Schema({
         required: true,
         ref: 'User'
     },
-    abuseTye: {
+    abuseType: {
         type: String,
         required: true,
         enum: {
-            values: ['Other'], // todo types of abuses here
+            values: ['Other', 'Sexual', 'Hateful', 'Violent', 'Harrasment', 'Harmful', 'Child', 'Terrorism', 'Spam'],
             message: '{VALUE} is not supported'
         }
     },
