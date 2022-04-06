@@ -14,7 +14,7 @@ const listingSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: {
-            values: [''], // todo - listing status here 
+            values: ['Available', 'Sold', 'Rented', 'Live', 'Disabled'], // todo - listing status here 
             message: '{VALUE} not supported here'
         }
     }
