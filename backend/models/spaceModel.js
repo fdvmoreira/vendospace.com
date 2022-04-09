@@ -5,7 +5,7 @@ const spaceSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: {
-            values: [''], // todo - type os OOH adspace here
+            values: ['Stunt ', 'Lamp-Post', 'Bridge', 'Guerilla', 'Point-of-Sale', 'Transit', 'Stunt', 'Outdoor', 'Other'],
             message: '{VALUE} not supported here'
         }
     },
