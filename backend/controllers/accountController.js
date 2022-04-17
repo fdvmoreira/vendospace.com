@@ -17,7 +17,7 @@ const getAccount = asyncHandler(async (req, res) => {
 // create new account
 
 const setAccount = asyncHandler(async (req, res) => {
-    let { name, email, password, 'signup-method': signUpMethod } = req.body;
+    let { user, type, status } = req.body;
 
     HASH_ROUND = 7;
     let passwordHash = "";
@@ -30,14 +30,9 @@ const setAccount = asyncHandler(async (req, res) => {
         }
     }
 
-    Account.create({
-        name,
-        email,
-        passwordHash,
-        signUpMethod
-    }, (error, result) => {
+    Account.create({ user, type, status }, (error, result) => {
         if (error) return res.status(400).json({ message: `${error.message}` });
-        res.status(201).json({ message: " Account created successfuly", user: result });
+        res.status(201).json({ message: " Account created", user: result });
     });
 });
 
@@ -60,6 +55,6 @@ const deleteAccount = asyncHandler(async (req, res) => {
 module.exports = {
     getAccount,
     setAccount,
-    // updateAccount,
+    //updateAccount,
     deleteAccount
 }
