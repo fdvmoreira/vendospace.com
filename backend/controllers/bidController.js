@@ -22,18 +22,28 @@ const getBid = asynHandler(async (req, res) => {
 
 // create bid
 const setBid = asynHandler(async (req, res) => {
-    const { id, userId, auctionId, bidPrice } = req.body;
+    const { userId, auctionId, bidPrice } = req.body;
 
-    Bid.create({ userId, auctionId, bidPrice }, (error, doc) => {
+    Bid.create({
+        bidder: userId,
+        auction: auctionId,
+        price: bidPrice
+    }, (error, doc) => {
 
         if (error) res.json({ message: `Error ${error.message}` });
 
-        res.status(201).json({ message: `${doc.id} create successfuly` });
+        res.status(201).json({ message: `${doc.id} created` });
     });
 });
 
 // update bid
 const updateBid = asynHandler(async (req, res) => {
+    const body = req.body;
+    Auction.findByIdAndUpdate(req.params.id, { body }, (err, doc) => {
+        if (err) res.status(400).json({ Error: `${err.message}` });
+
+        res.status(201).json({ message: `Bid ${doc._id} updated` });
+    });
 });
 
 // delete bid
