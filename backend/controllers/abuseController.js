@@ -12,8 +12,8 @@ const getAbuse = asyncHandler(async (req, res) => {
 
 // create abuse
 const setAbuse = asyncHandler(async (req, res) => {
-    const { itemReportedId, createdBy, userReported, abuseType } = req.body;
-    Abuse.create({ itemReportedId, createdBy, userReported, abuseType }, (err, doc) => {
+    const { itemReportedId, createdBy, userReported, abuseType, message } = req.body;
+    Abuse.create({ itemReportedId, createdBy, userReported, abuseType, message }, (err, doc) => {
         if (err) res.status(400).json({ Error: `${err.message}` });
 
         res.status(201).json({ message: `Abuse ${doc.id} reported` });
@@ -26,7 +26,7 @@ const updateAbuse = asyncHandler(async (req, res) => {
     Abuse.findByIdAndUpdate(req.params.id, { body }, (err, doc) => {
         if (err) res.status(400).json({ Error: `${err.message}` });
 
-        res.status(201).json({ message: `Abuse ${doc._id} Update` });
+        res.status(201).json({ message: `Abuse ${doc._id} updated` });
     });
 });
 
@@ -35,7 +35,7 @@ const deleteAbuse = asyncHandler(async (req, res) => {
     Abuse.findByIdAndDelete(req.params.id, (err, doc) => {
         if (err) res.status(400).json({ Error: `${err.message}` });
 
-        res.status().json({ message: `Item ${doc?.id} deleted` });
+        res.status().json({ message: `Abuse ${doc?.id} deleted` });
     });
 });
 module.exports = {
