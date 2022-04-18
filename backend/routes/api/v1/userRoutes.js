@@ -2,7 +2,7 @@ const express = require('express');
 const asynHandler = require("express-async-handler");
 const router = express.Router();
 const { getUser, setUser, deleteUser } = require('../../../controllers/userController');
-const User = require('../../../models/accountModel');
+const User = require('../../../models/userModel');
 
 router.route("/").get(asynHandler(async (req, res) => { // todo - remove this route
     User.find((err, doc) => {

@@ -1,13 +1,13 @@
 require('colors');
 const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcrypt');
-const User = require('../models/accountModel');
+const User = require('../models/userModel');
 
 // find a user by its _id
 const getUser = asyncHandler(async (req, res) => {
     User.findById(req.params.id, (error, doc) => {
         if (error) {
-            res.status(404).json({ message: `${error.message}` });
+            res.status(404).json({ error: `${error.message}` });
         }
         res.status(200).json(doc);
     });
@@ -34,9 +34,9 @@ const setUser = asyncHandler(async (req, res) => {
         passwordHash,
         signUpMethod
     }, (error, doc) => {
-        if (error) res.status(404).json({ message: `${error.message}` }); //throw new Error('Could not create user');
+        if (error) res.status(404).json({ error: `${error.message}` }); //throw new Error('Could not create user');
 
-        res.status(201).json({ message: ` User created successfuly with id ${doc.id}` });
+        res.status(201).json({ message: ` User id ${doc.id} created` });
     });
 });
 
@@ -46,7 +46,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 
     User.findByIdAndDelete(id, (error, doc) => {
 
-        if (error) return res.status(400).json({ message: `${error.message}`.red.bold.underline });
+        if (error) return res.status(400).json({ error: `${error.message}` });
 
         if (!doc) return res.status(404).json({ message: `${id} not found.` });
 
