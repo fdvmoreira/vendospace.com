@@ -13,6 +13,7 @@ require('./config/db')();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// vendospace routes
 app.use(require('./routes/vendoSpaceRoutes'));
 
 // API routes

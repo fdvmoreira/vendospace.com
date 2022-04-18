@@ -18,7 +18,7 @@ const auth = asyncHandler(async (err, req, res, next) => {
         next();
 
     } catch (error) {
-        res.status(403).json({ message: `${error.message}` });
+        res.status(403).json({ error: `${error.message}` });
     }
 
 });
