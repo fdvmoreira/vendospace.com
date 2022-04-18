@@ -1,7 +1,7 @@
 require('colors');
 const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcrypt');
-const Account = require('../models/AccountModel');
+const Account = require('../models/accountModel');
 
 // TODO - implement this controller with its data
 
