@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(require('./routes/vendoSpaceRoutes'));
-app.use('/api/v1/users', require('./routes/api/userRoutes'));
+app.use('/api/v1/users', require('./routes/api/v1/userRoutes'));
 
 // use custom error handler 'errorHandler' middleware
 app.use(require('./middlewares/errorHandler'));
