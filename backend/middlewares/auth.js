@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 
-const auth = asyncHandler(async (err, req, res, next) => {
+const auth = asyncHandler(async (req, res, next) => {
 
     if (!req.headers.authorization || !(req.headers.authorization.startsWith('Bearer'))) {
         throw new Error('Authorization header not found');
