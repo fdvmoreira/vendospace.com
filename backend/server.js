@@ -1,6 +1,5 @@
 const express = require("express");
 require("colors");
-const { listen } = require("express/lib/application");
 require("dotenv").config();
 const PORT = process.env.PORT || 5000;
 
@@ -8,6 +7,9 @@ const app = express();
 
 // database connection
 require('./config/db')();
+
+// passport auth strategies
+require("./config/passport.config");
 
 // parse the incoming request and respost to json format
 app.use(express.json());
