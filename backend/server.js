@@ -17,6 +17,8 @@ app.use(express.urlencoded({ extended: false }));
 
 // vendospace routes
 app.use(require('./routes/vendoSpaceRoutes'));
+// auth routes
+app.use(require("./routes/authRoutes"));
 
 // API routes
 app.use('/api/v1/users', require('./routes/api/v1/userRoutes'));
