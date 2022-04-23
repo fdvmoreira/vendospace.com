@@ -1,7 +1,7 @@
-export default function TextInput({type, placeholder}){
+export default function TextInput({type, name, placeholder}){
     return(
         <>
-            <input type={type} placeholder={placeholder} className="form-control my-3"/>
+            <input type={type} name={name} placeholder={placeholder} className="form-control my-3"/>
         </>
     );
 }
