@@ -8,7 +8,7 @@ let options = {
 };
 
 const jwtStrategy = new JwtStrategy(options, (jwtPayload, done) => {
-    User.findById({ id: jwtPayload.id }, (err, user) => {
+    User.findById({ _id: jwtPayload.id }, (err, user) => {
         if (err) return done(err, false);
         if (!user) return done(null, false);
         return done(err, user);
