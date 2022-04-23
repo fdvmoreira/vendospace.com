@@ -7,12 +7,12 @@ let options = {
     "secretOrKey": process.env.JWT_SECRET
 };
 
-const strategy = new JwtStrategy(options, (jwtPayload, done) => {
+const jwtStrategy = new JwtStrategy(options, (jwtPayload, done) => {
     User.findById({ id: jwtPayload.id }, (err, user) => {
-        if (this.err) return done(err, false);
+        if (err) return done(err, false);
         if (!user) return done(null, false);
         return done(err, user);
     });
 });
 
-module.exports = strategy;
+module.exports = jwtStrategy;
