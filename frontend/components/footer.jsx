@@ -1,7 +1,7 @@
 
 export default function Footer() {
   return (
-    <footer className="row">
+    <footer className="row bg-dark">
         <div className="col">
             <h6>Contact</h6>
             <ul className="nav">
