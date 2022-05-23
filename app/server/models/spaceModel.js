@@ -5,9 +5,27 @@ const spaceSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: {
-            values: ['Stunt ', 'Lamp-Post', 'Bridge', 'Guerilla', 'Point-of-Sale', 'Transit', 'Stunt', 'Outdoor', 'Other'],
+            values: [
+                'Stunt ',
+                'Lamp-Post',
+                'Bridge',
+                'Guerilla',
+                'Point-of-Sale',
+                'Transit',
+                'Outdoor',
+                'Other',
+                'Poster',
+                'Bus',
+                'Rail',
+                'Digital',
+                'Wall',
+                'Billboard',
+                'Shelter'],
             message: '{VALUE} not supported here'
         }
+    },
+    otherType: {
+        type: String,
     },
     location: {
         type: Object,
