@@ -2,17 +2,14 @@ const express = require("express");
 const next = require('next')
 require("colors");
 require("dotenv").config();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 const dev = process.env.NODE_ENV !== 'production';
-// const dir = './frontend'
-const dir = '.'
 
-
-console.log(dir);
-
+// next app
 const nextApp = next({ dev });
 
+// request handler for nextjs routes
 const handler = nextApp.getRequestHandler();
 
 nextApp.prepare().then(async () => {
