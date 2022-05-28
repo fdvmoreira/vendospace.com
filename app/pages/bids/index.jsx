@@ -2,8 +2,9 @@ import { useRouter } from "next/router";
 
 export default function Bids(props) {
   const { bids } = props;
+
   const listOfBids = bids.map((item, index) => {
-    <li key={index}>{item}</li>;
+    return <li key={index}>{item}</li>;
   });
 
   return (
@@ -17,8 +18,8 @@ export default function Bids(props) {
   );
 }
 
-async function getServerSideProps(context) {
+export async function getServerSideProps(context) {
   return {
-    props: {},
+    props: { bids: ["bid1", "bid2", "bid3"] },
   };
 }
