@@ -4,7 +4,7 @@ export default function AdSpace(props) {
   return <div>List of Adspaces </div>;
 }
 
-async function getServerSideProps(context) {
+export async function getServerSideProps(context) {
   return {
     props: {},
   };
