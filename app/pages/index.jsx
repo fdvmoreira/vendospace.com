@@ -59,7 +59,7 @@ const Index = (props) => {
             <div className='mb-2'>
               <select
                 name=''
-                defaultValue={"DEFAULT"}
+                defaultValue={"All"}
                 onChange={(event) => {
                   if (event.target.value === "other") {
                     setOtherType({ display: "block" });
@@ -103,47 +103,60 @@ const Index = (props) => {
               className='form-control mb-2'
             />
 
-            <div className='input-group mb-2'>
-              <input
-                type='text'
-                inputMode='number'
-                maxLength={7}
-                size={7}
-                placeholder='price min'
-                className='form-control'
-              />
-              <input
-                type='text'
-                inputMode='number'
-                maxLength={7}
-                size={7}
-                placeholder='price max'
-                className='form-control'
-              />
-            </div>
+            {/** Price */}
+            <fieldset className='text-muted'>
+              <legend>Price</legend>
+              <div className='input-group mb-2'>
+                <input
+                  type='text'
+                  inputMode='number'
+                  maxLength={7}
+                  size={7}
+                  placeholder='price min'
+                  className='form-control me-1'
+                />
+                <input
+                  type='text'
+                  inputMode='number'
+                  maxLength={7}
+                  size={7}
+                  placeholder='price max'
+                  className='form-control ms-1'
+                />
+              </div>
+            </fieldset>
 
-            <div className='input-group mb-2 g-3'>
-              <input type='text' placeholder='width' className='form-control' />
+            {/** size */}
+            <fieldset className='text-muted'>
+              <legend>Size</legend>
+              <div className='input-group mb-2 g-3'>
+                <input
+                  type='text'
+                  placeholder='width'
+                  className='form-control me-1'
+                />
 
-              <input
-                type='text'
-                placeholder='height'
-                className='form-control'
-              />
+                <input
+                  type='text'
+                  placeholder='height'
+                  className='form-control ms-1 me-1'
+                />
 
-              <select className='form-select' required>
-                <option value='' selected disabled>
-                  unit
-                </option>
-                <option value=''>cm</option>
-                <option value=''>ft</option>
-              </select>
-            </div>
+                <select className='form-select ms-1' defaultValue={""} required>
+                  <option value='' disabled>
+                    unit
+                  </option>
+                  <option value='centimeter'>cm</option>
+                  <option value='foot'>ft</option>
+                </select>
+              </div>
+            </fieldset>
 
+            {/** Apply button */}
             <input
               type='submit'
               value='Apply'
-              className='btn btn-outline-primary mb-3'
+              className='btn btn-outline-success mb-3'
             />
           </form>
         </aside>
