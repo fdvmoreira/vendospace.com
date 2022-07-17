@@ -29,7 +29,6 @@ const spaceSchema = new mongoose.Schema({
     },
     location: {
         type: Object,
-        required: true
     },
     dimension: {
         type: Object,
@@ -37,7 +36,6 @@ const spaceSchema = new mongoose.Schema({
     },
     imagesURL: {
         type: Array,
-        required: true
     },
     address: {
         type: String,
