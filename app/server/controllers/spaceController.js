@@ -17,7 +17,7 @@ const setSpace = asyncHandler(async (req, res) => {
     Space.create({ type, location, dimension, imagesURL, address }, (err, doc) => {
         if (err) res.status(400).json({ message: `${err.message}` });
 
-        res.status(201).json({ message: `Ad-Space created with ID: ${doc._id}`, id: _id });
+        res.status(201).json({ message: `Ad-Space created with ID: ${doc._id}`, id: doc._id });
     });
 });
 
