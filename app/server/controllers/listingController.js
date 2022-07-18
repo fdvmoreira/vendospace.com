@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const { Listing } = require('./../models/listingModel');
+const Listing = require('./../models/listingModel');
 
 // get Listing by id
 const getListing = asyncHandler(async (req, res) => {

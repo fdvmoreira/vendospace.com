@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const { Auction } = require('./../models/auctionModel');
+const Auction = require('./../models/auctionModel');
 
 // get Auction by id
 const getAuction = asyncHandler(async (req, res) => {

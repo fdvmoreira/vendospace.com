@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const { Abuse } = require('./../models/abuseModel');
+const Abuse = require('./../models/abuseModel');
 
 // get abuse by id
 const getAbuse = asyncHandler(async (req, res) => {

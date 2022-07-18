@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const { Message } = require('./../models/messageModel');
+const Message = require('./../models/messageModel');
 
 // get Message by id
 const getMessage = asyncHandler(async (req, res) => {
