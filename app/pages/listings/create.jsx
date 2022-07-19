@@ -16,25 +16,21 @@ export default function Listing() {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(
-      yup
-        .object()
-        .shape({
-          type: yup.string().required(),
-          typeDescription: yup.string(),
-          location: yup.object({
-            latitude: yup.number(),
-            logitude: yup.number(),
-          }),
-          dimension: yup.object({
-            height: yup.number().positive().required(),
-            width: yup.number().positive().required(),
-          }),
-          unit: yup.string().required(),
-          address: yup.string().required(),
-          status: yup.string().required(),
-          imageUrls: yup.array(yup.string().url()),
-        })
-        .required(),
+      yup.object().shape({
+        type: yup.string().required(),
+        typeDescription: yup.string().default(""),
+        location: yup.object({
+          latitude: yup.number(),
+          longitude: yup.number(),
+        }),
+        dimension: yup.object({
+          height: yup.number().positive().required(),
+          width: yup.number().positive().required(),
+        }),
+        unit: yup.string().required(),
+        address: yup.string().required(),
+        status: yup.string().required(),
+      }),
     ),
   });
 
@@ -107,7 +103,7 @@ export default function Listing() {
               <option value='bridge'>Bridge</option>
               <option value='bus'>Bus</option>
               <option value='digital'>Digital Transit</option>
-              <option value='guerrila'>Guerrila</option>
+              <option value='guerrilla'>Guerrilla</option>
               <option value='lampPost'>Lamp Post</option>
               <option value='outdoor'>Outdoors</option>
               <option value='pointOfSale'>Point of Sale</option>
@@ -122,7 +118,7 @@ export default function Listing() {
             <br />
             {/** display error if the field is empty */}
             {errors.type?.message && (
-              <span className='text-danger'>{errors.type.message}</span>
+              <p className='text-danger'>{errors.type.message}</p>
             )}
           </div>
 
@@ -194,7 +190,7 @@ export default function Listing() {
               </select>
               <br />
               {errors.unit?.message && (
-                <span className='text-danger'>{errors.unit.message}</span>
+                <p className='text-danger'>{errors.unit.message}</p>
               )}
             </div>
           </fieldset>
@@ -211,7 +207,7 @@ export default function Listing() {
             />
             <br />
             {errors.address?.message && (
-              <span className='text-danger'>{errors.address.message}</span>
+              <p className='text-danger'>{errors.address.message}</p>
             )}
           </div>
 
@@ -226,7 +222,7 @@ export default function Listing() {
           </select>
 
           {errors.status?.message && (
-            <span className='text-danger'>{errors.status.message}</span>
+            <p className='text-danger'>{errors.status.message}</p>
           )}
           <br />
           {/** Submit button */}
@@ -248,20 +244,16 @@ export default function Listing() {
     event.preventDefault();
     const elements = event.target;
 
-    // console.log(cloudinaryUploadURL);
-    // console.log(cloudinaryName);
-    // console.log(cloudinaryUploadPreset);
-
-    // console.log(event.target.file);
     // upload the images
-    console.log(elements.file.files);
+    // debugger
     let uploadedImageFiles = await uploadImageFiles(elements.file.files);
-    console.log(uploadedImageFiles);
+    // console.log(uploadedImageFiles);
     // wait for the urls from object
+
     // create adspace
-    const adpaceId = await adspaceSubmitHandler({
+    let adspaceId = await adspaceSubmitHandler({
       type: elements.type.value,
-      otherType: elements.otherType?.value||"",
+      otherType: elements.otherType?.value || "",
       location: {
         latitude: elements.latitude.value,
         longitude: elements.longitude.value,
@@ -276,23 +268,13 @@ export default function Listing() {
     });
 
     // create listing
-    const userId = "62d5c2e8fa838b651f49b98c";
+    const userId = "62d5c2e8fa838b651f49b98c"; //TODO get the user from context
 
-    if (adpaceId) {
-      fetch("/api/v1/listings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify({
-          space: adpaceId,
-          user: userId, // TODO find user ID to send with the request
-          status: elements.status,
-        }),
-      });
-    }
-
-    // console.log(event.target.file);
+    listingSubmitHandler({
+      space: adspaceId,
+      user: userId,
+      status: elements.status.value,
+    });
   }
 
   /**
@@ -322,8 +304,6 @@ export default function Listing() {
  * @returns
  */
 async function uploadImageFiles(files) {
-  const uploadURL = process.env.CLOUDINARY_UNAUTH_UPLOAD_URL;
-
   let URLs = [];
   const formData = new FormData();
 
@@ -331,9 +311,8 @@ async function uploadImageFiles(files) {
     formData.append("file", files[i]);
     formData.append("cloud_name", cloudinaryName);
     formData.append("upload_preset", cloudinaryUploadPreset);
-    // formData.append("public_id", files[i].name); //TODO give unique name for each file
 
-    fetch(cloudinaryUploadURL, {
+    await fetch(cloudinaryUploadURL, {
       method: "POST",
       body: formData,
     })
@@ -349,20 +328,14 @@ async function uploadImageFiles(files) {
  * @param {*} obj
  */
 async function adspaceSubmitHandler(obj) {
-  const API_URL = "/api/v1/spaces";
-  const {
-    type,
-    otherType,
-    location: { latitude, longitude },
-    dimension: { width, height },
-    imageUrls,
-    address,
-  } = obj;
+  let createdAdSpaceId = "coco";
+  const ADSPACE_API_URL = "/api/v1/spaces";
 
   //TODO print verufy the structure received
   console.log(obj);
+  console.log(JSON.stringify(obj));
 
-  fetch(API_URL, {
+  await fetch(ADSPACE_API_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
@@ -371,9 +344,28 @@ async function adspaceSubmitHandler(obj) {
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log(data); // TODO debugger line
-      return data.id || undefined;
+      createdAdSpaceId = data.id;
     })
+    .catch((err) => console.error(err.message));
+  return createdAdSpaceId;
+}
+
+async function listingSubmitHandler({ space, user, status }) {
+  const LISTINGS_API_URL = "/api/v1/listings";
+
+  await fetch(LISTINGS_API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify({
+      space,
+      user,
+      status,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => console.log(data?.message || data?.stack))
     .catch(console.error);
 }
 
