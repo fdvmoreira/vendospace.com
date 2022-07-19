@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Listing = require('./../models/listingModel');
+const mongoose = require('mongoose');
 
 // get Listing by id
 const getListing = asyncHandler(async (req, res) => {
@@ -12,8 +13,9 @@ const getListing = asyncHandler(async (req, res) => {
 
 // create Listing
 const setListing = asyncHandler(async (req, res) => {
-    const { itemReportedId, createdBy, userReported, ListingType } = req.body;
-    Listing.create({ itemReportedId, createdBy, userReported, ListingType }, (err, doc) => {
+    const { space, user, status } = req.body;
+
+    Listing.create({ space: mongoose.Types.ObjectId(space), user: mongoose.Types.ObjectId(user), status }, (err, doc) => {
         if (err) res.status(400).json({ Error: `${err.message}` });
 
         res.status(201).json({ message: `Listing ${doc.id} created` });
