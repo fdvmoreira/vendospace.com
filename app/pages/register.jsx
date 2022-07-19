@@ -51,12 +51,12 @@ const Register = () => {
 
           <div class='form-input my-3'>
             <input
-              class='form-check-input me-2'
+              className='form-check-input me-2'
               type='checkbox'
               id='termsAgreed'
               required
             />
-            <label class='form-check-label' for='termsAgreed'>
+            <label class='form-check-label' htmlFor='termsAgreed'>
               I agree all statements in <a href='#!'>Terms of service</a>
             </label>
           </div>
