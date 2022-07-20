@@ -35,6 +35,7 @@ nextApp.prepare().then(async () => {
     app.use('/api/v1/users', require('./routes/api/v1/userRoutes'));
     app.use('/api/v1/abuses', require('./routes/api/v1/abuseRoutes'));
     app.use('/api/v1/accounts', require('./routes/api/v1/accountRoutes'));
+    app.use('/api/v1/auctions', require('./routes/api/v1/auctionRoutes'));
     app.use('/api/v1/listings', require('./routes/api/v1/listingRoutes'));
     app.use('/api/v1/bids', require('./routes/api/v1/bidRoutes'));
     app.use('/api/v1/messages', require('./routes/api/v1/messageRoutes'));
