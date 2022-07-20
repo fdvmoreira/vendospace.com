@@ -4,7 +4,7 @@ const Auction = require('./../models/auctionModel');
 // get Auction by id
 const getAuction = asyncHandler(async (req, res) => {
     Auction.findById(req.params.id, (err, doc) => {
-        if (err) res.status(400).json({ Error: `${err.message}` });
+        if (err) return res.status(400).json({ error: `${err.message}` });
 
         res.status(200).json(doc);
     });
@@ -14,9 +14,9 @@ const getAuction = asyncHandler(async (req, res) => {
 const setAuction = asyncHandler(async (req, res) => {
     const { start, end, user, space, initialPrice, status } = req.body;
     Auction.create({ start, end, user, space, initialPrice, status }, (err, doc) => {
-        if (err) res.status(400).json({ Error: `${err.message}` });
+        if (err) return res.status(400).json({ success: false, error: `${err.message}` });
 
-        res.status(201).json({ message: `Auction ${doc.id} created` });
+        res.status(201).json({ success: true, message: `Auction ${doc.id} created` });
     });
 });
 
@@ -24,18 +24,18 @@ const setAuction = asyncHandler(async (req, res) => {
 const updateAuction = asyncHandler(async (req, res) => {
     const body = req.body;
     Auction.findByIdAndUpdate(req.params.id, { body }, (err, doc) => {
-        if (err) res.status(400).json({ Error: `${err.message}` });
+        if (err) return res.status(400).json({ success: false, error: `${err.message}` });
 
-        res.status(201).json({ message: `Auction ${doc._id} updated` });
+        res.status(201).json({ success: true, message: `Auction ${doc._id} updated` });
     });
 });
 
 // delete Auction
 const deleteAuction = asyncHandler(async (req, res) => {
     Auction.findByIdAndDelete(req.params.id, (err, doc) => {
-        if (err) res.status(400).json({ Error: `${err.message}` });
+        if (err) return res.status(400).json({ success: false, error: `${err.message}` });
 
-        res.status().json({ message: `Auction ${doc?.id} deleted` });
+        res.status().json({ success: true, message: `Auction ${doc?.id} deleted` });
     });
 });
 module.exports = {
