@@ -21,6 +21,7 @@ Find the best adspace for your Out-Of-Home campaign
 Inside vendospace.com folder type the following command:
 ``` 
 cd app &&\
+npm install &&\
 npm run server
  ```
 
