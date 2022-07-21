@@ -1,16 +1,26 @@
 const User = require("../../models/userModel");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const mongoose = require('mongoose');
+const DOMAIN = process.env.DOMAIN + ":" + process.env.PORT;
 
 const googleStrategy = new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://127.0.0.1:5000/auth/google/callback",
-    scope: ['profile'],
+    callbackURL: `${DOMAIN}/auth/google/callback`,
+    scope: ['profile', 'email'],
 }, (accessToken, refreshToken, profile, done) => {
-    User.findById({ id: profile.id }, (err, user) => {
-        if (err) return done(err, false);
-        if (!user) return done(null, false);
-        return done(err, user);
+
+    console.log(profile._json);
+
+    // const id = mongoose.Types.ObjectId(profile.id);
+
+    User.findOne({
+        name: profile._json.name,
+        email: profile._json.email,
+        passwordHash: "",
+        signupMethod: profile.provider
+    }, (err, user) => {
+        return done(err, profile._json);
     });
 });
 
