@@ -9,13 +9,22 @@ import { LoginContext } from "../context/loginContext";
 
 import { useEffect } from "react";
 
+import Script from "next/script";
+
 export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
     import("bootstrap/dist/js/bootstrap");
+    console.log("Bootstrap js loaded");
   }, []);
   return (
     <LoginContext>
       <Layout>
+        {/* <Script
+          src='/scripts/modal.js'
+          strategy='lazyLoad'
+          onLoad={() => console.log("LOADED modal")}
+          onError={() => console.error("Error Loading Modal Script")}
+        /> */}
         <Component {...pageProps} />
       </Layout>
     </LoginContext>
