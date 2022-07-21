@@ -52,7 +52,7 @@ export default function AdSpace(props) {
           <div className='input-group mb-2'>
             <select
               name='type'
-              defaultValue={"DEFAULT"}
+              defaultValue={""}
               onChange={(event) => {
                 if (event.target.value === "other") {
                   setOtherType({ display: "block" });
