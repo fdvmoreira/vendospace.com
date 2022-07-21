@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import NewMessage from "./NewMessage";
 
 export default function ListingCard({ listing }) {
   const { _id, space: spaceId, createdAt, user, status } = listing;
@@ -26,8 +27,8 @@ export default function ListingCard({ listing }) {
     <div className='card'>
       <div className='card-header'>
         <p>
-          <small className=''>
-            {String(user).substring(0, 6).toLocaleUpperCase()}
+          <small className='text text-uppercase'>
+            {String(user).substring(0, 6)}
           </small>
         </p>
         <Image
@@ -43,21 +44,28 @@ export default function ListingCard({ listing }) {
           <small className='card-text'>
             {status.toLocaleUpperCase()}&nbsp;
           </small>
-          <small className='text-muted'>{new Date(createdAt).toLocaleDateString()}</small>
+          <small className='text-muted'>
+            {new Date(createdAt).toLocaleDateString()}
+          </small>
         </h6>
-        <h5 className='card-title'>
+        <h5 className='card-title text-uppercase'>
           {`${space?.type} ${space?.dimension.width}x${space?.dimension.height} ${space?.dimension.unit}`}
         </h5>
         <p className='card-text'>{space?.address}</p>
-        <p>
-          <small>lat{space?.location.latitude}</small>&#9900;
-          <small>lng{space?.location.longitude}</small>
+        <p className='card-text'>
+          <span>lat@{space?.location.latitude}</span>&#9900;
+          <span>lng@{space?.location.longitude}</span>
         </p>
       </div>
       <div className='card-footer'>
-        <Link href='/message/create'>
-          <a className='btn btn-outline-primary'>Message owner</a>
-        </Link>
+        <button
+          type='button'
+          className='btn btn-primary'
+          data-bs-toggle='modal'
+          data-bs-target='#messageModal'>
+          Message owner
+        </button>
+        <NewMessage data={user} />
       </div>
     </div>
   );
