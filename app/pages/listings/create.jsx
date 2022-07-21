@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -115,7 +116,6 @@ export default function Listing() {
               <option value='wall'>Wall</option>
               <option value='other'>Other</option>
             </select>
-            <br />
             {/** display error if the field is empty */}
             {errors.type?.message && (
               <p className='text-danger'>{errors.type.message}</p>
@@ -188,7 +188,7 @@ export default function Listing() {
                 <option value='inches'>in</option>
                 <option value='feet'>ft</option>
               </select>
-              <br />
+              {/** error check */}
               {errors.unit?.message && (
                 <p className='text-danger'>{errors.unit.message}</p>
               )}
@@ -205,7 +205,7 @@ export default function Listing() {
               className='form-control'
               {...register("address")}
             />
-            <br />
+            {/** error check */}
             {errors.address?.message && (
               <p className='text-danger'>{errors.address.message}</p>
             )}
@@ -220,16 +220,20 @@ export default function Listing() {
             <option value='rented'>Rented</option>
             <option value='disabled'>Disabled</option>
           </select>
-
+          {/** error check */}
           {errors.status?.message && (
             <p className='text-danger'>{errors.status.message}</p>
           )}
           <br />
+          <Link href='/'>
+            <a className='btn btn-outline-secondary mb-2'>cancel</a>
+          </Link>
+
           {/** Submit button */}
           <input
             type={"submit"}
             value={"Create Listing"}
-            className='btn btn-success mb-2'
+            className='btn btn-success mb-2 ms-2'
           />
         </form>
       </div>
@@ -350,6 +354,10 @@ async function adspaceSubmitHandler(obj) {
   return createdAdSpaceId;
 }
 
+/**
+ * Handle listing submiting
+ * @param {*} param0
+ */
 async function listingSubmitHandler({ space, user, status }) {
   const LISTINGS_API_URL = "/api/v1/listings";
 
@@ -368,8 +376,3 @@ async function listingSubmitHandler({ space, user, status }) {
     .then((data) => console.log(data?.message || data?.stack))
     .catch(console.error);
 }
-
-/**
- * TODO add the multiple choices for selecting or creating new adspace
- *
- */
