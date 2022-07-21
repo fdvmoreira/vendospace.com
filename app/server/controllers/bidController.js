@@ -14,7 +14,7 @@ const Bid = require('./../models/bidModel');
 const getBid = asynHandler(async (req, res) => {
     Bid.findById(req.params.id, (err, doc) => {
 
-        if (err) res.status(404).json({ message: `${err.message}` });
+        if (err)return res.status(404).json({success:false, message: `${err.message}` });
 
         res.status(200).json(doc);
     });
@@ -30,9 +30,9 @@ const setBid = asynHandler(async (req, res) => {
         price: bidPrice
     }, (error, doc) => {
 
-        if (error) res.json({ message: `Error ${error.message}` });
+        if (error) return res.json({success:false, message: `Error ${error.message}` });
 
-        res.status(201).json({ message: `${doc.id} created` });
+        res.status(201).json({success:true, message: `${doc.id} created` });
     });
 });
 
@@ -40,9 +40,9 @@ const setBid = asynHandler(async (req, res) => {
 const updateBid = asynHandler(async (req, res) => {
     const body = req.body;
     Auction.findByIdAndUpdate(req.params.id, { body }, (err, doc) => {
-        if (err) res.status(400).json({ Error: `${err.message}` });
+        if (err) return res.status(400).json({success:false, Error: `${err.message}` });
 
-        res.status(201).json({ message: `Bid ${doc._id} updated` });
+        res.status(201).json({success:true, message: `Bid ${doc._id} updated` });
     });
 });
 
@@ -50,9 +50,9 @@ const updateBid = asynHandler(async (req, res) => {
 const deleteBid = asynHandler(async (req, res) => {
     Bid.findByIdAndDelete(req.body.id, (error, doc) => {
 
-        if (error) res.status(400).json({ message: `Error: ${error.message}` });
+        if (error) return res.status(400).json({success:false, message: `Error: ${error.message}` });
 
-        res.status(200).json({ message: `${doc.id} deleted successfuly` });
+        res.status(200).json({ success:true,message: `${doc.id} deleted successfuly` });
     });
 });
 
