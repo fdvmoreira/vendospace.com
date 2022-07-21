@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: {
-            values: ['Google', 'Facebook', 'LinkedIn', 'Microsoft', 'Email'], // todo - signup methods here
+            values: ['google', 'facebook', 'linkedIn', 'microsoft', 'Email'], // todo - signup methods here
             message: '{VALUE} not supported here'
         }
     }
