@@ -6,28 +6,14 @@ import { ToastContainer, toast } from "react-toastify";
 
 const Navbar = ({ props }) => {
   const [login, updateLogin] = useLogin();
-  updateLogin(true);
-
-  const notify = () => toast("Wow so easy!");
-
-  const toast_ = () => {
-    toast("Hello world!", {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
+  // updateLogin(true);
 
   return (
-    <nav className='navbar navbar-expand-lg '>
+    <nav className='navbar navbar-expand-lg'>
       <div className='container-fluid'>
         <Link href='/'>
           <a className='navbar-brand'>
-            <Image src='/logo.jpeg' alt='logo' width='64' height='64' />
+            <Image src='/logo.jpeg' alt='logo' width='48' height='48' />
           </a>
         </Link>
 
@@ -53,6 +39,9 @@ const Navbar = ({ props }) => {
             </div>
           ) : (
             <div className='dropdown'>
+              <Link href={"/listings/create"}>
+                <a className='btn navbar-btn btn-primary'>Create listing</a>
+              </Link>
               <a
                 className='btn navbar-btn btn-secondary dropdown-toggle'
                 id='dropdownMenuButton'
@@ -81,9 +70,6 @@ const Navbar = ({ props }) => {
                   </Link>
                 </li>
               </ul>
-
-              <button onClick={toast_}>Notify!</button>
-              <ToastContainer />
             </div>
           )}
         </div>
