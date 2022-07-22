@@ -1,75 +1,150 @@
-import React from "react";
-import TextInput from "../components/textInput";
+import { useRef } from "react";
 import Script from "next/script";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+let registerForm;
 
 const Register = () => {
+  const RECAPTCHA_SITE_KEY = process.env.RECAPTCHA_SITE_KEY;
+  registerForm = useRef(undefined);
+
+  const schema = yup.object().shape({
+    name: yup.string().required("Name required"),
+    email: yup.string().email("Invalid email").required("Email required"),
+    password: yup.string().required("Password required").min(8),
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref("password")], "Your passwords do not match"),
+    agreement: yup
+      .bool()
+      .oneOf([true], "Please accept the terms and conditions")
+      .required(),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
   return (
     <div className='container bg-light border col-md-6 col-lg-4'>
-      <Script
+      {/*
+        Uncomment to enable google capatcha 
+        <Script
         id='google-js'
-        src='https://https://www.google.com/recaptcha/api.js'
+        src='https://www.google.com/recaptcha/api.js'
         strategy='lazyOnload'
         onLoad={() => {
-          console.log("recaptcha loaded");
+          console.log("Recaptcha loaded");
         }}
-      />
+      /> */}
 
-      <header>
-        <h6>Register</h6>
-      </header>
-      <form onSubmit={handleSubmit}>
+      <h1 className='lead text-center'>Register</h1>
+      <hr />
+      <form
+        onSubmit={handleSubmit((data) => console.log(data))}
+        ref={registerForm}>
+        {/** Full name */}
         <div className='form-group '>
-          <TextInput
-            type={"text"}
-            placeholder={"Full name"}
-            name={"name"}
-            required={true}
-          />
-          <TextInput
-            type={"email"}
-            placeholder={"Email address"}
-            name={"email"}
-            required={true}
-          />
-          <TextInput
-            type={"password"}
-            placeholder={"Password"}
-            name={"password"}
-            required={true}
-          />
-          <TextInput
-            type={"password"}
-            placeholder={"Repeat Password"}
-            name={"password"}
-            required={true}
-          />
-
-          <div className='g-recaptcha' data-sitekey='your_site_key'>
-            <span></span>
+          <div className='mb-2'>
+            <input
+              type='text'
+              className='form-control'
+              placeholder='Name'
+              {...register("name")}
+            />
+            {/** name error check */}
+            {errors.name?.message && (
+              <span className='text-danger'>{errors.name?.message}</span>
+            )}
           </div>
 
+          {/** email */}
+          <div className='mb-2'>
+            <input
+              type='email'
+              className='form-control'
+              placeholder='Email address'
+              {...register("email")}
+            />
+            {/** email error check */}
+            {errors.email?.message && (
+              <span className='text-danger'>{errors.email?.message}</span>
+            )}
+          </div>
+
+          {/** password */}
+          <div className='mb-2'>
+            <input
+              type='password'
+              className='form-control'
+              placeholder='Password'
+              {...register("password")}
+            />
+            {/** password error check */}
+            {errors.password?.message && (
+              <span className='text-danger'>{errors.password?.message}</span>
+            )}
+          </div>
+
+          {/** confirm password */}
+          <div className='mb-2'>
+            <input
+              type='password'
+              className='form-control'
+              placeholder='Confirm Password'
+              {...register("confirmPassword")}
+            />
+            {/** confirm error check */}
+            {errors.confirmPassword?.message && (
+              <span className='text-danger'>
+                {errors.confirmPassword?.message}
+              </span>
+            )}
+          </div>
+
+          {/** terms and conditions agreements */}
           <div className='form-input my-3'>
             <input
-              className='form-check-input me-2'
+              className='form-check-input'
               type='checkbox'
               id='termsAgreed'
-              required
+              {...register("agreement")}
             />
-            <label className='form-check-label' htmlFor='termsAgreed'>
-              I agree all statements in <a href='#!'>Terms of service</a>
+            <label className='ms-2 form-check-label' htmlFor='termsAgreed'>
+              I agree with all the statements in{" "}
+              <Link href={"#"}>
+                <a className='link-primary'>Terms of service</a>
+              </Link>
             </label>
+            {errors.agreement?.message && (
+              <span className='text-danger'>
+                <br />
+                {errors.agreement?.message}
+              </span>
+            )}
           </div>
 
-          <button type='submit' className='btn btn-primary text-smallcaps'>
-            Register
-          </button>
+          <input
+            type='submit'
+            className='btn btn-primary g-recaptcha'
+            // Uncomment to enable google capatcha
+            // data-sitekey={`${RECAPTCHA_SITE_KEY}`}
+            // data-callback='recaptchaSubmit'
+            // data-action='submit'
+            value='Register'
+          />
         </div>
       </form>
 
-      <hr data-content='OR' className='hr-text' />
+      <hr className='hr-text' data-content='OR' />
       <div className='flex-content'>
-        <h6>Continue with</h6>
+        <h5 className='fst-'>Register with</h5>
         <ul className='nav nav-pills py-3'>
           <li className='nav-item'>
             <a href='/auth/facebook' className='nav-link'>
@@ -88,11 +163,11 @@ const Register = () => {
           </li>
         </ul>
       </div>
-      <hr className='' data-content='OR' />
+      <hr className='hr' data-content='OR' />
       <p className='text-end'>
         I already have an account,{" "}
         <Link href='/login'>
-          <a className='text-primary'>sign in</a>
+          <a className='link-primary'>sign in</a>
         </Link>
       </p>
     </div>
@@ -100,10 +175,13 @@ const Register = () => {
 };
 
 // register the user
-const handleSubmit = async (event) => {
-  event.preventDefault();
+const submitHandler = async (data) => {
+  // event.preventDefault();
 };
 
-const handlePasswordMismatch = () => {};
+const recaptchaSubmit = (token) => {
+  console.log(token);
+  registerForm.current.submit();
+};
 
 export default Register;
