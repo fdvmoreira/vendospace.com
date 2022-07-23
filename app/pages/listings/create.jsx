@@ -11,34 +11,40 @@ const cloudinaryName = process.env.CLOUDINARY_CLOUD_NAME;
 const cloudinaryUploadPreset = process.env.CLOUDINARY_UNAUTH_UPLOAD_PRESET;
 
 export default function Listing() {
+  const imageButton = useRef();
+  const [imageSrc, setImageSrc] = useState("/upload-icon.png");
+  const [selectImage, setSelectImage] = useState("Select Images");
+  const [otherType, setOtherType] = useState({ display: "none" });
+
+  const schema = yup.object().shape({
+    file: yup.mixed().required("Select an image"),
+    type: yup.string().label("Type").required(),
+    typeDescription: yup.string().default(""),
+    location: yup.object().shape({
+      latitude: yup.number(),
+      longitude: yup.number(),
+    }),
+    dimension: yup.object().shape({
+      height: yup.number().positive().required(),
+      width: yup.number().positive().required(),
+      unit: yup.string().when("height", {
+        is: (val) => {
+          return yup.ref("height") == true;
+        },
+        then: yup.string().required(),
+      }),
+    }),
+    address: yup.string().label("Address").required(),
+    status: yup.string().label("Status").required(),
+  });
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(
-      yup.object().shape({
-        type: yup.string().required(),
-        typeDescription: yup.string().default(""),
-        location: yup.object({
-          latitude: yup.number(),
-          longitude: yup.number(),
-        }),
-        dimension: yup.object({
-          height: yup.number().positive().required(),
-          width: yup.number().positive().required(),
-        }),
-        unit: yup.string().required(),
-        address: yup.string().required(),
-        status: yup.string().required(),
-      }),
-    ),
+    resolver: yupResolver(schema),
   });
-
-  const [imageSrc, setImageSrc] = useState("/upload-icon.png");
-  const [selectImage, setSelectImage] = useState("Select Images");
-  const [otherType, setOtherType] = useState({ display: "none" });
-  let imgSelect = useRef();
 
   return (
     <div className='container'>
@@ -46,9 +52,7 @@ export default function Listing() {
       <hr className='' />
       <div style={{ width: "360px" }} className='m-auto'>
         <form
-          onSubmit={submitHandler}
-          method={"POST"}
-          action={"/"}
+          onSubmit={handleSubmit((data) => console.log(data))}
           encType='multipart/form-data'>
           <figure
             className='border border-secondary d-inline-block cursor-hand p-4'
@@ -57,25 +61,34 @@ export default function Listing() {
               src={imageSrc}
               width={96}
               height={96}
-              onClick={() => imgSelect.current.click()}
+              onClick={(e) => {
+                console.log(imageButton);
+                imageButton?.current?.click();
+              }}
             />
             <figcaption
               className='text-small'
-              onClick={() => imgSelect.current.click()}>
+              onClick={(e) => imageButton?.current?.click()}>
               {selectImage}
             </figcaption>
           </figure>
 
           <input
             type='file'
-            name='file'
             id='file'
+            className='btn form-control mb-2 me-2'
             accept='image/*'
-            style={{ display: "none" }}
-            ref={imgSelect}
+            style={{ display: "block" }}
             onChange={handleImageChange}
             multiple
+            ref={imageButton}
+            {...register("file")}
+            name='file'
           />
+          {/** file error check */}
+          {errors.file?.message && (
+            <p className='text-danger'>{errors.file?.message}</p>
+          )}
           {/**
            * Image URLs
            */}
@@ -86,8 +99,9 @@ export default function Listing() {
           {/**
            * Type of ad space
            */}
-          <div className='input-group mb-2'>
+          <div className='form-group mb-2 '>
             <select
+              className='form-select'
               defaultValue={""}
               onChange={(event) => {
                 if (event.target.value === "other") {
@@ -97,7 +111,6 @@ export default function Listing() {
                 }
                 setOtherType({ display: "none" });
               }}
-              className='form-select'
               {...register("type")}>
               <option value=''>Select ad space type</option>
               <option value='billboard'>Billboard</option>
@@ -118,7 +131,7 @@ export default function Listing() {
             </select>
             {/** display error if the field is empty */}
             {errors.type?.message && (
-              <p className='text-danger'>{errors.type.message}</p>
+              <span className='text-danger'>{errors.type.message}</span>
             )}
           </div>
 
@@ -146,14 +159,14 @@ export default function Listing() {
                 id='lat'
                 placeholder='Latitude'
                 className='form-control me-1'
-                {...register("latitude")}
+                {...register("location.latitude")}
               />
               <input
                 type='number'
                 id='long'
                 placeholder='Longitude'
                 className='form-control ms-1'
-                {...register("longitude")}
+                {...register("location.longitude")}
               />
             </div>
           </fieldset>
@@ -162,52 +175,61 @@ export default function Listing() {
            */}
           <fieldset>
             <legend>Dimensions</legend>
-            <div className='input-group mb-2'>
-              <input
-                type='number'
-                id='x'
-                className='form-control me-2'
-                placeholder="5''"
-                {...register("height")}
-              />
-              <input
-                type='number'
-                id='y'
-                className='form-control'
-                placeholder="4''"
-                {...register("width")}
-              />
-
-              <select
-                id='unit'
-                defaultValue={""}
-                className='form-select ms-2'
-                {...register("unit")}>
-                <option value=''>unit</option>
-                <option value='centimeters'>cm</option>
-                <option value='inches'>in</option>
-                <option value='feet'>ft</option>
-              </select>
-              {/** error check */}
-              {errors.unit?.message && (
-                <p className='text-danger'>{errors.unit.message}</p>
-              )}
+            <div className='form-group mb-2'>
+              <div className='row form-row gx-2'>
+                <div className='col'>
+                  <input
+                    type='number'
+                    id='x'
+                    className='form-control'
+                    placeholder="5''"
+                    {...register("dimension.height")}
+                  />
+                </div>
+                <div className='col'>
+                  <input
+                    type='number'
+                    id='y'
+                    className='form-control'
+                    placeholder="4''"
+                    {...register("dimension.width")}
+                  />
+                </div>
+                <div className='col col-5'>
+                  <select
+                    id='unit'
+                    defaultValue={""}
+                    className='form-select'
+                    {...register("dimension.unit")}>
+                    <option value=''>unit</option>
+                    <option value='cm'>centimeters</option>
+                    <option value='in'>inches</option>
+                    <option value='ft'>feet</option>
+                  </select>
+                  {/** error check */}
+                  {errors.dimension?.unit?.message && (
+                    <span className='alert alert-danger'>
+                      {errors.dimension.unit.message}
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
           </fieldset>
 
           {/**
            * Ad space address
            */}
-          <div className='input-group mb-2'>
+          <div className='form-group mb-2'>
             <input
               type='text'
               placeholder='Address here'
               className='form-control'
               {...register("address")}
             />
-            {/** error check */}
+            {/** address error check */}
             {errors.address?.message && (
-              <p className='text-danger'>{errors.address.message}</p>
+              <span className='text-danger'>{errors.address.message}</span>
             )}
           </div>
 
