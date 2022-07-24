@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { ToastContainer } from "react-toastify";
+import notify from "../utils/notify";
 
 export default function NewMessage({ recipient, subject }) {
   const schema = yup.object().shape({
@@ -93,6 +95,7 @@ export default function NewMessage({ recipient, subject }) {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </form>
   );
 }

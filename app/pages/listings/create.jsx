@@ -5,7 +5,8 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { env } from "../../next.config";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import notify from "../../utils/notify";
 
 const cloudinaryUploadURL = process.env.CLOUDINARY_UNAUTH_UPLOAD_URL;
 const cloudinaryName = process.env.CLOUDINARY_CLOUD_NAME;
@@ -430,14 +431,3 @@ async function listingSubmitHandler({ space, user, status }) {
     })
     .catch(console.error);
 }
-
-/**
- * Custom notification toast
- * @param {*} message the message to display
- * @param {*} success succeeded?
- * @returns Toast ID
- */
-const notify = (message, success = true) => {
-  if (!success) return toast.error(message);
-  toast.success(message);
-};

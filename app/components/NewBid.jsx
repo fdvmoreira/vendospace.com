@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import notify from "../utils/notify";
+import { useEffect } from "react";
+import { ToastContainer } from "react-toastify";
 
 export default function NewBid({ data }) {
   const schema = yup.object().shape({
@@ -16,6 +19,7 @@ export default function NewBid({ data }) {
   } = useForm({
     resolver: yupResolver(schema),
   });
+
   return (
     <form onSubmit={handleSubmit((data) => console.log(data))}>
       <div
@@ -93,6 +97,7 @@ export default function NewBid({ data }) {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </form>
   );
 }
