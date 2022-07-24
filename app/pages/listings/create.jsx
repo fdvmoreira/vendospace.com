@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { env } from "../../next.config";
+import { toast, ToastContainer } from "react-toastify";
 
 const cloudinaryUploadURL = process.env.CLOUDINARY_UNAUTH_UPLOAD_URL;
 const cloudinaryName = process.env.CLOUDINARY_CLOUD_NAME;
@@ -275,6 +276,7 @@ export default function Listing() {
           />
         </form>
       </div>
+      <ToastContainer autoClose={4000} />
     </div>
   );
 
@@ -303,13 +305,13 @@ export default function Listing() {
       // type: elements.type.value,
       // otherType: elements.otherType?.value || "",
       // location: {
-      //   latitude: elements.latitude.value,
-      //   longitude: elements.longitude.value,
+      //   latitude: elements.location.latitude.value,
+      //   longitude: elements.location.longitude.value,
       // },
       // dimension: {
-      //   width: elements.width.value,
-      //   height: elements.height.value,
-      //   unit: elements.unit.value,
+      //   width: elements.dimension.width.value,
+      //   height: elements.dimension.height.value,
+      //   unit: elements.dimension.unit.value,
       // },
       // imagesURL: uploadedImageFiles,
       // address: elements.address.value,
@@ -326,7 +328,7 @@ export default function Listing() {
   }
 
   /**
-   * handle the image change
+   * handles the image change
    * @param {*} event
    * @returns
    */
@@ -366,7 +368,10 @@ async function uploadImageFiles(files) {
       body: formData,
     })
       .then((res) => res.json())
-      .then((data) => URLs.push(data.secure_url))
+      .then((data) => {
+        URLs.push(data.secure_url);
+        notify(files.length + " Images uploaded");
+      })
       .catch((err) => console.error(err.message));
   }
   return URLs;
@@ -377,7 +382,7 @@ async function uploadImageFiles(files) {
  * @param {*} obj
  */
 async function adspaceSubmitHandler(obj) {
-  let createdAdSpaceId = "coco";
+  let createdAdSpaceId = "cocoloco";
   const ADSPACE_API_URL = "/api/v1/spaces";
 
   //TODO print verufy the structure received
@@ -394,6 +399,7 @@ async function adspaceSubmitHandler(obj) {
     .then((res) => res.json())
     .then((data) => {
       createdAdSpaceId = data.id;
+      notify("Space created!");
     })
     .catch((err) => console.error(err.message));
   return createdAdSpaceId;
@@ -418,6 +424,20 @@ async function listingSubmitHandler({ space, user, status }) {
     }),
   })
     .then((res) => res.json())
-    .then((data) => console.log(data?.message || data?.stack))
+    .then((data) => {
+      console.log(data?.message || data?.stack);
+      notify("Listing created");
+    })
     .catch(console.error);
 }
+
+/**
+ * Custom notification toast
+ * @param {*} message the message to display
+ * @param {*} success succeeded?
+ * @returns Toast ID
+ */
+const notify = (message, success = true) => {
+  if (!success) return toast.error(message);
+  toast.success(message);
+};
