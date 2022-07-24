@@ -16,10 +16,20 @@ export default function Listing() {
   const [selectImage, setSelectImage] = useState("Select Images");
   const [otherType, setOtherType] = useState({ display: "none" });
 
+  /** form schema */
   const schema = yup.object().shape({
-    file: yup.mixed().required("Select an image"),
+    // TODO set the limit for the size of files accepted
+    // file: yup.mixed().test("size", "Please select a file", (files) => {
+    //   return files?.length > 0;
+    // }),
     type: yup.string().label("Type").required(),
-    typeDescription: yup.string().default(""),
+    typeDescription: yup
+      .string()
+      .default("")
+      .when("type", {
+        is: (type) => type === "other",
+        then: yup.string().required("A short description is required"),
+      }),
     location: yup.object().shape({
       latitude: yup.number(),
       longitude: yup.number(),
@@ -27,12 +37,15 @@ export default function Listing() {
     dimension: yup.object().shape({
       height: yup.number().positive().required(),
       width: yup.number().positive().required(),
-      unit: yup.string().when("height", {
-        is: (val) => {
-          return yup.ref("height") == true;
-        },
-        then: yup.string().required(),
-      }),
+      unit: yup
+        .string()
+        .label("Unit")
+        .when(["height", "width"], {
+          is: (height, width) => {
+            return height || width;
+          },
+          then: yup.string().required(),
+        }),
     }),
     address: yup.string().label("Address").required(),
     status: yup.string().label("Status").required(),
@@ -52,7 +65,7 @@ export default function Listing() {
       <hr className='' />
       <div style={{ width: "360px" }} className='m-auto'>
         <form
-          onSubmit={handleSubmit((data) => console.log(data))}
+          onSubmit={handleSubmit(submitHandler)}
           encType='multipart/form-data'>
           <figure
             className='border border-secondary d-inline-block cursor-hand p-4'
@@ -76,25 +89,22 @@ export default function Listing() {
           <input
             type='file'
             id='file'
-            className='btn form-control mb-2 me-2'
+            className='btn form-control mb-2 me-2 d-none'
             accept='image/*'
-            style={{ display: "block" }}
-            onChange={handleImageChange}
+            onChange={(e) => {
+              handleImageChange;
+              console.log(e.target.files);
+              setImageSrc(URL.createObjectURL(e.target.files[0]));
+            }}
             multiple
             ref={imageButton}
-            {...register("file")}
             name='file'
+            // {...register("file")}
           />
           {/** file error check */}
           {errors.file?.message && (
             <p className='text-danger'>{errors.file?.message}</p>
           )}
-          {/**
-           * Image URLs
-           */}
-          <datalist name='imageUrls' id='imageUrls'>
-            <option value='' />
-          </datalist>
 
           {/**
            * Type of ad space
@@ -146,6 +156,12 @@ export default function Listing() {
             className='form-control mb-2'
             {...register("typeDescription")}
           />
+          {/** other type error */}
+          {errors.typeDescription?.message && (
+            <span className='text-danger'>
+              {errors.typeDescription.message}
+            </span>
+          )}
 
           {/**
            * Location
@@ -208,7 +224,7 @@ export default function Listing() {
                   </select>
                   {/** error check */}
                   {errors.dimension?.unit?.message && (
-                    <span className='alert alert-danger'>
+                    <span className='text-danger small'>
                       {errors.dimension.unit.message}
                     </span>
                   )}
@@ -266,8 +282,12 @@ export default function Listing() {
    * Handle the submit event
    * @param {event} event
    */
-  async function submitHandler(event) {
+  async function submitHandler(data, event) {
     event.preventDefault();
+
+    console.log({ ...data, mine: "extra" });
+    console.log(event);
+
     const elements = event.target;
 
     // upload the images
@@ -278,19 +298,21 @@ export default function Listing() {
 
     // create adspace
     let adspaceId = await adspaceSubmitHandler({
-      type: elements.type.value,
-      otherType: elements.otherType?.value || "",
-      location: {
-        latitude: elements.latitude.value,
-        longitude: elements.longitude.value,
-      },
-      dimension: {
-        width: elements.width.value,
-        height: elements.height.value,
-        unit: elements.unit.value,
-      },
+      ...data,
       imagesURL: uploadedImageFiles,
-      address: elements.address.value,
+      // type: elements.type.value,
+      // otherType: elements.otherType?.value || "",
+      // location: {
+      //   latitude: elements.latitude.value,
+      //   longitude: elements.longitude.value,
+      // },
+      // dimension: {
+      //   width: elements.width.value,
+      //   height: elements.height.value,
+      //   unit: elements.unit.value,
+      // },
+      // imagesURL: uploadedImageFiles,
+      // address: elements.address.value,
     });
 
     // create listing
@@ -315,7 +337,8 @@ export default function Listing() {
     if (selectFilesCount === 0) return;
 
     for (let i = 0; i <= selectFilesCount; i++) {
-      event.target.files[`${i}`] && files.push(event.target.files[`${i}`]);
+      // event.target.files[`${i}`] && files.push(event.target.files[`${i}`]);
+      event.target.files[i] && files.push(event.target.files[i]);
     }
 
     setSelectImage(`${selectFilesCount} selected`);
