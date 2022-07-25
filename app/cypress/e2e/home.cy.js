@@ -1,5 +1,5 @@
 describe('empty spec', () => {
-  it('passes', () => {
+  it.only('passes', () => {
     cy.visit('http://localhost:3000')
   })
 })
