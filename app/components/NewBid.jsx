@@ -9,7 +9,12 @@ export default function NewBid({ data }) {
   const schema = yup.object().shape({
     bidder: yup.string().required(),
     auction: yup.string().required(),
-    price: yup.number().min(1).required().typeError("Price required > 1"),
+    price: yup
+      .number()
+      .min(1, "Bid should be > 0")
+      .label("Price")
+      .required()
+      .typeError("Bid required"),
   });
 
   const {
@@ -91,7 +96,7 @@ export default function NewBid({ data }) {
               <input
                 type='submit'
                 className='btn btn-success'
-                value='Place did'
+                value='Place bid'
               />
             </div>
           </div>
