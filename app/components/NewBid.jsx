@@ -48,7 +48,7 @@ export default function NewBid({ data }) {
             </div>
 
             <div className='modal-body'>
-              {/** bidder */}
+              {/** bidder */} //TODO auto add the bidder
               <div className='m-1'>
                 <input
                   type='text'
