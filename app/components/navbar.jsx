@@ -5,7 +5,7 @@ import { useLogin } from "../context/loginContext";
 import { ToastContainer, toast } from "react-toastify";
 
 const Navbar = ({ props }) => {
-  const [login, updateLogin] = useLogin();
+  const [user, updateUser] = useLogin();
   // updateLogin(true);
 
   return (
@@ -28,7 +28,7 @@ const Navbar = ({ props }) => {
           <span className='bi bi-list'></span>
         </a>
         <div className='collapse navbar-collapse' id='navbarSupportedContent'>
-          {!login ? (
+          {!user.loggedIn ? (
             <div className='d-flex-row justify-content-around '>
               <Link href='/login'>
                 <a className='btn btn-sm btn-outline-primary mx-1'>Login</a>
@@ -39,8 +39,11 @@ const Navbar = ({ props }) => {
             </div>
           ) : (
             <div className='dropdown'>
+              {
+                //TODO add component to create listing and auctions
+              }
               <Link href={"/listings/create"}>
-                <a className='btn navbar-btn btn-primary'>Create listing</a>
+                <a className='btn navbar-btn btn-primary'>Create slisting</a>
               </Link>
               <a
                 className='btn navbar-btn btn-secondary dropdown-toggle'
@@ -62,7 +65,7 @@ const Navbar = ({ props }) => {
                   <Link href='/'>
                     <a
                       onClick={(e) => {
-                        updateLogin(false);
+                        updateUser({ ...user, loggedIn: false });
                       }}
                       className='dropdown-item'>
                       Logout&nbsp;<i className='bi bi-box-arrow-right'></i>
