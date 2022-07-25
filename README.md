@@ -18,7 +18,7 @@ Find the best adspace for your Out-Of-Home campaign
     git clone git@github.com:fdvmoreira/vendospace.com.git .
 
 ### Usage
-Inside vendospace.com folder type the following command:
+Inside vendospace.com directory, type the following command:
 ``` 
 cd app &&\
 npm install &&\
