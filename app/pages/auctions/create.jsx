@@ -3,14 +3,19 @@ import Link from "next/link";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import { useLogin } from "../../context/loginContext";
+import notify from "../../utils/notify";
+import { ToastContainer } from "react-toastify";
 
 const AUCTION_API_URL = "/api/v1/auctions";
 let userId = "622f55d4b3763981e2e825df";
 
-export default function Auction(props) {
+export default function Auction({ data }) {
+  const [user] = useLogin();
+
   const schema = yup.object().shape({
-    user: yup.string().required().typeError("User ID is required"),
-    space: yup.string().required().typeError("Ad space required"),
+    user: yup.string().required().label("User"),
+    space: yup.string().required().label("Space"),
     start: yup
       .date()
       .required()
@@ -50,7 +55,7 @@ export default function Auction(props) {
 
       <form onSubmit={handleSubmit(submitHandler)}>
         {/** User ID */} //TODO get the user from context API
-        <input type='hidden' value={userId} {...register("user")} />
+        <input type='hidden' value={user.userId} {...register("user")} />
         {/** user error check */}
         {errors.user?.message && (
           <p className='text-danger'>{errors.user?.message}</p>
@@ -132,14 +137,15 @@ export default function Auction(props) {
           className='btn btn-success ms-2'
           value={"Create auction"}
         />
+        <ToastContainer />
       </form>
     </div>
   );
 }
 
-async function submitHandler(data) {
+async function submitHandler(data, event) {
   // event.preventDefault();
-  console.log(data);
+  // console.log(data);
 
   await fetch(AUCTION_API_URL, {
     method: "POST",
@@ -149,6 +155,9 @@ async function submitHandler(data) {
     body: JSON.stringify(data),
   })
     .then((res) => res.json())
-    .then((data) => console.log(data))
-    .catch((err) => console.error(err));
+    .then((data) => {
+      if (data.success) notify("Auction Created");
+      console.log(data);
+    })
+    .catch(console.error);
 }
