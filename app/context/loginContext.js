@@ -6,8 +6,8 @@ const loginContext = createContext();
 // create context provider component
 export function LoginContext(props) {
     const [login, setLogin] = useState({
-        userId: undefined,
-        loggedIn: false
+        userId: "622f55d4b3763981e2e825df",
+        loggedIn: true
     });
     // update login context
     function updateLogin(user) {

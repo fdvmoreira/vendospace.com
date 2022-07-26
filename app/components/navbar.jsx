@@ -43,7 +43,7 @@ const Navbar = ({ props }) => {
                 //TODO add component to create listing and auctions
               }
               <Link href={"/listings/create"}>
-                <a className='btn navbar-btn btn-primary'>Create slisting</a>
+                <a className='btn navbar-btn btn-primary'>Create listing</a>
               </Link>
               <a
                 className='btn navbar-btn btn-secondary dropdown-toggle'
@@ -61,6 +61,7 @@ const Navbar = ({ props }) => {
                     <a className='dropdown-item'>My account</a>
                   </Link>
                 </li>
+                <div className="separator"></div>
                 <li>
                   <Link href='/'>
                     <a
