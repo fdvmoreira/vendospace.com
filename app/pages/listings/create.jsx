@@ -4,9 +4,9 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { env } from "../../next.config";
 import { ToastContainer } from "react-toastify";
 import notify from "../../utils/notify";
+import { useLogin } from "../../context/loginContext";
 
 const cloudinaryUploadURL = process.env.CLOUDINARY_UNAUTH_UPLOAD_URL;
 const cloudinaryName = process.env.CLOUDINARY_CLOUD_NAME;
@@ -18,12 +18,14 @@ export default function Listing() {
   const [selectImage, setSelectImage] = useState("Select Images");
   const [otherType, setOtherType] = useState({ display: "none" });
 
+  const [user] = useLogin();
   /** form schema */
   const schema = yup.object().shape({
     // TODO set the limit for the size of files accepted
     // file: yup.mixed().test("size", "Please select a file", (files) => {
-    //   return files?.length > 0;
+    //   return files?.size <= 4*1024*1024 0;
     // }),
+    user: yup.string().required().label("User"),
     type: yup.string().label("Type").required(),
     typeDescription: yup
       .string()
@@ -87,7 +89,20 @@ export default function Listing() {
               {selectImage}
             </figcaption>
           </figure>
+          {/** user */}
+          <input
+            type='plain'
+            className='form-control mb-2 d-none'
+            value={user.userId}
+            onChange={(e) => console.log("user has changed")}
+            {...register("user")}
+          />
+          {/** error check */}
+          {errors.user?.message && (
+            <p className='text-danger'>{errors.user?.message}</p>
+          )}
 
+          {/** Files */}
           <input
             type='file'
             id='file'
@@ -287,44 +302,25 @@ export default function Listing() {
    */
   async function submitHandler(data, event) {
     event.preventDefault();
-
-    console.log({ ...data, mine: "extra" });
-    console.log(event);
-
+    // console.log({ ...data, mine: "extra" });
     const elements = event.target;
 
     // upload the images
-    // debugger
-    let uploadedImageFiles = await uploadImageFiles(elements.file.files);
-    // console.log(uploadedImageFiles);
-    // wait for the urls from object
+    let uploadedImageFiles = [];
+    if (elements.file.files.length > 0)
+      uploadedImageFiles = await uploadImageFiles(elements.file.files);
 
     // create adspace
     let adspaceId = await adspaceSubmitHandler({
       ...data,
       imagesURL: uploadedImageFiles,
-      // type: elements.type.value,
-      // otherType: elements.otherType?.value || "",
-      // location: {
-      //   latitude: elements.location.latitude.value,
-      //   longitude: elements.location.longitude.value,
-      // },
-      // dimension: {
-      //   width: elements.dimension.width.value,
-      //   height: elements.dimension.height.value,
-      //   unit: elements.dimension.unit.value,
-      // },
-      // imagesURL: uploadedImageFiles,
-      // address: elements.address.value,
     });
 
     // create listing
-    const userId = "62d5c2e8fa838b651f49b98c"; //TODO get the user from context
-
     listingSubmitHandler({
       space: adspaceId,
-      user: userId,
-      status: elements.status.value,
+      user: data.user,
+      status: data.status,
     });
   }
 
@@ -343,15 +339,13 @@ export default function Listing() {
       // event.target.files[`${i}`] && files.push(event.target.files[`${i}`]);
       event.target.files[i] && files.push(event.target.files[i]);
     }
-
     setSelectImage(`${selectFilesCount} selected`);
-
     setImageSrc(URL.createObjectURL(files[0]));
   }
 }
 
 /**
- * Upload the images to the cloud storage
+ * Uploads the images to the cloud storage
  * @param {*} files
  * @returns
  */
@@ -370,25 +364,22 @@ async function uploadImageFiles(files) {
     })
       .then((res) => res.json())
       .then((data) => {
+        if (data?.secure_url.length > 0)
+          notify(files.length + " Images uploaded");
         URLs.push(data.secure_url);
-        notify(files.length + " Images uploaded");
       })
-      .catch((err) => console.error(err.message));
+      .catch(console.error);
   }
   return URLs;
 }
 
 /**
- * Handle the creation of ad spaces
+ * Handles the creation of ad spaces
  * @param {*} obj
  */
 async function adspaceSubmitHandler(obj) {
   let createdAdSpaceId = "cocoloco";
   const ADSPACE_API_URL = "/api/v1/spaces";
-
-  //TODO print verufy the structure received
-  console.log(obj);
-  console.log(JSON.stringify(obj));
 
   await fetch(ADSPACE_API_URL, {
     method: "POST",
@@ -399,10 +390,10 @@ async function adspaceSubmitHandler(obj) {
   })
     .then((res) => res.json())
     .then((data) => {
+      if (data.success) notify("Space created!");
       createdAdSpaceId = data.id;
-      notify("Space created!");
     })
-    .catch((err) => console.error(err.message));
+    .catch(console.error);
   return createdAdSpaceId;
 }
 
@@ -426,8 +417,8 @@ async function listingSubmitHandler({ space, user, status }) {
   })
     .then((res) => res.json())
     .then((data) => {
+      if (data.success) notify("Listing created");
       console.log(data?.message || data?.stack);
-      notify("Listing created");
     })
     .catch(console.error);
 }
