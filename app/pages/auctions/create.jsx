@@ -19,18 +19,12 @@ export default function Auction({ data }) {
     start: yup
       .date()
       .required()
-      .test("start-after-now", "This date has passed", (startdate, context) => {
-        return startdate.getTime() > Date.now();
-      })
+      .default(() => Date())
       .typeError("Start date and time are required"),
     end: yup
       .date()
       .required()
-      .test(
-        "is-after-start",
-        "End data is before start date",
-        (value, context) => value.getTime() > context.parent.start.getTime(),
-      )
+      .default(() => Date())
       .typeError("End date and time are required"),
     initialPrice: yup
       .number()
