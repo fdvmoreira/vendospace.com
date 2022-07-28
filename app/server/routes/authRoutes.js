@@ -12,14 +12,21 @@ router.get('/auth/linkedin', passport.authenticate('linkedin'));
 router.get('/auth/google/callback', passport.authenticate('google',
     {
         failureRedirect: '/login',
-        failureMessage: "Failed",
+        // failureMessage: "Failed",
         successRedirect: '/',
-        successMessage: "Success",
+        // successMessage: "Success",
         session: false
-    }, (...args) => {
-        console.log("PROFILE GOOGLE");
-        console.log(args[1]);
-    }));
+    }
+    // , (...args) => {
+    //     console.log("PROFILE GOOGLE");
+    //     console.log(args[1]);
+
+    // }
+), (req, res) => {
+    console.log("End of google request");
+    // console.log(req);
+    res.status(200).json({ message: "End of Google's ops", user: req?.user })
+});
 
 /**
  * FACEBOOK

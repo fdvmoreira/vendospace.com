@@ -12,15 +12,13 @@ const googleStrategy = new GoogleStrategy({
 
     console.log(profile._json);
 
-    // const id = mongoose.Types.ObjectId(profile.id);
-
     User.findOne({
         name: profile._json.name,
         email: profile._json.email,
         passwordHash: "",
         signupMethod: profile.provider
     }, (err, user) => {
-        return done(err, profile._json);
+        return done(err, profile);
     });
 });
 
