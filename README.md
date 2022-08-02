@@ -26,6 +26,7 @@ npm run server
  ```
 
 ## Libraries
+     @hookform/resolvers": "^2.9.6"
      bcrypt": "^5.0.1"
      bootstrap": "^5.1.3"
      bootstrap-icons": "^1.8.1"
@@ -44,6 +45,7 @@ npm run server
      react-dom": "18.1.0"
      react-hook-form": "^7.33.1"
      react-toastify": "^9.0.1"
+     swr": "^1.3.0"
      yup": "^0.32.11"
 
 ## License
