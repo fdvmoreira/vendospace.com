@@ -5,7 +5,10 @@ import notify from "../utils/notify";
 import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 
-export default function NewBid({ data }) {
+export default function NewBid({ bidder, auction }) {
+  {
+    // TODO handle the props passed from parent component
+  }
   const schema = yup.object().shape({
     bidder: yup.string().required(),
     auction: yup.string().required(),
@@ -105,4 +108,27 @@ export default function NewBid({ data }) {
       <ToastContainer />
     </form>
   );
+}
+
+export function onSubmit(auction, data) {
+  // TODO revuew the URI for its parameters
+  const BID_URL = `/api/v1/bids/${auction}`;
+
+  fetch(BID_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: data,
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (!data.success) {
+        notify("Operation has failed", false);
+        console.log(data.message);
+        return;
+      }
+
+      notify("Bid placed successfuly");
+    });
 }
