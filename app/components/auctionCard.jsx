@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useLogin } from "../context/loginContext";
 import NewBid from "./NewBid";
 
 export default function AuctionCard({ auction }) {
@@ -14,6 +15,7 @@ export default function AuctionCard({ auction }) {
     status,
   } = auction;
 
+  const [authUser, userUpdate] = useLogin();
   let [space, setSpace] = useState();
   let [highestBid, setHighestBid] = useState(0);
   let [remainingTime, setRemainingTime] = useState(
@@ -110,7 +112,7 @@ export default function AuctionCard({ auction }) {
           data-bs-target='#bidModal'>
           New bid
         </button>
-        <NewBid data={"dss"} />
+        <NewBid data={{ bidderId: authUser.userId, auctionId: auction._id }} />
       </div>
     </div>
   );
