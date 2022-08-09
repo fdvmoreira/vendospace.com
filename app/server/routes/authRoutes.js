@@ -11,21 +11,12 @@ router.get('/auth/linkedin', passport.authenticate('linkedin'));
 /** GOOGLE */
 router.get('/auth/google/callback', passport.authenticate('google',
     {
-        failureRedirect: '/login',
-        // failureMessage: "Failed",
-        successRedirect: '/',
-        // successMessage: "Success",
         session: false
     }
-    // , (...args) => {
-    //     console.log("PROFILE GOOGLE");
-    //     console.log(args[1]);
-
-    // }
 ), (req, res) => {
-    console.log("End of google request");
-    // console.log(req);
+    if (!req.user) return res.status(204).json({ message: "Unauthorized access" })
     res.status(200).json({ message: "End of Google's ops", user: req?.user })
+    //TODO send the user the front end so it can used for auth
 });
 
 /**
