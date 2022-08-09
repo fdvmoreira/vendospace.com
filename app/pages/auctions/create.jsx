@@ -60,13 +60,16 @@ export default function Auction({ data }) {
       <hr className='hr' />
 
       <form onSubmit={handleSubmit(submitHandler)}>
-        {/** User ID */} //TODO get the user from context API
+        {/** User ID */}
         <input type='hidden' value={user.userId} {...register("user")} />
         {/** user error check */}
         {errors.user?.message && (
           <p className='text-danger'>{errors.user?.message}</p>
         )}
-        {/** space ID */} //TODO implement space selection or creation
+        {/** space ID */}
+        {
+          //TODO implement space selection or creation
+        }
         <input
           type='hidden'
           value={"62d66ac134e94039f9bb8883"}
