@@ -5,10 +5,7 @@ import notify from "../utils/notify";
 import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 
-export default function NewBid({ bidder, auction }) {
-  {
-    // TODO handle the props passed from parent component
-  }
+export default function NewBid({ data: { bidderId, auctionId } }) {
   const schema = yup.object().shape({
     bidder: yup.string().required(),
     auction: yup.string().required(),
@@ -26,6 +23,10 @@ export default function NewBid({ bidder, auction }) {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      bidder: bidderId,
+      auction: auctionId,
+    },
   });
 
   return (
@@ -51,13 +52,13 @@ export default function NewBid({ bidder, auction }) {
             </div>
 
             <div className='modal-body'>
-              {/** bidder */} //TODO auto add the bidder
+              {/** bidder */}
               <div className='m-1'>
                 <input
                   type='text'
                   className='form-control'
                   placeholder='Bidder ID'
-                  {...register("bidder")}
+                  {...register("bidder", { readOnly: true })}
                 />
                 {/** check bidder error  */}
                 {errors.bidder?.message && (
@@ -110,8 +111,10 @@ export default function NewBid({ bidder, auction }) {
   );
 }
 
-export function onSubmit(auction, data) {
+export function onSubmit(data, event) {
+  event.preventDefault();
   // TODO revuew the URI for its parameters
+
   const BID_URL = `/api/v1/bids/${auction}`;
 
   fetch(BID_URL, {
