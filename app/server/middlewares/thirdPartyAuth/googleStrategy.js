@@ -18,7 +18,8 @@ const googleStrategy = new GoogleStrategy({
         passwordHash: "",
         signupMethod: profile.provider
     }, (err, user) => {
-        return done(err, profile);
+        if (err) return done(err);
+        return done(err, profile._json);
     });
 });
 
