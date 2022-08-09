@@ -23,7 +23,7 @@ export default (props) => {
     fetch(LISTINGS_API_URL)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         setListings(data);
       })
       .catch((err) => console.error(err));
@@ -32,8 +32,9 @@ export default (props) => {
   return (
     <div className='container'>
       <hr />
-      <p className='lead'>welcome</p>
-      <p>{props.data}</p>
+      {/**
+       * // TODO: display the listings and auctions according to the current sort order
+       */}
       <ul className='list-group'>
         {auctions.map((auction) => {
           return (
@@ -55,7 +56,13 @@ export default (props) => {
   );
 };
 
+/**
+ * server-side rendering for main page content
+ * @param {*} context
+ * @returns
+ */
 export async function getServerSideProps(context) {
+  //TODO: fetch data from server side
   return {
     props: {
       data: "my testing data",
