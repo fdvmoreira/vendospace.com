@@ -58,7 +58,8 @@ export default function NewBid({ data: { bidderId, auctionId } }) {
                   type='text'
                   className='form-control'
                   placeholder='Bidder ID'
-                  {...register("bidder", { readOnly: true })}
+                  readOnly={true}
+                  {...register("bidder")}
                 />
                 {/** check bidder error  */}
                 {errors.bidder?.message && (
@@ -71,6 +72,7 @@ export default function NewBid({ data: { bidderId, auctionId } }) {
                   type='text'
                   className='form-control'
                   placeholder='Auction ID'
+                  readOnly={true}
                   {...register("auction")}
                 />
                 {/** check auction error  */}
