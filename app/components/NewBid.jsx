@@ -2,10 +2,12 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import notify from "../utils/notify";
-import { useEffect } from "react";
+import { useRef } from "react";
 import { ToastContainer } from "react-toastify";
 
 export default function NewBid({ data: { bidderId, auctionId } }) {
+  const closeModalButton = useRef(undefined);
+
   const schema = yup.object().shape({
     bidder: yup.string().required(),
     auction: yup.string().required(),
@@ -30,7 +32,7 @@ export default function NewBid({ data: { bidderId, auctionId } }) {
   });
 
   return (
-    <form onSubmit={handleSubmit((data) => console.log(data))}>
+    <form onSubmit={handleSubmit((data, event) => onSubmit(data, event))}>
       <div
         className='modal fade'
         id='bidModal'
@@ -43,6 +45,7 @@ export default function NewBid({ data: { bidderId, auctionId } }) {
               <h5 className='modal-title'>New bid</h5>
               {/** close modal button */}
               <button
+                ref={closeModalButton}
                 type='button'
                 className='btn close'
                 data-bs-dismiss='modal'
@@ -111,29 +114,30 @@ export default function NewBid({ data: { bidderId, auctionId } }) {
       <ToastContainer />
     </form>
   );
-}
 
-export function onSubmit(data, event) {
-  event.preventDefault();
-  // TODO revuew the URI for its parameters
+  function onSubmit(data, event) {
+    event.preventDefault();
+    const BID_URL = `/api/v1/bids`;
 
-  const BID_URL = `/api/v1/bids/${auction}`;
+    fetch(BID_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.success) {
+          notify("Operation has failed", false);
+          console.log(data.message);
+          return;
+        }
 
-  fetch(BID_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json;charset=utf-8",
-    },
-    body: data,
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (!data.success) {
-        notify("Operation has failed", false);
-        console.log(data.message);
-        return;
-      }
+        notify("Bid placed successfuly");
 
-      notify("Bid placed successfuly");
-    });
+        // close the modal if successfuly
+        closeModalButton?.current?.click();
+      });
+  }
 }
