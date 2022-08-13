@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import useSWR from "swr";
 import { useLogin } from "../context/loginContext";
 import NewBid from "./NewBid";
 
@@ -22,9 +23,16 @@ export default function AuctionCard({ auction }) {
     (Number(new Date(end).getTime()) - Number(Date.now())) / (1000 * 60 * 60),
   );
 
+  // TODO: fetch the highest price from every minute
+  const BIDS_URL = "/api/v1/bids/${auctionId}";
+  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+  const { data, error } = useSWR(BIDS_URL, fetcher, { refreshInterval: 1000 });
+  setHighestBid(data?.highestBid);
+
   const SPACE_API_URL = `/api/v1/spaces/${spaceId}`;
   const BID_API_URL = `/api/v1/bids/${spaceId}`;
 
+  // TODO: fetch thhe data with the swr hook
   useEffect(() => {
     // fetch space data
     fetch(SPACE_API_URL)
@@ -50,6 +58,7 @@ export default function AuctionCard({ auction }) {
       Number(new Date(end).getTime()),
     );
   }, []);
+
   return (
     <div className='card'>
       <div className='card-header'>

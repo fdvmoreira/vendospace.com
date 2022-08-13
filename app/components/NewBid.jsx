@@ -11,6 +11,8 @@ export default function NewBid({ data: { bidderId, auctionId } }) {
   const schema = yup.object().shape({
     bidder: yup.string().required(),
     auction: yup.string().required(),
+
+    //TODO: ensure that the price is higher than the current price
     price: yup
       .number()
       .min(1, "Bid should be > 0")
