@@ -24,17 +24,11 @@ export default function AuctionCard({ auction }) {
   );
 
   // TODO: fetch the highest price from every minute
-<<<<<<< HEAD
+
   // const BIDS_URL = "/api/v1/bids/${auctionId}";
   // const fetcher = (...args) => fetch(...args).then((res) => res.json());
   // const { data, error } = useSWR(BIDS_URL, fetcher, { refreshInterval: 1000 });
   // setHighestBid(data?.highestBid);
-=======
-  const BIDS_URL = "/api/v1/bids/${auctionId}";
-  const fetcher = (...args) => fetch(...args).then((res) => res.json());
-  const { data, error } = useSWR(BIDS_URL, fetcher, { refreshInterval: 1000 });
-  setHighestBid(data?.highestBid);
->>>>>>> 7953f7ca5f4ebadb72f30774f104f7aa0af16041
 
   const SPACE_API_URL = `/api/v1/spaces/${spaceId}`;
   const BID_API_URL = `/api/v1/bids/${spaceId}`;
