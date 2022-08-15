@@ -47,6 +47,8 @@ export default function NewMessage({ recipient, subject }) {
                 type='text'
                 className='form-control'
                 placeholder='Recipient'
+                defaultValue={recipient}
+                readOnly={true}
                 {...register("recipient")}
               />
               {/** recipient error check */}
