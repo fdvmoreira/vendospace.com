@@ -65,7 +65,7 @@ export default function ListingCard({ listing }) {
           data-bs-target='#messageModal'>
           Message owner
         </button>
-        <NewMessage recipient={user} />
+        <NewMessage recipient={user} subject={"default subject!"} />
       </div>
     </div>
   );
