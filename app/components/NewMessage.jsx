@@ -3,11 +3,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { ToastContainer } from "react-toastify";
 import notify from "../utils/notify";
+import { useRef } from "react";
 
 export default function NewMessage({ recipient, subject }) {
+  const closeModalButton = useRef({});
+
   const schema = yup.object().shape({
     recipient: yup.string().required(),
-    subject: yup.string().required(),
+    subject: yup.string().max(50).required(),
     message: yup.string().max(200).required(),
   });
 
@@ -20,7 +23,7 @@ export default function NewMessage({ recipient, subject }) {
   });
 
   return (
-    <form onSubmit={handleSubmit((data) => console.log(data))}>
+    <form onSubmit={handleSubmit((data, event) => onSubmit(data, event))}>
       <div
         className='modal fade m-auto'
         id='messageModal'
@@ -33,6 +36,7 @@ export default function NewMessage({ recipient, subject }) {
               <h5 className='modal-title'>New Message</h5>
               {/** modal close button */}
               <button
+                ref={closeModalButton}
                 type='button'
                 className='btn close'
                 data-bs-dismiss='modal'
@@ -62,6 +66,7 @@ export default function NewMessage({ recipient, subject }) {
                 type='text'
                 className='form-control'
                 placeholder='Subject'
+                defaultValue={subject}
                 {...register("subject")}
               />
               {/** subject error check */}
@@ -100,4 +105,22 @@ export default function NewMessage({ recipient, subject }) {
       <ToastContainer />
     </form>
   );
+}
+/**
+ * submit the message to the server
+ * @param {objexxt} data to be sent to the server
+ * @param {Event} event default event object of the form submitHandler
+ */
+function onSubmit(data, event) {
+  event.preventDefault();
+  const API_NEWMESSAGE = "/api/v1/messages";
+
+  fetch(API_NEWMESSAGE)
+    .then((res) => res.json())
+    .then((data) => {
+      if (!data.success) return console.log(data?.message);
+      notify("Message sent successfuly");
+      closeModalButton.current.click();
+    })
+    .catch(console.error);
 }
