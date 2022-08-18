@@ -35,7 +35,7 @@ const deleteMessage = asyncHandler(async (req, res) => {
     Message.findByIdAndDelete(req.params.id, (err, doc) => {
         if (err) res.status(400).json({ success: false, message: `${err.message}` });
 
-        res.status().json({ success: true, message: `Message ${doc?.id} deleted` });
+        res.status(200).json({ success: true, message: `Message ${doc?.id} deleted` });
     });
 });
 module.exports = {
