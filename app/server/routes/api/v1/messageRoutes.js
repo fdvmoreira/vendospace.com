@@ -19,8 +19,8 @@ router.route("/").get(asynHandler(async (req, res) => { // todo - remove this ro
     (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) return res.status(400).json({
-            success: false, message: errors.array()
-        }
+            success: false, message: errors.array(),
+        })
     },
     setMessage);
 
