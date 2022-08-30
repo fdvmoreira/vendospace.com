@@ -12,8 +12,8 @@ const getMessage = asyncHandler(async (req, res) => {
 
 // create Message
 const setMessage = asyncHandler(async (req, res) => {
-    const { sender, receiver, text } = req.body;
-    Message.create({ sender, receiver, text }, (err, doc) => {
+    const { from, to, subject, text } = req.body;
+    Message.create({ from, to, subject, text }, (err, doc) => {
         if (err) res.status(400).json({ success: false, message: `${err.message}` });
 
         res.status(201).json({ success: true, message: `Message ${doc.id} created` });
