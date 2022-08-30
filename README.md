@@ -48,5 +48,4 @@ npm run server
      yup: "^0.32.11"
 
 ## License
-Unlicensed
 
