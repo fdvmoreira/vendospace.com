@@ -4,12 +4,15 @@ import * as yup from "yup";
 import { ToastContainer } from "react-toastify";
 import notify from "../utils/notify";
 import { useRef } from "react";
+import { useLogin } from "../context/loginContext";
 
-export default function NewMessage({ recipient, subject }) {
+export default function NewMessage({ recipient: to, subject }) {
+  const [login, setLogin] = useLogin();
   const closeModalButton = useRef({});
 
   const schema = yup.object().shape({
-    recipient: yup.string().required(),
+    from: yup.string().required(),
+    to: yup.string().required(),
     subject: yup.string().max(50).required(),
     message: yup.string().max(200).required(),
   });
@@ -45,19 +48,36 @@ export default function NewMessage({ recipient, subject }) {
               </button>
             </div>
             <div className='modal-body'></div>
-            {/** recipient */}
+            {/** sender id */}
+            <div className='m1'>
+              <input
+                type='hidden'
+                className='form-control'
+                placeholder='Your User ID'
+                defaultValue={login.userId}
+                readOnly={true}
+                {...register("from")}
+              />
+              {/** from error check */}
+              {errors.from?.message && (
+                <span className='alert alert-danger'>
+                  {errors.from.message}
+                </span>
+              )}
+            </div>
+            {/** to */}
             <div className='m-1'>
               <input
                 type='text'
                 className='form-control'
-                placeholder='Recipient'
-                defaultValue={recipient}
+                placeholder='to'
+                defaultValue={to}
                 readOnly={true}
-                {...register("recipient")}
+                {...register("to")}
               />
-              {/** recipient error check */}
-              {errors.recipient?.message && (
-                <span className='text-danger'>{errors.recipient.message}</span>
+              {/** to error check */}
+              {errors.to?.message && (
+                <span className='text-danger'>{errors.to.message}</span>
               )}
             </div>
             {/** subject */}
@@ -105,22 +125,27 @@ export default function NewMessage({ recipient, subject }) {
       <ToastContainer />
     </form>
   );
-}
-/**
- * submit the message to the server
- * @param {objexxt} data to be sent to the server
- * @param {Event} event default event object of the form submitHandler
- */
-function onSubmit(data, event) {
-  event.preventDefault();
-  const API_NEWMESSAGE = "/api/v1/messages";
 
-  fetch(API_NEWMESSAGE)
-    .then((res) => res.json())
-    .then((data) => {
-      if (!data.success) return console.log(data?.message);
-      notify("Message sent successfuly");
-      closeModalButton.current.click();
+  /**
+   * submit the message to the server
+   * @param {objexxt} data to be sent to the server
+   * @param {Event} event default event object of the form submitHandler
+   */
+  function onSubmit(data, event) {
+    event.preventDefault();
+    const API_NEWMESSAGE = "/api/v1/messages";
+
+    fetch(API_NEWMESSAGE, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: data.message, ...data }),
     })
-    .catch(console.error);
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.success) return console.log(data?.message);
+        notify("Message sent successfuly");
+        closeModalButton.current.click();
+      })
+      .catch(console.error);
+  }
 }
