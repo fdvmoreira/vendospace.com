@@ -1,5 +1,6 @@
 const express = require("express");
 const next = require('next')
+const helmet = require('helmet');
 require("colors");
 require("dotenv").config();
 const PORT = process.env.PORT || 3000;
@@ -22,9 +23,15 @@ nextApp.prepare().then(async () => {
     // passport auth strategies
     require("./config/passport.config");
 
+
     // parse the incoming request and respost to json format
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
+    // protec the application against well-known vulnerabilities
+    // disable x-powered-by header to obfuscate the server
+    // app.disable("x-powered-by");
+    app.use(helmet.hidePoweredBy());
+
 
     // vendospace routes
     app.use(require('./routes/vendoSpaceRoutes'));
