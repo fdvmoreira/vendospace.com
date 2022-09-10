@@ -1,3 +1,7 @@
+//TODO: ensure that the price is higher than the current price
+//TODO: show the current price in the form
+//TODO: redesign new bid form to present all info required before bid is submitted
+
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -12,7 +16,6 @@ export default function NewBid({ data: { bidderId, auctionId } }) {
     bidder: yup.string().required(),
     auction: yup.string().required(),
 
-    //TODO: ensure that the price is higher than the current price
     price: yup
       .number()
       .min(1, "Bid should be > 0")
