@@ -5,9 +5,9 @@ const { getBid, setBid, deleteBid } = require('../../../controllers/bidControlle
 // TODO: make sure that the bid is bigger than the current biggest bid before creating a new one
 // TODO: make sure that bidder and the auction ID exist before creating a new one
 router.post('/',
-    body("bidder").isHexadecimal().isByteLength(12),
-    body("auction").isHexadecimal().isByteLength(12),
-    body("price").isDecimal(),
+    body("bidder").trim().escape().isMongoId(),
+    body("auction").trim().escape().isMongoId(),
+    body("price").trim().escape().isNumeric().isDecimal(),
     (req, res, next) => {
         const errors = validationResult(req);
         if (errors.length > 0) { return res.status(400).json({ success: false, message: errors[0].msg }); }
