@@ -1,3 +1,7 @@
+//TODO: ensure that the message is in the correct format before sending it to the server
+//TODO: redesign the message form to present the form in better way
+
+
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
