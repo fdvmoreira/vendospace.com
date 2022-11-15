@@ -12,7 +12,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@hookform/resolvers": "^2.9.9",
+    "@hookform/resolvers": "^2.9.10",
     "bcrypt": "^5.1.0",
     "bootstrap": "^5.2.2",
     "bootstrap-icons": "^1.8.1",
