@@ -69,7 +69,7 @@ const Navbar = ({ props }) => {
                       updateUser({ ...user, loggedIn: false });
                     }}
                     className='dropdown-item'
-                    legacyBehavior>
+                    >
                     Logout<i className='bi bi-box-arrow-right'></i>
 
                   </Link>
