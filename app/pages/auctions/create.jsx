@@ -137,8 +137,8 @@ export default function Auction({ data }) {
           <p className='text-danger'>{errors.status?.message}</p>
         )}
         {/** TODO cancel button */}
-        <Link href='/'>
-          <a className='btn btn-outline-secondary border border-none'>Cancel</a>
+        <Link href='/' className='btn btn-outline-secondary border border-none'>
+          Cancel
         </Link>
         {/** submit button */}
         <input

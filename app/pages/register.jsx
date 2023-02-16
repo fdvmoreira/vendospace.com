@@ -118,8 +118,8 @@ const Register = () => {
             />
             <label className='ms-2 form-check-label' htmlFor='termsAgreed'>
               I agree with all the statements in{" "}
-              <Link href={"#"}>
-                <a className='link-primary'>Terms of service</a>
+              <Link href={"#"} className='link-primary'>
+                Terms of service
               </Link>
             </label>
             {errors.agreement?.message && (
@@ -166,8 +166,8 @@ const Register = () => {
       <hr className='hr' data-content='OR' />
       <p className='text-end'>
         I already have an account,{" "}
-        <Link href='/login'>
-          <a className='link-primary'>sign in</a>
+        <Link href='/login' className='link-primary'>
+          sign in
         </Link>
       </p>
     </div>

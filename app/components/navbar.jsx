@@ -11,10 +11,10 @@ const Navbar = ({ props }) => {
   return (
     <nav className='navbar navbar-expand-lg'>
       <div className='container-fluid'>
-        <Link href='/'>
-          <a className='navbar-brand'>
-            <Image src='/logo.jpeg' alt='logo' width='48' height='48' />
-          </a>
+        <Link href='/' className='navbar-brand' legacyBehavior>
+
+          <Image src='/logo.jpeg' alt='logo' width='48' height='48' />
+
         </Link>
 
         <a
@@ -30,11 +30,11 @@ const Navbar = ({ props }) => {
         <div className='collapse navbar-collapse' id='navbarSupportedContent'>
           {!user.loggedIn ? (
             <div className='d-flex-row justify-content-around '>
-              <Link href='/login'>
-                <a className='btn btn-sm btn-outline-primary mx-1'>Login</a>
+              <Link href='/login' className='btn btn-sm btn-outline-primary mx-1'>
+                Login
               </Link>
-              <Link href='/register'>
-                <a className='btn btn-sm btn-primary mx-1'>SignUp</a>
+              <Link href='/register' className='btn btn-sm btn-primary mx-1'>
+                SignUp
               </Link>
             </div>
           ) : (
@@ -42,8 +42,8 @@ const Navbar = ({ props }) => {
               {
                 //TODO add component to create listing and auctions
               }
-              <Link href={"/listings/create"}>
-                <a className='btn navbar-btn btn-primary'>Create listing</a>
+              <Link href={"/listings/create"} className='btn navbar-btn btn-primary'>
+                Create listing
               </Link>
               <a
                 className='btn navbar-btn btn-secondary dropdown-toggle'
@@ -57,20 +57,21 @@ const Navbar = ({ props }) => {
                 className='dropdown-menu'
                 aria-labelledby='dropdownMenuButton'>
                 <li>
-                  <Link href='/account/profile'>
-                    <a className='dropdown-item'>My account</a>
+                  <Link href='/account/profile' className='dropdown-item'>
+                    My account
                   </Link>
                 </li>
                 <div className="separator"></div>
                 <li>
-                  <Link href='/'>
-                    <a
-                      onClick={(e) => {
-                        updateUser({ ...user, loggedIn: false });
-                      }}
-                      className='dropdown-item'>
-                      Logout&nbsp;<i className='bi bi-box-arrow-right'></i>
-                    </a>
+                  <Link
+                    href='/'
+                    onClick={(e) => {
+                      updateUser({ ...user, loggedIn: false });
+                    }}
+                    className='dropdown-item'
+                    legacyBehavior>
+                    Logout<i className='bi bi-box-arrow-right'></i>
+
                   </Link>
                 </li>
               </ul>

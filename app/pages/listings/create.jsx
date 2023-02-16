@@ -280,8 +280,8 @@ export default function Listing() {
             <p className='text-danger'>{errors.status.message}</p>
           )}
           <br />
-          <Link href='/'>
-            <a className='btn btn-outline-secondary mb-2'>cancel</a>
+          <Link href='/' className='btn btn-outline-secondary mb-2'>
+            cancel
           </Link>
 
           {/** Submit button */}

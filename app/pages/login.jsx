@@ -79,8 +79,8 @@ const Login = () => {
       <hr data-content='' className='hr-text' />
       <p className='text-end'>
         I don't have an account,{" "}
-        <Link href='/register'>
-          <a className='link-primary'>sign me up</a>
+        <Link href='/register' className='link-primary'>
+          sign me up
         </Link>
       </p>
     </div>
