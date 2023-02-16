@@ -4,7 +4,7 @@
  *
  */
 import { useRouter } from "next/router";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 export default function Bid(props) {
   const { acid } = useRouter().query;
