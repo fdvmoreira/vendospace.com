@@ -7,8 +7,8 @@ import { toast } from "react-toastify";
  * @returns Toast ID
  */
 const notify = (message, success = true) => {
-    if (!success) return toast.error(message);
-    toast.success(message);
+  if (!success) return toast.error(message);
+  toast.success(message);
 };
 
 export default notify;
