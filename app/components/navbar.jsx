@@ -2,14 +2,13 @@ import Image from "next/legacy/image";
 import Link from "next/link";
 import { useLogin } from "../context/loginContext";
 
-import { ToastContainer, toast } from "react-toastify";
 
 const Navbar = ({ props }) => {
   const [user, updateUser] = useLogin();
   // updateLogin(true);
 
   return (
-    <nav className='navbar navbar-expand-lg'>
+    <nav className='navbar navbar-expand-lg shadow'>
       <div className='container-fluid'>
         <Link href='/' className='navbar-brand' legacyBehavior>
 

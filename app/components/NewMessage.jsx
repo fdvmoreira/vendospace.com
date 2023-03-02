@@ -1,14 +1,15 @@
 //TODO: ensure that the message is in the correct format before sending it to the server
 //TODO: redesign the message form to present the form in better way
+//TODO: Add character count to alert the user that the message size is limited
 
 
-import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { ToastContainer } from "react-toastify";
-import notify from "../utils/notify";
 import { useRef } from "react";
+import { useForm } from "react-hook-form";
+import { ToastContainer } from "react-toastify";
+import * as yup from "yup";
 import { useLogin } from "../context/loginContext";
+import notify from "../utils/notify";
 
 export default function NewMessage({ recipient: to, subject }) {
   const [login, setLogin] = useLogin();
