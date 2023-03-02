@@ -62,7 +62,7 @@ const Footer = () => {
       </div>
 
       <span className='text-center text-muted'>
-        &copy; 2022 vendospace.com, All rights reserved.
+        &copy; vendospace.com 2023, All rights reserved.
       </span>
     </footer>
   );
