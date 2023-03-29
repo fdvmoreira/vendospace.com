@@ -1,9 +1,9 @@
 const passport = require("passport");
 
-const jwtStrategy = require("../middlewares/thirdPartyAuth/jwtStrategy")
-const googleStrategy = require("../middlewares/thirdPartyAuth/googleStrategy");
-const facebookStrategy = require("../middlewares/thirdPartyAuth/facebookStrategy");
-const linkedInStrategy = require("../middlewares/thirdPartyAuth/linkedInStrategy");
+const jwtStrategy = require("../authStrategies/jwtStrategy")
+const googleStrategy = require("../authStrategies/googleStrategy");
+const facebookStrategy = require("../authStrategies/facebookStrategy");
+const linkedInStrategy = require("../authStrategies/linkedInStrategy");
 
 passport.use(jwtStrategy);
 passport.use(linkedInStrategy);
