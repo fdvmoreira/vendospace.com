@@ -6,13 +6,13 @@ const { getUser, setUser, deleteUser } = require('../../../controllers/userContr
 const auth = require('../../../middlewares/auth');
 const User = require('../../../models/userModel');
 
-passport.use(require("../../../middlewares/thirdPartyAuth/jwtStrategy"));
+passport.use(require("../../../authStrategies/jwtStrategy"));
 
 router.route("/").get(passport.authenticate('jwt', { session: false }), asynHandler(async (req, res) => { // todo - remove this route
-    User.find((err, doc) => {
-        if (err) res.status(400).json({ error: `You've messed up: ${err.message}` });
-        res.status(200).json(doc);
-    });
+  User.find((err, doc) => {
+    if (err) res.status(400).json({ error: `You've messed up: ${err.message}` });
+    res.status(200).json(doc);
+  });
 
 })).post(setUser);
 
