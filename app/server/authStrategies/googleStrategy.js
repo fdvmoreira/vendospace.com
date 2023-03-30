@@ -1,5 +1,5 @@
 const User = require("../models/userModel");
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 const mongoose = require('mongoose');
 const DOMAIN = process.env.DOMAIN + ":" + process.env.PORT;
 
@@ -7,10 +7,13 @@ const googleStrategy = new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: `${DOMAIN}/auth/google/callback`,
+  passReqToCallback: true,
   scope: ['profile', 'email'],
-}, (accessToken, refreshToken, profile, done) => {
+}, (req, accessToken, refreshToken, profile, done) => {
 
-  console.log(profile._json); // Ensure that the user registered before authenticating
+  console.log(req.headers); // Check type origin of req
+
+  //console.log(profile._json); // Ensure that the user registered before authenticating
 
   User.findOne({
     name: profile._json.name,
@@ -21,6 +24,7 @@ const googleStrategy = new GoogleStrategy({
     if (err) return done(err);
     console.log(user);
     return done(err, user);
+
 
   });
 });
