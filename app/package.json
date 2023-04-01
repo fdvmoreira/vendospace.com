@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "server": "nodemon ./server/server.js",
+    "debug": "NODE_DEBUG=Error,DEBUG=express:* node --inspect ./server/server.js",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
