@@ -36,7 +36,7 @@ nextApp.prepare().then(async () => {
   // vendospace routes
   app.use(require('./routes/vendoSpaceRoutes'));
   // auth routes
-  app.use(require("./routes/authRoutes"));
+  app.use(require("./routes/authRoutes").router);
 
   // API routes
   app.use('/api/v1/users', require('./routes/api/v1/userRoutes'));
