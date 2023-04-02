@@ -1,9 +1,39 @@
 const passport = require('passport');
+const { setAuthType } = require('../config/auth.type');
 
 const router = require('express').Router();
 
+/**
+ * get the type of authentication
+ * @param {string} str 
+ * @returns string
+ */
+const getLastWordFromPath = (str) => str?.split('\/').at(-1);
+
+/**
+ * extract authentication type from headers
+ * @param {Request} req 
+ * @param {Response} _res 
+ * @param {Function} next 
+ */
+const extractAuthTypeMiddleware = (req, _res, next) => {
+  switch (getLastWordFromPath(req?.headers?.referer ?? "")) {
+    case 'signin':
+    case 'login':
+      setAuthType('SIGNIN');
+      break;
+    case 'register':
+    case 'signup':
+      setAuthType('SIGNUP');
+      break;
+    default:
+      setAuthType('DEFAULT');
+  }
+  next();
+}
+//TODO FIXME-I am not running as I should
 // media routes
-router.get('/auth/google', passport.authenticate('google'));
+router.get('/auth/google', extractAuthTypeMiddleware, passport.authenticate('google'));
 router.get('/auth/facebook', passport.authenticate('facebook'));
 router.get('/auth/linkedin', passport.authenticate('linkedin'));
 
@@ -21,7 +51,7 @@ router.get('/auth/google/callback', passport.authenticate('google',
 
 /**
  * FACEBOOK
- */
+*/
 router.get('/auth/facebook/callback', passport.authenticate('facebook', {
   failureRedirect: '/login',
   failureMessage: "Faile",
@@ -52,4 +82,4 @@ router.get('/auth/linkedin/callback', passport.authenticate('linkedin',
     // res.status(200).json(req.body);
   }));
 
-module.exports = router;
+module.exports = { router, getLastWordFromPath, extractAuthTypeMiddleware };
