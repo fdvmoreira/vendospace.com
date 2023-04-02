@@ -1,3 +1,4 @@
+const { getAuthType } = require("../config/auth.type");
 const User = require("../models/userModel");
 const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 const mongoose = require('mongoose');
@@ -7,11 +8,10 @@ const googleStrategy = new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: `${DOMAIN}/auth/google/callback`,
-  passReqToCallback: true,
   scope: ['profile', 'email'],
-}, (req, accessToken, refreshToken, profile, done) => {
+}, (accessToken, refreshToken, profile, done) => {
 
-  console.log(req.headers); // Check type origin of req
+  console.log(getAuthType()); // Check type origin of reqmo
 
   //console.log(profile._json); // Ensure that the user registered before authenticating
 
