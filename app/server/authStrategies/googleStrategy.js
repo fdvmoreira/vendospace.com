@@ -45,6 +45,7 @@ const googleStrategy = new GoogleStrategy({
     if (getAuthType() === 'SIGNIN') {
       User.findOne({
         email: profile._json.email,
+        signUpMethod: profile.provider,
       }, (err, user) => {
         if (err) return done(err);
         if (!user) return done(null, false);
