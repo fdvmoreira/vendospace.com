@@ -18,7 +18,7 @@ const googleStrategy = new GoogleStrategy({
         name: profile._json.name,
         email: profile._json.email,
         passwordHash: '',
-        signUpMethod: 'google'
+        signUpMethod: profile.provider
       }, (err, user) => {
         // Return error
         if (err) return done(err);
