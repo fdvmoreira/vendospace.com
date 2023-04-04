@@ -47,15 +47,15 @@ const googleStrategy = new GoogleStrategy({
         email: profile._json.email,
         signUpMethod: profile.provider,
       }, (err, user) => {
-        if (err) return done(err);
-        if (!user) return done(null, false);
+        if (err) return done(err, false, "Error " + err.message);
+        if (!user) return done(err, false, "User not found");
         return done(err, user);
       });
     }
   }
 
   if (!['signin', 'signup'].includes(getAuthType().toLocaleLowerCase())) {
-    done(new Error("I am not sure what is your intention!!!"), false);
+    return done(new Error("I am not sure what is your intention!!!"), false);
   }
 });
 

@@ -47,8 +47,8 @@ const facebookStrategy = new FacebookStrategy({
         email: profile?.email,
         signUpMethod: profile.provider,
       }, (err, user) => {
-        if (err) return done(err);
-        if (!user) return done(null, false);
+        if (err) return done(err, false, "Error " + err.message);
+        if (!user) return done(null, false, "User not found");
         return done(err, user);
       });
     }
@@ -60,7 +60,7 @@ const facebookStrategy = new FacebookStrategy({
   }
 
   if (!['signin', 'signup'].includes(getAuthType().toLocaleLowerCase())) {
-    done(null, false, "I am not sure what is your intention!!!");
+    return done(null, false, "I am not sure what is your intention!!!");
   }
 });
 
