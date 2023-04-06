@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Authentication Successful</title>
+  <meta http-equiv="refresh" content="3;url=/">
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      font-size: 36px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin-bottom: 30px;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #3e8e41;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Authentication Successful!</h1>
+  <p>You will be redirected to the homepage in 3 seconds. Or you can click the button below to go there now:</p>
+  <button onclick="goToHomepage()">Go to Homepage</button>
+
+  <script>
+    function goToHomepage() {
+      window.location.href = "/";
+    }
+  </script>
+</body>
+
+</html>
