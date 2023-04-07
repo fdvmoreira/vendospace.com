@@ -29,4 +29,19 @@ userSchema.methods.isPasswordValid = function (password) {
   });
 }
 
+/**
+ * hash the password using prev save middleware
+ */
+userSchema.pre('save', function (next) {
+  let user = this;
+  const SALT_ROUNDS = 10;
+  if (user.signUpMethod == 'email') {
+    bcrypt.hash(user.passwordHash, SALT_ROUNDS, (err, hash) => {
+      if (err) next(new Error(err));
+      if (hash) user.passwordHash = hash;
+    });
+  }
+  next();
+});
+
 module.exports = model('User', userSchema);
