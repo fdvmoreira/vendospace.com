@@ -1,11 +1,11 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 const Login = () => {
   const schema = yup.object().shape({
-    email: yup.string().email().required("Email required"),
+    email: yup.string().email("Email is invalid").required("Email required"),
     password: yup.string().required("Password required"),
   });
 
@@ -23,7 +23,11 @@ const Login = () => {
       <hr />
       <form
         id='login-form'
-        onSubmit={handleSubmit((data) => console.log(data))}
+        onSubmit={handleSubmit((data) => fetch("/auth/login",{
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json'},
+          body: JSON.stringify(data),
+        }))}
         className='group-input mb-3'>
         <div className='form-group'>
           <div className='mb-2'>
