@@ -23,10 +23,7 @@ const userSchema = new Schema({
 }, { timestamps: true });
 
 userSchema.methods.isPasswordValid = function (password) {
-  bcrypt.compare(password, this.passwordHash, (err, same) => {
-    if (err) return false;
-    if (same) return true;
-  });
+  return bcrypt.compareSync(password, this.passwordHash);
 }
 
 /**
