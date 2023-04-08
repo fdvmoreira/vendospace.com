@@ -1,9 +1,8 @@
-import { useRef } from "react";
-import Script from "next/script";
+import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 let registerForm;
 
@@ -47,7 +46,7 @@ const Register = () => {
       <h1 className='lead text-center'>Register</h1>
       <hr />
       <form
-        onSubmit={handleSubmit((data) => console.log(data))}
+        onSubmit={handleSubmit(submitHandler)}
         ref={registerForm}>
         {/** Full name */}
         <div className='form-group '>
@@ -175,8 +174,14 @@ const Register = () => {
 };
 
 // register the user
-const submitHandler = async (data) => {
-  // event.preventDefault();
+const submitHandler = (data) => {
+  
+  data['signup-method'] = 'email';
+  fetch('/auth/signup',{
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(data),
+  });
 };
 
 const recaptchaSubmit = (token) => {
