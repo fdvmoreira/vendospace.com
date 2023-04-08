@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, models } = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const userSchema = new Schema({
@@ -39,6 +39,24 @@ userSchema.pre('save', function (next) {
       next();
     });
   }
+});
+
+userSchema.pre('save', function (next) {
+  const user = this;
+
+  models.User.findOne({ email: user.email }, function (err, existingUser) {
+    if (err) {
+      return next(err);
+    }
+
+    if (existingUser) {
+      const error = new Error('Email address already exists.');
+      error.name = 'DuplicateEmailError';
+      return next(error);
+    }
+
+    next();
+  });
 });
 
 module.exports = model('User', userSchema);
