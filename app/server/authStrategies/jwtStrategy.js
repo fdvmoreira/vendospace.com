@@ -1,5 +1,5 @@
-const JwtStrategy = require("passport-jwt").Strategy,
-  extractor = require('passport-jwt').ExtractJwt;
+const JwtStrategy = require("passport-jwt").Strategy;
+const extractor = require('passport-jwt').ExtractJwt;
 const User = require("../models/userModel");
 
 let options = {
@@ -8,12 +8,11 @@ let options = {
 };
 
 const jwtStrategy = new JwtStrategy(options, (jwtPayload, done) => {
-  // TODO: fech user, profile and account to save on the client side for messaging and posting
-  User.findById({ _id: jwtPayload.id }, (err, user) => {
-    if (err) return done(err, false);
-    if (!user) return done(null, false);
-    return done(err, user);
-  });
+  try {
+    return done(null, jwtPayload.user);
+  } catch (error) {
+    return done(error);
+  }
 });
 
 module.exports = jwtStrategy;
