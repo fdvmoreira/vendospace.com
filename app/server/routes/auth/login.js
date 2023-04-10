@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const passport = require('passport');
+const signJwtToken = require('../../utils/signJwtToken');
 
 router.post('/auth/login', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
@@ -11,10 +12,13 @@ router.post('/auth/login', (req, res, next) => {
       });
     }
     if (user) {
+      let token = signJwtToken(user);
+
       return res.status(200).json({
         success: true,
         message: "Authentication successful",
-        data: user
+        data: user,
+        token: token
       });
     }
     next();

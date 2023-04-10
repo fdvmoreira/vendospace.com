@@ -11,10 +11,13 @@ router.post('/auth/signup', (req, res, next) => {
       });
     }
     if (user) {
+      let token = signJwtToken(user);
+
       return res.status(201).json({
         success: true,
         message: 'User created successfully',
-        data: user
+        data: user,
+        token: token
       });
     }
 
