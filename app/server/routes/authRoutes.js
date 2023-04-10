@@ -1,7 +1,11 @@
 const passport = require('passport');
 const { setAuthType } = require('../config/auth.type');
+const path = require('path');
 
 const router = require('express').Router();
+const failureRidrect = path.join(__dirname, '../views/auth-failure.html');
+const successRidrect = path.join(__dirname, '../views/auth-success.html');
+
 
 /**
  * get the type of authentication
@@ -31,55 +35,63 @@ const extractAuthTypeMiddleware = (req, _res, next) => {
   }
   next();
 }
-//TODO FIXME-I am not running as I should
+
 // media routes
 router.get('/auth/google', extractAuthTypeMiddleware, passport.authenticate('google'));
-router.get('/auth/facebook', passport.authenticate('facebook'));
-router.get('/auth/linkedin', passport.authenticate('linkedin'));
+router.get('/auth/facebook', extractAuthTypeMiddleware, passport.authenticate('facebook'));
+router.get('/auth/linkedin', extractAuthTypeMiddleware, passport.authenticate('linkedin'));
 
 // social media callback 
-/** GOOGLE */
-router.get('/auth/google/callback', passport.authenticate('google',
-  {
-    session: false
-  }
-), (req, res) => {
-  if (!req.user) return res.status(204).json({ message: "Unauthorized access" })
-  res.status(200).json({ message: "End of Google's ops", user: req?.user })
-  //TODO send the user the front end so it can used for auth
+/**
+ * GOOGLE 
+ */
+router.get('/auth/google/callback', (req, res, next) => {
+  passport.authenticate('google', (err, user, _info, _status) => {
+    if (!user || err) {
+      res.sendFile(failureRidrect);
+    }
+
+    if (user) {
+      res.sendFile(successRidrect);
+    }
+
+    next();
+  })(req, res, next)
 });
 
 /**
  * FACEBOOK
-*/
-router.get('/auth/facebook/callback', passport.authenticate('facebook', {
-  failureRedirect: '/login',
-  failureMessage: "Faile",
-  successRedirect: '/',
-  successMessage: "Success",
-  session: false,
-  scope: ['id', 'displayName', 'photos', 'email']
-}, (...args) => {
+ */
+router.get('/auth/facebook/callback', (req, res, next) => {
+  passport.authenticate('facebook', (err, user, _info, _status) => {
+    if (!user || err) {
+      res.sendFile(failureRidrect);
+    }
 
-  console.log("PROFILE FACEBOOK:");
-  console.log(args[1]);
-}));
+    if (user) {
+      res.sendFile(successRidrect);
+    }
 
-/** LINKEDIN */
-router.get('/auth/linkedin/callback', passport.authenticate('linkedin',
-  {
-    failureRedirect: '/login',
-    failureMessage: "Failed",
-    successRedirect: '/',
-    successMessage: "Success",
-    session: false,
-    scope: ['r_emailaddress', 'r_liteprofile']
-  }, (...args) => {
+    next();
+  })(req, res, next)
+});
 
-    console.log("PROFILE LINKEDIN:");
-    console.log(args[1]);
+/**
+ * LINKEDIN 
+ */
+router.get('/auth/linkedin/callback', (req, res, next) => {
+  passport.authenticate('linkedin', (err, user, _info, _status) => {
+    if (!user || err) {
+      res.sendFile(failureRidrect);
+    }
 
-    // res.status(200).json(req.body);
-  }));
+    if (user) {
+      res.sendFile(successRidrect);
+    }
+
+    next();
+  })(req, res, next)
+
+});
 
 module.exports = { router, getLastWordFromPath, extractAuthTypeMiddleware };
