@@ -1,8 +1,11 @@
 const express = require("express");
 const next = require('next');
+const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 require("colors");
 require("dotenv").config();
+
+
 const PORT = process.env.PORT || 3000;
 const path = require("path");
 
@@ -17,6 +20,9 @@ const handler = nextApp.getRequestHandler();
 nextApp.prepare().then(async () => {
 
   const app = express();
+
+  //parse cookies
+  app.use(cookieParser());
 
   // database connection
   require('./config/db')();
