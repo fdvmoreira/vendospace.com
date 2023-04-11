@@ -10,10 +10,8 @@ const Navbar = ({ props }) => {
   return (
     <nav className='navbar navbar-expand-lg shadow'>
       <div className='container-fluid'>
-        <Link href='/' className='navbar-brand' legacyBehavior>
-
+        <Link href='/' className='navbar-brand cursor-pointer'>
           <Image src='/logo.jpeg' alt='logo' width='48' height='48' />
-
         </Link>
 
         <a
