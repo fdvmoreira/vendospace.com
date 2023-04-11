@@ -8,11 +8,11 @@ import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { ToastContainer } from "react-toastify";
 import * as yup from "yup";
-import { useLogin } from "../context/loginContext";
+import { useAuth } from "../context/authContext";
 import notify from "../utils/notify";
 
 export default function NewMessage({ recipient: to, subject }) {
-  const [login, setLogin] = useLogin();
+  const [auth, _] = useAuth();
   const closeModalButton = useRef({});
 
   const schema = yup.object().shape({
@@ -59,7 +59,7 @@ export default function NewMessage({ recipient: to, subject }) {
                 type='hidden'
                 className='form-control'
                 placeholder='Your User ID'
-                defaultValue={login.userId}
+                defaultValue={auth?.user?._id}
                 readOnly={true}
                 {...register("from")}
               />

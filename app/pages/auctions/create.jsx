@@ -1,17 +1,16 @@
-import Image from "next/legacy/image";
-import Link from "next/link";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { useLogin } from "../../context/loginContext";
-import notify from "../../utils/notify";
 import { ToastContainer } from "react-toastify";
+import * as yup from "yup";
+import { useAuth } from "../../context/authContext";
+import notify from "../../utils/notify";
 
 const AUCTION_API_URL = "/api/v1/auctions";
 let userId = "622f55d4b3763981e2e825df";
 
 export default function Auction({ data }) {
-  const [user] = useLogin();
+  const [auth, _] = useAuth();
 
   const schema = yup.object().shape({
     user: yup.string().required().label("User"),
@@ -61,7 +60,7 @@ export default function Auction({ data }) {
 
       <form onSubmit={handleSubmit(submitHandler)}>
         {/** User ID */}
-        <input type='hidden' value={user.userId} {...register("user")} />
+        <input type='hidden' value={auth?.user?._id} {...register("user")} />
         {/** user error check */}
         {errors.user?.message && (
           <p className='text-danger'>{errors.user?.message}</p>

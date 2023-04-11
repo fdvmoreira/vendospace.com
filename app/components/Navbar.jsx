@@ -1,11 +1,10 @@
 import Image from "next/legacy/image";
 import Link from "next/link";
-import { useLogin } from "../context/loginContext";
+import { useAuth } from "../context/authContext";
 
 
 const Navbar = ({ props }) => {
-  const [user, updateUser] = useLogin();
-  // updateLogin(true);
+  const [auth, updateAuth] = useAuth();
 
   return (
     <nav className='navbar navbar-expand-lg shadow'>
@@ -25,7 +24,7 @@ const Navbar = ({ props }) => {
           <span className='bi bi-list'></span>
         </a>
         <div className='collapse navbar-collapse' id='navbarSupportedContent'>
-          {!user.loggedIn ? (
+          {!auth.isAuthenticated ? (
             <div className='d-flex-row justify-content-around '>
               <Link href='/login' className='btn btn-sm btn-outline-primary mx-1'>
                 Login
@@ -48,7 +47,7 @@ const Navbar = ({ props }) => {
                 data-bs-toggle='dropdown'
                 aria-expanded='false'>
                 <i className='bi bi-person'></i>
-                {props?.user?.name || "John Doe"}
+                {auth?.user?.name}
               </a>
               <ul
                 className='dropdown-menu'
@@ -63,7 +62,7 @@ const Navbar = ({ props }) => {
                   <Link
                     href='/'
                     onClick={(e) => {
-                      updateUser({ ...user, loggedIn: false });
+                      updateAuth({isAuthenticated: false, token: null, user: null });
                     }}
                     className='dropdown-item'
                     >

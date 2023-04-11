@@ -1,12 +1,12 @@
-import { useState, useRef } from "react";
-import Link from "next/link";
-import Image from "next/legacy/image";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Image from "next/legacy/image";
+import Link from "next/link";
+import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { ToastContainer } from "react-toastify";
+import * as yup from "yup";
+import { useAuth } from "../../context/authContext";
 import notify from "../../utils/notify";
-import { useLogin } from "../../context/loginContext";
 
 const cloudinaryUploadURL = process.env.CLOUDINARY_UNAUTH_UPLOAD_URL;
 const cloudinaryName = process.env.CLOUDINARY_CLOUD_NAME;
@@ -18,7 +18,7 @@ export default function Listing() {
   const [selectImage, setSelectImage] = useState("Select Images");
   const [otherType, setOtherType] = useState({ display: "none" });
 
-  const [user] = useLogin();
+  const [auth, _] = useAuth();
   /** form schema */
   const schema = yup.object().shape({
     // TODO set the limit for the size of files accepted
@@ -93,7 +93,7 @@ export default function Listing() {
           <input
             type='plain'
             className='form-control mb-2 d-none'
-            value={user.userId}
+            value={auth?.user?._id}
             onChange={(e) => console.log("user has changed")}
             {...register("user")}
           />
