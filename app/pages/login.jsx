@@ -1,7 +1,11 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
+import { ToastContainer } from "react-toastify";
 import * as yup from "yup";
+import { useAuth } from "../context/authContext";
+import notify from "../utils/notify";
 
 const Login = () => {
   const schema = yup.object().shape({
@@ -17,17 +21,37 @@ const Login = () => {
     resolver: yupResolver(schema),
   });
 
+  const [auth, updateAuth] = useAuth();
+  const router = useRouter();
+
   return (
     <div className='container bg-light border col-md-6 col-lg-4'>
       <h5 className='lead text-center'>Login</h5>
       <hr />
       <form
         id='login-form'
-        onSubmit={handleSubmit((data) => fetch("/auth/login",{
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json'},
-          body: JSON.stringify(data),
-        }))}
+        onSubmit={handleSubmit( data => {
+          fetch("/auth/login", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify(data),
+        })
+        .then(data => data.json())
+        .then(res =>{
+          notify(res.message, res.success);
+          if(res.success){
+            updateAuth({
+              isAuthenticated: res.success,
+              user: res.data,
+              token: res.token
+            });
+            
+            router.push('/');
+          }
+        })
+        .catch(console.error)
+        })}
+
         className='group-input mb-3'>
         <div className='form-group'>
           <div className='mb-2'>
@@ -87,6 +111,7 @@ const Login = () => {
           sign me up
         </Link>
       </p>
+      <ToastContainer />
     </div>
   );
 };
