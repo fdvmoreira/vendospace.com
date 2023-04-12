@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { ToastContainer } from "react-toastify";
 import * as yup from "yup";
+import { useAuth } from "../context/authContext";
 import notify from "../utils/notify";
 
 let registerForm;
