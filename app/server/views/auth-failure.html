@@ -3,7 +3,9 @@
 
 <head>
   <title>Authentication Failed</title>
-  <meta http-equiv="refresh" content="3;url=/login">
+  <!--
+    <meta http-equiv="refresh" content="3;url=/login">
+  -->
   <style>
     body {
       background-color: #f5f5f5;
@@ -52,8 +54,13 @@
 
   <script>
     function goBack() {
-      window.location.href = "/login";
+      window.location.href = "/login?auth_success=false";
     }
+
+    window.addEventListener("load", () => {
+      // let searchParam = new URLSearchParams(window.location.search);
+      setTimeout(() => window.location.href = '/login?auth_success=false', 3000);
+    })
   </script>
 </body>
 
