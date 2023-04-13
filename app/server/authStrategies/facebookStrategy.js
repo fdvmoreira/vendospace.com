@@ -12,13 +12,13 @@ const facebookStrategy = new FacebookStrategy({
   profileFields: ['id', 'displayName', 'photos', 'email'],
 }, (_accessToken, _refreshToken, profile, done) => {
 
-  let userHasEmail = (profile?.emails[0]?.value) ? true : false;
+  let userHasEmail = (profile?.emails?.[0]?.value) ? true : false;
   if (userHasEmail) {
     switch (getAuthType()) {
       case 'SIGNUP':
         User.create({
           name: profile.displayName,
-          email: profile?.emails[0]?.value,
+          email: profile?.emails?.[0]?.value,
           passwordHash: '',
           signUpMethod: profile.provider
         }, (err, user) => {
@@ -40,7 +40,7 @@ const facebookStrategy = new FacebookStrategy({
 
       case 'SIGNIN':
         User.findOne({
-          email: profile?.emails[0].value,
+          email: profile?.emails?.[0]?.value,
           signUpMethod: profile.provider,
         }, (err, user) => {
           if (err) return done(err, false, `Error: ${err.message}`);
@@ -56,7 +56,7 @@ const facebookStrategy = new FacebookStrategy({
   }
 
   // If the user does not have an email address associated with their fb account
-  if (!profile?.emails[0]?.value && profile.id) {
+  if (!profile?.emails?.[0]?.value && profile.id) {
     return done(null, false, "Sorry, your email address is not available");
   }
 
