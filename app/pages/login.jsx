@@ -28,6 +28,7 @@ const Login = () => {
     <div className='container bg-light border col-md-6 col-lg-4'>
       <h5 className='lead text-center'>Login</h5>
       <hr />
+      {(router?.query?.auth_success == "false")? <p className="alert alert-warning">Authentication has failed!</p> : null}
       <form
         id='login-form'
         onSubmit={handleSubmit( data => {
