@@ -1,20 +1,30 @@
 const { getAuthType } = require("../server/config/auth.type");
-const { getLastWordFromPath, extractAuthTypeMiddleware } = require("../server/middlewares/lib/extractAuthTypeFromReqHeader");
+const { getAuthOrigin, extractAuthTypeMiddleware } = require("../server/middlewares/lib/extractAuthTypeFromReqHeader");
 
-describe("Get Last word from a URL", () => {
+describe("Get Authentication origin from a string ", () => {
 
-  it("should throw an Exception", () => {
-    expect(getLastWordFromPath()).toBe.undefined;
+  it("should return signup", () => {
+    const URL = "http://example.com/register?into=google";
+    expect(getAuthOrigin(URL)).toMatch(/signup/);
   });
 
-  it("should return undefined it URL is empty", () => {
+  it("should return login", () => {
+    const URL = "http://example.com/login?success=true";
+    expect(getAuthOrigin(URL)).toMatch(/login/);
+  });
+
+  it("should return unknown", () => {
+    expect(getAuthOrigin()).toMatch(/unknown/);
+  });
+
+  it("should return unknown", () => {
     const URL = "http://localhost";
-    expect(getLastWordFromPath(URL)).toBe.undefined;
+    expect(getAuthOrigin(URL)).toMatch(/unknown/);
   });
 
-  it("should return last word from the path", () => {
+  it("should return unknown", () => {
     const URL = "http://example.com/users";
-    expect(getLastWordFromPath(URL)).toMatch(/users/);
+    expect(getAuthOrigin(URL)).toMatch(/unknown/);
   });
 });
 
