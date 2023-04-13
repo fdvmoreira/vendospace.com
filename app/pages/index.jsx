@@ -1,6 +1,8 @@
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import AuctionCard from "../components/auctionCard";
 import ListingCard from "../components/listingCard";
+import { useAuth } from "../context/authContext";
 
 const AUCTIONS_API_URL = "/api/v1/auctions";
 const LISTINGS_API_URL = "/api/v1/listings";
@@ -9,12 +11,17 @@ export default (props) => {
   let [auctions, setAuctions] = useState([]);
   let [listings, setListings] = useState([]);
 
+  let param = useRouter();
+  let {data} = param.query;
+  data = JSON.parse(data);
+  let [auth, updateAuth] = useAuth();
+ 
   useEffect(() => {
+    
     /** Auctions */
     fetch(AUCTIONS_API_URL)
       .then((res) => res.json())
       .then((data) => {
-        // console.log(data);
         setAuctions(data);
       })
       .catch((err) => console.error(err));
@@ -23,14 +30,26 @@ export default (props) => {
     fetch(LISTINGS_API_URL)
       .then((res) => res.json())
       .then((data) => {
-        // console.log(data);
         setListings(data);
       })
       .catch((err) => console.error(err));
+
+      /** Authenticate the user */
+      if(!auth.isAuthenticated) {
+        updateAuth({
+          isAuthenticated: true,
+          user: data.user,
+          token: data.token
+        });
+      }
+      
   }, []);
 
   return (
     <div className='container'>
+      {
+        data?.user?.name&&<span className="alert alert-success">Welcome {data?.user?.name}</span>
+      }
       <hr />
       {/**
        * // TODO: display the listings and auctions according to the current sort order
