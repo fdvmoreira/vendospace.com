@@ -11,59 +11,56 @@ const facebookStrategy = new FacebookStrategy({
   callbackURL: `${DOMAIN}/auth/facebook/callback`,
   profileFields: ['id', 'displayName', 'photos', 'email'],
 }, (_accessToken, _refreshToken, profile, done) => {
-  // console.log(profile);
-  if (profile?.email) {
-    if (getAuthType() === 'SIGNUP') {
-      User.create({
-        name: profile.displayName,
-        email: profile?.email,
-        passwordHash: '',
-        signUpMethod: profile.provider
-      }, (err, user) => {
-        // Return error
-        if (err) return done(err);
 
-        // User not created
-        if (user.createdAt.length === 0) return done(null, false);
+  let userHasEmail = (profile?.emails[0]?.value) ? true : false;
+  if (userHasEmail) {
+    switch (getAuthType()) {
+      case 'SIGNUP':
+        User.create({
+          name: profile.displayName,
+          email: profile?.emails[0]?.value,
+          passwordHash: '',
+          signUpMethod: profile.provider
+        }, (err, user) => {
+          if (err) return done(err, false, `Error: ${err.message}`);
 
-        // User created successfully
-        // -Now create a new profile
-        Profile.create({ user: user.id, avatar: profile.photos[0].value }, (err, nprofile) => {
-          if (err) return done(err);
+          if (user.createdAt.length === 0) return done(null, false, "User not created");
+
+          Profile.create({ user: user.id, avatar: profile.photos[0].value }, (err, nprofile) => {
+            if (err) return done(err, false, `Error: ${err.message}`);
+          });
+
+          Account.create({ user: user.id, type: "Personal", status: "Active" }, (err, account) => {
+            if (err) return done(err, false, `Error: ${err.message}`);
+          });
+
+          return done(err, user);
         });
-        //TODO: Make the type of account change dynamically
-        // -Now create a new Account
-        Account.create({ user: user.id, type: "Personal", status: "Active" }, (err, account) => {
-          if (err) return done(err);
-        });
-        // Return the user created
-        return done(err, user, "Something went wrong");
-      });
-    }
+        break;
 
-    // User already exists fetch it
-    if (getAuthType() === 'SIGNIN') {
-      return User.findOne({
-        email: profile?.email,
-        signUpMethod: profile.provider,
-      }, (err, user) => {
-        if (err) return done(err, false, "Error " + err.message);
-        if (!user) return done(null, false, "User not found");
-        return done(err, user);
-      });
+      case 'SIGNIN':
+        User.findOne({
+          email: profile?.emails[0].value,
+          signUpMethod: profile.provider,
+        }, (err, user) => {
+          if (err) return done(err, false, `Error: ${err.message}`);
+          if (!user) return done(null, false, "User not found");
+          return done(err, user);
+        });
+        break;
+
+      default:
+        return done(null, false, "Not sure how to handle that. Intent:" + getAuthType());
     }
+    return;
   }
 
   // If the user does not have an email address associated with their fb account
-  if (!profile?.email && profile.id) {
-    return done(null, false, "Sorry: Your email address is not available");
+  if (!profile?.emails[0]?.value && profile.id) {
+    return done(null, false, "Sorry, your email address is not available");
   }
 
-  if (!['signin', 'signup'].includes(getAuthType().toLocaleLowerCase())) {
-    return done(null, false, "I am not sure what is your intention!!!");
-  }
-
-  return done(null, true);
+  return done(null, false, "Something went wrong: Authentication failed");
 });
 
 module.exports = facebookStrategy;

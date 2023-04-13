@@ -11,54 +11,51 @@ const googleStrategy = new GoogleStrategy({
   callbackURL: `${DOMAIN}/auth/google/callback`,
   scope: ['profile', 'email'],
 }, (_accessToken, _refreshToken, profile, done) => {
-  // console.log(profile);
-  if (profile._json.email) {
-    if (getAuthType() === 'SIGNUP') {
-      User.create({
-        name: profile._json.name,
-        email: profile._json.email,
-        passwordHash: '',
-        signUpMethod: profile.provider
-      }, (err, user) => {
-        // Return error
-        if (err) return done(err);
 
-        // User not created
-        if (user.createdAt.length === 0) return done(null, false);
+  let userHasEmail = (profile?._json?.email) ? true : false;
+  if (userHasEmail) {
+    switch (getAuthType()) {
+      case 'SIGNUP':
+        User.create({
+          name: profile._json.name,
+          email: profile._json.email,
+          passwordHash: '',
+          signUpMethod: profile.provider
+        }, (err, user) => {
+          if (err) return done(err, false, `Error: ${err.message}`);
 
-        // User created successfully
-        // -Now create a new profile
-        Profile.create({ user: user.id, avatar: profile._json.picture }, (err, nprofile) => {
-          if (err) return done(err);
+          if (user.createdAt.length === 0) return done(null, false), "User not created";
+
+          Profile.create({ user: user.id, avatar: profile._json.picture }, (err, nprofile) => {
+            if (err) return done(err, false, `Error: ${err.message}`);
+          });
+
+          Account.create({ user: user.id, type: "Personal", status: "Active" }, (err, account) => {
+            if (err) return done(err, false, `Error: ${err.message}`);
+          });
+
+          return done(err, user);
         });
-        //TODO: Make the type of account change dynamically
-        // -Now create a new Account
-        Account.create({ user: user.id, type: "Personal", status: "Active" }, (err, account) => {
-          if (err) return done(err);
-        });
-        // Return the user created
-        return done(err, user);
-      });
-    }
+        break;
 
-    // User already exists fetch it
-    if (getAuthType() === 'SIGNIN') {
-      return User.findOne({
-        email: profile._json.email,
-        signUpMethod: profile.provider,
-      }, (err, user) => {
-        if (err) return done(err, false, "Error " + err.message);
-        if (!user) return done(null, false, "User not found");
-        return done(err, user);
-      });
+      case 'SIGNIN':
+        User.findOne({
+          email: profile._json.email,
+          signUpMethod: profile.provider,
+        }, (err, user) => {
+          if (err) return done(err, false, `Error: ${err.message}`);
+          if (!user) return done(null, false, "User not found");
+          return done(err, user);
+        });
+        break;
+
+      default:
+        return done(null, false, "Not sure how to handle that. Intent:" + getAuthType());
     }
+    return;
   }
 
-  if (!['signin', 'signup'].includes(getAuthType().toLocaleLowerCase())) {
-    return done(new Error("I am not sure what is your intention!!!"), false);
-  }
-
-  return done(null, false, "Something went wrong");
+  return done(null, false, "Something went wrong: Authentication failed");
 });
 
 module.exports = googleStrategy;
