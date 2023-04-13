@@ -5,7 +5,11 @@ const { setAuthType } = require("../../config/auth.type");
  * @param {string} str 
  * @returns string
  */
-const getLastWordFromPath = (str) => str?.split('\/').at(-1);
+const getAuthOrigin = (str) => {
+  if (str?.includes('\/login')) return 'login';
+  if (str?.includes('\/register')) return 'signup';
+  return 'unknown';
+}
 
 /**
  * extract authentication type from headers
@@ -14,7 +18,7 @@ const getLastWordFromPath = (str) => str?.split('\/').at(-1);
  * @param {Function} next 
  */
 const extractAuthTypeMiddleware = (req, _res, next) => {
-  switch (getLastWordFromPath(req?.headers?.referer ?? "")) {
+  switch (getAuthOrigin(req?.headers?.referer ?? "")) {
     case 'signin':
     case 'login':
       setAuthType('SIGNIN');
@@ -29,4 +33,4 @@ const extractAuthTypeMiddleware = (req, _res, next) => {
   next();
 }
 
-module.exports = { extractAuthTypeMiddleware, getLastWordFromPath }
+module.exports = { extractAuthTypeMiddleware, getAuthOrigin }
