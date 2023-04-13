@@ -25,7 +25,7 @@ const Navbar = ({ props }) => {
         </a>
         <div className='collapse navbar-collapse' id='navbarSupportedContent'>
           {!auth.isAuthenticated ? (
-            <div className='d-flex-row justify-content-around '>
+            <div className='d-flex d-flex-row justify-content-end'>
               <Link href='/login' className='btn btn-sm btn-outline-primary mx-1'>
                 Login
               </Link>
@@ -34,7 +34,7 @@ const Navbar = ({ props }) => {
               </Link>
             </div>
           ) : (
-            <div className='dropdown'>
+            <div className='dropdown d-flex justify-content-end'>
               {
                 //TODO add component to create listing and auctions
               }
@@ -46,7 +46,7 @@ const Navbar = ({ props }) => {
                 id='dropdownMenuButton'
                 data-bs-toggle='dropdown'
                 aria-expanded='false'>
-                <i className='bi bi-person'></i>
+                <i className='bi bi-person'>&nbsp;</i>
                 {auth?.user?.name}
               </a>
               <ul
@@ -66,7 +66,7 @@ const Navbar = ({ props }) => {
                     }}
                     className='dropdown-item'
                     >
-                    Logout<i className='bi bi-box-arrow-right'></i>
+                    Logout&nbsp;<i className='bi bi-box-arrow-right'></i>
 
                   </Link>
                 </li>
