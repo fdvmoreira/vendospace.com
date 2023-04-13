@@ -1,5 +1,5 @@
 const { getAuthType } = require("../server/config/auth.type");
-const { getLastWordFromPath, extractAuthTypeMiddleware } = require("../server/routes/authRoutes");
+const { getLastWordFromPath, extractAuthTypeMiddleware } = require("../server/middlewares/lib/extractAuthTypeFromReqHeader");
 
 describe("Get Last word from a URL", () => {
 
