@@ -15,7 +15,7 @@ const localStrategy = new LocalStrategy({
 
     if (path && path.includes("login")) { // login
       User.findOne({ email }, (err, user) => {
-        if (err) return done(err, false, `Error: {err.message}`);
+        if (err) return done(err, false, `Error: ${err.message}`);
         if (!user) return done(null, false, "Error: user not found");
 
         if (!user.isPasswordValid(password)) {
