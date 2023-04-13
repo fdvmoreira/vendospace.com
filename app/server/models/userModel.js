@@ -36,9 +36,9 @@ userSchema.pre('save', function (next) {
     bcrypt.hash(user.passwordHash, SALT_ROUNDS, (err, hash) => {
       if (err) next(new Error(err));
       if (hash) user.passwordHash = hash;
-      next();
     });
   }
+  next();
 });
 
 userSchema.pre('save', function (next) {
