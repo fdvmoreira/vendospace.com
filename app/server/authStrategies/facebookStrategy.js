@@ -11,7 +11,7 @@ const facebookStrategy = new FacebookStrategy({
   callbackURL: `${DOMAIN}/auth/facebook/callback`,
   profileFields: ['id', 'displayName', 'photos', 'email'],
 }, (_accessToken, _refreshToken, profile, done) => {
-
+  // console.log(profile);
   if (profile?.email) {
     if (getAuthType() === 'SIGNUP') {
       User.create({
@@ -37,13 +37,13 @@ const facebookStrategy = new FacebookStrategy({
           if (err) return done(err);
         });
         // Return the user created
-        return done(err, user);
+        return done(err, user, "Something went wrong");
       });
     }
 
     // User already exists fetch it
     if (getAuthType() === 'SIGNIN') {
-      User.findOne({
+      return User.findOne({
         email: profile?.email,
         signUpMethod: profile.provider,
       }, (err, user) => {
@@ -62,6 +62,8 @@ const facebookStrategy = new FacebookStrategy({
   if (!['signin', 'signup'].includes(getAuthType().toLocaleLowerCase())) {
     return done(null, false, "I am not sure what is your intention!!!");
   }
+
+  return done(null, true);
 });
 
 module.exports = facebookStrategy;

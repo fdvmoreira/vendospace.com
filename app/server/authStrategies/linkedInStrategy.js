@@ -11,7 +11,7 @@ const linkedInStrategy = new LinkedInStrategy({
   callbackURL: `${DOMAIN}/auth/linkedin/callback`,
   scope: ['r_emailaddress', 'r_liteprofile'],
 }, (_accessToken, _refreshToken, profile, done) => {
-
+  // console.log(profile);
   if (profile.emails[0].value) {
     if (getAuthType() === 'SIGNUP') {
       User.create({
@@ -43,7 +43,7 @@ const linkedInStrategy = new LinkedInStrategy({
 
     // User already exists fetch it
     if (getAuthType() === 'SIGNIN') {
-      User.findOne({
+      return User.findOne({
         email: profile.emails[0].value,
         signUpMethod: profile.provider,
       }, (err, user) => {
@@ -57,6 +57,8 @@ const linkedInStrategy = new LinkedInStrategy({
   if (!['signin', 'signup'].includes(getAuthType().toLocaleLowerCase())) {
     return done(null, false, "I am not sure what is your intention!!!");
   }
+
+  return done(null, false, "Something went wrong");
 });
 
 module.exports = linkedInStrategy;

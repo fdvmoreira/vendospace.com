@@ -11,7 +11,7 @@ const googleStrategy = new GoogleStrategy({
   callbackURL: `${DOMAIN}/auth/google/callback`,
   scope: ['profile', 'email'],
 }, (_accessToken, _refreshToken, profile, done) => {
-
+  // console.log(profile);
   if (profile._json.email) {
     if (getAuthType() === 'SIGNUP') {
       User.create({
@@ -43,12 +43,12 @@ const googleStrategy = new GoogleStrategy({
 
     // User already exists fetch it
     if (getAuthType() === 'SIGNIN') {
-      User.findOne({
+      return User.findOne({
         email: profile._json.email,
         signUpMethod: profile.provider,
       }, (err, user) => {
         if (err) return done(err, false, "Error " + err.message);
-        if (!user) return done(err, false, "User not found");
+        if (!user) return done(null, false, "User not found");
         return done(err, user);
       });
     }
@@ -57,6 +57,8 @@ const googleStrategy = new GoogleStrategy({
   if (!['signin', 'signup'].includes(getAuthType().toLocaleLowerCase())) {
     return done(new Error("I am not sure what is your intention!!!"), false);
   }
+
+  return done(null, false, "Something went wrong");
 });
 
 module.exports = googleStrategy;
