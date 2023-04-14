@@ -1,3 +1,4 @@
+import CryptoJS from "crypto-js";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import AuctionCard from "../components/auctionCard";
@@ -33,7 +34,8 @@ export default (props) => {
       .catch((err) => console.error(err));
 
     let {data, auth_success} = param.query;
-    if(data && auth_success) data = JSON.parse(data);
+    //TODO: DO NOT USE this env IN PRODUCTION
+    if(data && auth_success) data = JSON.parse(CryptoJS.AES.decrypt(data, process.env.NEXT_PUBLIC_JWT_SECRET).toString(CryptoJS.enc.Utf8));
     
     /** Authenticate the user */
     if(auth_success&& data&&!auth.isAuthenticated) {

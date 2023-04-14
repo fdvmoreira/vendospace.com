@@ -2,6 +2,7 @@ const passport = require('passport');
 const router = require('express').Router();
 const { extractAuthTypeMiddleware } = require('../../middlewares/lib/extractAuthTypeFromReqHeader');
 const signJwtToken = require('../../utils/signJwtToken');
+const AES = require('crypto-js/aes')
 
 router.get('/auth/facebook', extractAuthTypeMiddleware, passport.authenticate('facebook'));
 
@@ -16,11 +17,11 @@ router.get('/auth/facebook/callback', (req, res, next) => {
       let token = signJwtToken(user);
       let params = new URLSearchParams({
         auth_success: true,
-        data: JSON.stringify({
+        data: AES.encrypt(JSON.stringify({
           user: { _id, name, email, signUpMethod } = user,
           token,
           isAuthenticated: true
-        })
+        }), process.env.JWT_SECRET).toString()
       }).toString();
 
       res.redirect('/?' + params);
