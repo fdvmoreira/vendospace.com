@@ -12,10 +12,8 @@ export default (props) => {
   let [listings, setListings] = useState([]);
 
   let param = useRouter();
-  let {data} = param.query;
-  data = JSON.parse(data);
   let [auth, updateAuth] = useAuth();
- 
+
   useEffect(() => {
     
     /** Auctions */
@@ -34,21 +32,20 @@ export default (props) => {
       })
       .catch((err) => console.error(err));
 
-      /** Authenticate the user */
-      if(!auth.isAuthenticated) {
-        updateAuth({
-          isAuthenticated: true,
-          user: data.user,
-          token: data.token
-        });
-      }
+    let {data, auth_success} = param.query;
+    if(data && auth_success) data = JSON.parse(data);
+    
+    /** Authenticate the user */
+    if(auth_success&& data&&!auth.isAuthenticated) {
+      updateAuth(data);
+    }
       
   }, []);
 
   return (
     <div className='container'>
       {
-        data?.user?.name&&<span className="alert alert-success">Welcome {data?.user?.name}</span>
+        auth?.user?.name&&<span className="alert alert-success">Welcome {auth?.user?.name}</span>
       }
       <hr />
       {/**

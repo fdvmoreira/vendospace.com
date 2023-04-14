@@ -1,31 +1,29 @@
 const passport = require('passport');
 const router = require('express').Router();
-const path = require('path');
 const { extractAuthTypeMiddleware } = require('../../middlewares/lib/extractAuthTypeFromReqHeader');
-const failureRidrect = path.join(__dirname, '../../views/auth-failure.html');
-const successRidrect = path.join(__dirname, '../../views/auth-success.html');
+const signJwtToken = require('../../utils/signJwtToken');
 
 router.get('/auth/google', extractAuthTypeMiddleware, passport.authenticate('google'));
 
 router.get('/auth/google/callback', (req, res, next) => {
   passport.authenticate('google', (err, user, _info, _status) => {
 
-    console.log(err);
-    console.log(user);
-    console.log(_info);
-    console.log(_status);
-
     if (!user || err) {
-      let nquery = {
-        auth_success: false,
-        redirect: '/login',
-      };
-      res.redirect('/login?' + new URLSearchParams(nquery).toString());
-      // res.sendFile(failureRidrect);
+      res.redirect('/login?' + new URLSearchParams({ auth_success: false }).toString());
     }
 
     if (user) {
-      res.sendFile(successRidrect);
+      let token = signJwtToken(user);
+      let params = new URLSearchParams({
+        auth_success: true,
+        data: JSON.stringify({
+          user: { _id, name, email, signUpMethod } = user,
+          token,
+          isAuthenticated: true
+        })
+      }).toString();
+
+      res.redirect(200, '/?' + params);
     }
 
     next();
