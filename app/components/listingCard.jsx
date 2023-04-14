@@ -1,5 +1,4 @@
 import Image from "next/legacy/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import NewMessage from "./NewMessage";
 
@@ -19,7 +18,6 @@ export default function ListingCard({ listing }) {
       .then((res) => res.json())
       .then((data) => {
         setSpace(data);
-        console.log(data);
       })
       .catch((err) => console.error(err));
   }, []);

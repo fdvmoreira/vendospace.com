@@ -39,7 +39,6 @@ export default function AuctionCard({ auction }) {
       .then((res) => res.json())
       .then((data) => {
         setSpace(data);
-        console.log(data);
       })
       .catch((err) => console.error(err));
 
