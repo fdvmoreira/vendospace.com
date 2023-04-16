@@ -3,6 +3,7 @@ const passport = require('passport');
 const router = require('express').Router();
 const {
   getUserById,
+  getUserName,
   getUserMessages,
   getUserListings,
   getUserSpaces,
@@ -43,6 +44,7 @@ router.get('/:id/messages', authenticationCheck, getUserMessages)
   .get('/:id/listings', authenticationCheck, ownershipCheck, getUserListings)
   .get('/:id/spaces', authenticationCheck, ownershipCheck, getUserSpaces)
   .get('/:id/auctions', authenticationCheck, ownershipCheck, getUserAuctions)
-  .get('/:id/bids', authenticationCheck, ownershipCheck, getUserBids);
+  .get('/:id/bids', authenticationCheck, ownershipCheck, getUserBids)
+  .get('/:id/name', authenticationCheck, getUserName);
 
 module.exports = router;

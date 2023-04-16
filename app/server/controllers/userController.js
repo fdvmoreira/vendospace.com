@@ -14,6 +14,14 @@ const getUserById = asyncHandler(async (req, res) => {
   });
 });
 
+const getUserName = asyncHandler(async (req, res) => {
+  User.findOne({ _id: req?.params?.id }, { name: 1 }, (error, user) => {
+    if (error) return res.status(400).json({ success: false, message: `Error ${error.message}`, data: err });
+    if (error) return res.status(404).json({ success: false, message: "User not found", data: err });
+    res.json({ success: true, message: "User found", data: user });
+  });
+});
+
 const getUserMessages = asyncHandler(async (req, res) => {
   Message.find({ to: req?.params?.id }, (error, messages) => {
     if (error) return res.status(404).json({ success: false, message: `Error: ${error.message}`, data: error });
@@ -76,6 +84,7 @@ const deleteUserById = asyncHandler(async (req, res) => {
 
 module.exports = {
   getUserById,
+  getUserName,
   getUserMessages,
   getUserListings,
   getUserSpaces,
