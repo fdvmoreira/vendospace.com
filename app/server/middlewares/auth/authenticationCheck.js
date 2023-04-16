@@ -12,7 +12,7 @@ const authenticationCheck = (req, res, next) => {
     if (err) return next(err);
     if (!user) return res.status(401).json({
       success: false,
-      message: "Please authentication",
+      message: "Authentication required",
       data: null
     });
     next();
