@@ -1,22 +1,32 @@
-const express = require('express');
 const asyncHandler = require("express-async-handler");
 const passport = require('passport');
-const router = express.Router();
-const { getUserById, setUser, deleteUser } = require('../../../controllers/userController');
+const router = require('express').Router();
+const {
+  getUserById,
+  getUserMessages,
+  getUserListings,
+  getUserSpaces,
+  getUserAuctions,
+  getUserBids,
+  setUser,
+  deleteUserById
+} = require('../../../controllers/userController');
 const User = require('../../../models/userModel');
+const authenticationCheck = require("../../../middlewares/auth/authenticationCheck");
+const ownershipCheck = require("../../../middlewares/auth/ownershipCheck");
 
 passport.use(require("../../../authStrategies/jwtStrategy"));
 
 router.route("/").get(passport.authenticate('jwt', { session: false }), asyncHandler(async (req, res) => { // TODO - remove this route to prevent users from accessing others info
-  User.find((err, doc) => {
+  User.find((err, users) => {
     if (err) return res.status(400).json({ success: false, message: `You've messed up: ${err.message}`, data: err });
-    let users = doc.map((user) => { return { ...user._doc, passwordHash: "" } });
-    res.status(200).json(users);
+    users = users.map((user) => { return { ...users?._doc, passwordHash: "" } });
+    res.json({ success: true, message: `Found ${users.length} users`, data: users });
   });
 
 })).post(setUser);
 
-// TODO -remove delete route because the database must keep history
+
 router.route('/:id').get((req, res, next) => {
   passport.authenticate('jwt', (err, user, info) => {
     if (err) return res.status(400).json({ success: false, message: err.message, data: err });
@@ -26,6 +36,13 @@ router.route('/:id').get((req, res, next) => {
     next();
   })(req, res, next)
 }, getUserById)
-  .delete(deleteUser);
+  .delete(deleteUserById);// TODO -remove delete route because the database must keep history
+
+/** common requests by authenticated users */
+router.get('/:id/messages', authenticationCheck, getUserMessages)
+  .get('/:id/listings', authenticationCheck, ownershipCheck, getUserListings)
+  .get('/:id/spaces', authenticationCheck, ownershipCheck, getUserSpaces)
+  .get('/:id/auctions', authenticationCheck, ownershipCheck, getUserAuctions)
+  .get('/:id/bids', authenticationCheck, ownershipCheck, getUserBids);
 
 module.exports = router;
