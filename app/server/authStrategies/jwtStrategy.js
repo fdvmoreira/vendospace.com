@@ -9,7 +9,7 @@ let options = {
 
 const jwtStrategy = new JwtStrategy(options, (jwtPayload, done) => {
   try {
-    return done(null, jwtPayload.user);
+    return done(null, jwtPayload);
   } catch (error) {
     return done(error);
   }
