@@ -38,7 +38,7 @@ export default function AuctionCard({ auction }) {
     fetch(SPACE_API_URL)
       .then((res) => res.json())
       .then((data) => {
-        setSpace(data);
+        setSpace(data.data);
       })
       .catch((err) => console.error(err));
 
@@ -82,7 +82,7 @@ export default function AuctionCard({ auction }) {
         </p>
         {/** image */}
         <Image
-          src={space?.imagesURL[0] || "/logo.jpeg"}
+          src={space?.imagesURL?.[0] || "/logo.jpeg"}
           alt={`${space?.type} ${space?.dimension.width}x${space?.dimension.height} ${space?.dimension.unit}`}
           height={200}
           width={200}
