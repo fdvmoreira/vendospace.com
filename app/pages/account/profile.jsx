@@ -1,3 +1,6 @@
+import { Suspense } from "react";
+import Message from "../../components/profile/message/Message";
+
 export default function Profile(props) {
   return (
     <div className='container'>
@@ -72,7 +75,9 @@ export default function Profile(props) {
             id='v-pills-messages'
             role='tabpanel'
             aria-labelledby='v-pills-messages-tab'>
-            Messages
+              <Suspense fallback={<p>Loading messages ...</p>}>
+                <Message />
+              </Suspense>
           </div>
           <div
             className='tab-pane fade'
