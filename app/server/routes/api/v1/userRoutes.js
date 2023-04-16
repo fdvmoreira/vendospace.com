@@ -1,23 +1,31 @@
 const express = require('express');
-const asynHandler = require("express-async-handler");
+const asyncHandler = require("express-async-handler");
 const passport = require('passport');
 const router = express.Router();
-const { getUser, setUser, deleteUser } = require('../../../controllers/userController');
-const auth = require('../../../middlewares/auth');
+const { getUserById, setUser, deleteUser } = require('../../../controllers/userController');
 const User = require('../../../models/userModel');
 
 passport.use(require("../../../authStrategies/jwtStrategy"));
 
-router.route("/").get(passport.authenticate('jwt', { session: false }), asynHandler(async (req, res) => { // todo - remove this route
+router.route("/").get(passport.authenticate('jwt', { session: false }), asyncHandler(async (req, res) => { // TODO - remove this route to prevent users from accessing others info
   User.find((err, doc) => {
-    if (err) res.status(400).json({ error: `You've messed up: ${err.message}` });
-    res.status(200).json(doc);
+    if (err) return res.status(400).json({ success: false, message: `You've messed up: ${err.message}`, data: err });
+    let users = doc.map((user) => { return { ...user._doc, passwordHash: "" } });
+    res.status(200).json(users);
   });
 
 })).post(setUser);
 
-// todo -remove delete route because the database must keep history 
-// only deactive the account when the use requests delete account
-router.route('/:id').get(getUser).delete(deleteUser);
+// TODO -remove delete route because the database must keep history
+router.route('/:id').get((req, res, next) => {
+  passport.authenticate('jwt', (err, user, info) => {
+    if (err) return res.status(400).json({ success: false, message: err.message, data: err });
+    if (req.params.id != user.sub) return res.status(403).json({
+      success: false, message: "Unauthorized", data: new Error("Unauthorized User")
+    });
+    next();
+  })(req, res, next)
+}, getUserById)
+  .delete(deleteUser);
 
 module.exports = router;
