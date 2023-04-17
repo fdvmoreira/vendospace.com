@@ -10,7 +10,7 @@ import notify from "../../../utils/notify";
 const Profile = ()=> {
   const schema = yup.object().shape({
     name: yup.string().required("Name is required"),
-    email: yup.string().email("").required("Email is required"),
+    email: yup.string().email("Email is invalid").required("Email is required"),
   });
   const { register, handleSubmit, formState:{errors}, reset} = useForm({
     resolver: yupResolver(schema)
