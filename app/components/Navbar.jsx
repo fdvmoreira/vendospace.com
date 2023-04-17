@@ -49,7 +49,7 @@ const Navbar = ({ props }) => {
                 className='dropdown-menu'
                 aria-labelledby='dropdownMenuButton'>
                 <li>
-                  <Link href='/account/profile' className='dropdown-item'>
+                  <Link href='/account/my' className='dropdown-item'>
                     My account
                   </Link>
                 </li>

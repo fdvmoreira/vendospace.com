@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import History from "../../components/profile/history/History";
-import Message from "../../components/profile/message/Message";
+import History from "../../../components/profile/history/History";
+import Message from "../../../components/profile/message/Message";
 
 export default function Profile(props) {
   return (
