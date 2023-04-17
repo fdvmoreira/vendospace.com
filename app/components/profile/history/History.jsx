@@ -20,38 +20,39 @@ const History = () => {
     .catch(console.error);
 
   },[]);
+  
   return (
-    <div className="container border border-danger">
+    <div className="container d-flex flex-column m-2">
       <div className="card bg-light mb-3">
         <Link className="card-body"  href="/auctions">
-          <p className="text-center">
+          <div className="text-center">
             <h1>{history?.auctions?.count??0}</h1>
             <h5>Auctions</h5>
-          </p>
+          </div>
         </Link>
       </div>
       <div className="card bg-light mb-3">
         <Link className="card-body" href="/bids">
-          <p className="text-center">
+          <div className="text-center">
             <h1>{history?.bids?.count??0}</h1>
             <h5>Bids</h5>
-          </p>
+          </div>
         </Link>
       </div>
       <div className="card bg-light mb-3">
         <Link className="card-body" href="/listings">
-          <p className="text-center">
+          <div className="text-center">
             <h1>{history?.listings?.count??0}</h1>
             <h5>Listings</h5>
-          </p>
+          </div>
         </Link>
       </div>
       <div className="card bg-light mb-3">
         <Link className="card-body" href="/adspaces">
-          <p className="text-center">
+          <div className="text-center">
             <h1>{history?.spaces?.count??0}</h1>
             <h5>Spaces</h5>
-          </p>
+          </div>
         </Link>
       </div>
     </div>
