@@ -12,7 +12,7 @@ const Profile = ()=> {
     name: yup.string().required("Name is required"),
     email: yup.string().email("Email is invalid").required("Email is required"),
   });
-  const { register, handleSubmit, formState:{errors}, reset} = useForm({
+  const { register, handleSubmit, formState:{errors}} = useForm({
     resolver: yupResolver(schema)
   });
 
@@ -32,7 +32,6 @@ const Profile = ()=> {
   }, []);
 
   const onSubmitHandler = (data)=>{
-    reset();
     fetch(`/api/v1/users/${auth?.user?._id??0}/profile`,{
       method: 'POST',
       headers:{
@@ -43,7 +42,7 @@ const Profile = ()=> {
     })
     .then(response => response.json())
     .then(data => {
-      if(data?.success){setProfile(data.data);}
+      if(data?.success) setProfile(data.data);
       notify(data?.message, data?.success);
     })
     .catch(console.error);
@@ -51,7 +50,7 @@ const Profile = ()=> {
 
   return (
     <div className="container d-flex flex-sm-column flex-lg-row">
-      <Image src={profile?.avatarUrl??"/face.jpg"} 
+      <Image src={profile?.avatarUrl??"/logo.jpeg"} 
         alt="User profile photo" 
         width={150} 
         height={150} 
