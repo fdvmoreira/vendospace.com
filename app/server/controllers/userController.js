@@ -5,6 +5,7 @@ const Bid = require('../models/bidModel');
 const Space = require('../models/spaceModel');
 const Listing = require('../models/listingModel');
 const Auction = require('../models/auctionModel');
+const { response } = require('express');
 
 const getUserById = asyncHandler(async (req, res) => {
   User.findById(req?.params?.id, (error, user) => {
@@ -57,6 +58,49 @@ const getUserBids = asyncHandler(async (req, res) => {
   });
 });
 
+const getUserHistories = asyncHandler(async (req, res) => {
+  let [listingCount, bidCount, spaceCount, auctionCount] = [0, 0, 0, 0];
+  let errors = [];
+
+  Auction.countDocuments({ _id: req?.params?.id }, (error, count) => {
+    if (error) return errors.push(error);
+    auctionCount = count;
+  });
+
+  Listing.countDocuments({ _id: req?.params?.id }, (error, count) => {
+    if (error) return errors.push(error);
+    listingCount = count;
+  });
+
+  Space.countDocuments({ _id: req?.params?.id }, (error, count) => {
+    if (error) return errors.push(error);
+    spaceCount = count;
+  });
+
+  Bid.countDocuments({ _id: req?.params?.id }, (error, count) => {
+    if (error) return errors.push(error);
+    bidCount = count;
+  });
+
+  if (errors.length > 0) return res.status(500).json({
+    success: false,
+    message: `Error: ${errors?.[0].message}`,
+    data: errors
+  });
+
+  res.json({
+    success: true,
+    message: "Here are the history summary",
+    data: {
+      listings: { count: listingCount },
+      auctions: { count: auctionCount },
+      bids: { count: bidCount },
+      spaces: { count: spaceCount }
+    }
+  });
+
+});
+
 const setUser = asyncHandler(async (req, res) => {
   let { name, email, password: passwordHash, 'signup-method': signUpMethod } = req.body;
 
@@ -91,6 +135,7 @@ module.exports = {
   getUserAuctions,
   getUserBids,
   setUser,
+  getUserHistories,
   // updateUser, //TODO: implement password update
   deleteUserById
 };

@@ -1,6 +1,7 @@
 import Image from "next/legacy/image";
 import Link from "next/link";
 import { useAuth } from "../context/authContext";
+import ActionMenu from "./menus/ActionMenu";
 
 
 const Navbar = ({ props }) => {
@@ -8,11 +9,11 @@ const Navbar = ({ props }) => {
 
   return (
     <nav className='navbar navbar-expand-lg shadow'>
-      <div className='container-fluid'>
+      <div className='container'>
         <Link href='/' className='navbar-brand cursor-pointer'>
           <Image src='/logo.jpeg' alt='logo' width='48' height='48' />
         </Link>
-
+        
         <a
           className='navbar-toggler'
           href='#'
@@ -25,7 +26,7 @@ const Navbar = ({ props }) => {
         </a>
         <div className='collapse navbar-collapse' id='navbarSupportedContent'>
           {!auth.isAuthenticated ? (
-            <div className='d-flex d-flex-row justify-content-end'>
+            <div className='d-flex'>
               <Link href='/login' className='btn btn-sm btn-outline-primary mx-1'>
                 Login
               </Link>
@@ -34,13 +35,8 @@ const Navbar = ({ props }) => {
               </Link>
             </div>
           ) : (
-            <div className='dropdown d-flex justify-content-end'>
-              {
-                //TODO add component to create listing and auctions
-              }
-              <Link href={"/listings/create"} className='btn navbar-btn btn-primary'>
-                Create listing
-              </Link>
+            <div className='dropdown'>
+              <ActionMenu />
               <a
                 className='btn navbar-btn btn-secondary dropdown-toggle'
                 id='dropdownMenuButton'
