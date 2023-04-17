@@ -117,6 +117,33 @@ const getUserProfile = asyncHandler(async (req, res) => {
   res.json({ success: true, message: "Profile found", data: { name, email, avatarUrl } });
 });
 
+const updateUserProfile = asyncHandler(async (req, res) => {
+  let signUpMethod = "";
+
+  // Get the type of email used to create the account
+  User.findOne({ _id: id }, { signUpMethod: 1 }, (error, method) => {
+    if (error) return res.status(500).json({ success: false, message: `Error: ${error?.message}`, data: error });
+    if (!method) return res.status(404).json({ success: false, message: `Signup method not found`, data: null });
+    signUpMethod = method;
+  });
+
+  if (emailType != 'email') {
+    return res.status(400).json({ success: false, message: 'Email address cannot be changed', data: null });
+  }
+
+  let id = req.params.id;
+  let { name, email } = req.body;
+
+  User.findOneAndUpdate({ _id: id }, { name, email }, (error, user) => {
+    if (error) return res.status(500).json({ success: false, message: `Error: ${error?.message}`, data: error });
+    if (!user) return res.status(404).json({ success: false, message: `Profile not update`, data: null });
+
+    //TODO: handle profile photo change HERE
+
+    res.json({ success: true, message: "Profile updated", data: user });
+  });
+});
+
 const setUser = asyncHandler(async (req, res) => {
   let { name, email, password: passwordHash, 'signup-method': signUpMethod } = req.body;
 
@@ -153,6 +180,7 @@ module.exports = {
   setUser,
   getUserHistories,
   getUserProfile,
+  updateUserProfile,
   // updateUser, //TODO: implement password update
   deleteUserById
 };
