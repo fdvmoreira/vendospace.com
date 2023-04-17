@@ -48,7 +48,10 @@ const Message = () =>{
   useEffect(()=>{
     fetch(`${USER_MESSAGES_API}/${auth?.user?._id}/messages`,{
       method: "GET",
-      headers:{'Accept': 'application/json'}
+      headers:{
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${auth?.token}`,
+      }
     })
     .then(response => response.json())
     .then(data => setMessages(data.data))
