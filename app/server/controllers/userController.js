@@ -102,26 +102,30 @@ const getUserHistories = asyncHandler(async (req, res) => {
 });
 
 const getUserProfile = asyncHandler(async (req, res) => {
-  let [name, email, avatarUrl] = ["", "", ""];
 
-  Profile.findOne({ user: req?.params?.id }, { avatar: 1 }, (error, imageUrl) => {
+  Profile.findOne({ user: req?.params?.id }, { "avatar": 1 }, (error, avatarUrl) => {
     if (error) return res.status(500).json({ success: false, message: `Error: ${error.message}`, data: error });
-    avatarUrl = imageUrl;
-  });
 
-  User.findOne({ id: req?.params?.id }, (error, user) => {
-    if (error) return res.status(500).json({ success: false, message: `Error: ${error.message}`, data: error });
-    name = user.email, email = user.email;
+    User.findById({ _id: req?.params?.id }, { "name": 1, "email": 1 }, (error, user) => {
+      if (error) return res.status(500).json({ success: false, message: `Error: ${error.message}`, data: error });
+      res.json({
+        success: true,
+        message: "Profile found",
+        data: {
+          name: user?.name,
+          email: user?.email,
+          avatarUrl: avatarUrl?.avatar
+        }
+      });
+    });
   });
-
-  res.json({ success: true, message: "Profile found", data: { name, email, avatarUrl } });
 });
 
 const updateUserProfile = asyncHandler(async (req, res) => {
   let signUpMethod = "";
 
   // Get the type of email used to create the account
-  User.findOne({ _id: id }, { signUpMethod: 1 }, (error, method) => {
+  User.findOne({ _id: id }, { "signUpMethod": 1 }, (error, method) => {
     if (error) return res.status(500).json({ success: false, message: `Error: ${error?.message}`, data: error });
     if (!method) return res.status(404).json({ success: false, message: `Signup method not found`, data: null });
     signUpMethod = method;
