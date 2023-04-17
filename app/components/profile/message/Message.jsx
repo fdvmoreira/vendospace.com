@@ -46,7 +46,7 @@ const Message = () =>{
   ];
 
   useEffect(()=>{
-    fetch(`${USER_MESSAGES_API}/${auth?.user?._id}/messages`,{
+    fetch(`${USER_MESSAGES_API}/${auth?.user?._id??0}/messages`,{
       method: "GET",
       headers:{
         'Accept': 'application/json',
