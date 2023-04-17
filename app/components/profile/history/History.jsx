@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../../../context/authContext';
+import { useAuth } from '../../../context/authContext';
 
 const History = () => {
   let [history, setHistory] = useState({});
