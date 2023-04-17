@@ -5,7 +5,7 @@ const Bid = require('../models/bidModel');
 const Space = require('../models/spaceModel');
 const Listing = require('../models/listingModel');
 const Auction = require('../models/auctionModel');
-const { response } = require('express');
+const Profile = require('../models/profileModel');
 
 const getUserById = asyncHandler(async (req, res) => {
   User.findById(req?.params?.id, (error, user) => {
@@ -101,6 +101,22 @@ const getUserHistories = asyncHandler(async (req, res) => {
 
 });
 
+const getUserProfile = asyncHandler(async (req, res) => {
+  let [name, email, avatarUrl] = ["", "", ""];
+
+  Profile.findOne({ user: req?.params?.id }, { avatar: 1 }, (error, imageUrl) => {
+    if (error) return res.status(500).json({ success: false, message: `Error: ${error.message}`, data: error });
+    avatarUrl = imageUrl;
+  });
+
+  User.findOne({ id: req?.params?.id }, (error, user) => {
+    if (error) return res.status(500).json({ success: false, message: `Error: ${error.message}`, data: error });
+    name = user.email, email = user.email;
+  });
+
+  res.json({ success: true, message: "Profile found", data: { name, email, avatarUrl } });
+});
+
 const setUser = asyncHandler(async (req, res) => {
   let { name, email, password: passwordHash, 'signup-method': signUpMethod } = req.body;
 
@@ -136,6 +152,7 @@ module.exports = {
   getUserBids,
   setUser,
   getUserHistories,
+  getUserProfile,
   // updateUser, //TODO: implement password update
   deleteUserById
 };
