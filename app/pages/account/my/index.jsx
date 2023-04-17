@@ -1,8 +1,9 @@
 import { Suspense } from "react";
 import History from "../../../components/profile/history/History";
 import Message from "../../../components/profile/message/Message";
+import Profile from "../../../components/profile/profile/Profile";
 
-export default function Profile(props) {
+export default function MyAccount(props) {
   return (
     <div className='container'>
       <div className='d-flex align-items-start'>
@@ -69,7 +70,7 @@ export default function Profile(props) {
             id='v-pills-profile'
             role='tabpanel'
             aria-labelledby='v-pills-profile-tab'>
-            Profile
+            <Profile />
           </div>
           <div
             className='tab-pane fade'

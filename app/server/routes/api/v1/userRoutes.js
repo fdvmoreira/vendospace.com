@@ -12,6 +12,7 @@ const {
   setUser,
   getUserHistories,
   getUserProfile,
+  updateUserProfile,
   deleteUserById
 } = require('../../../controllers/userController');
 const User = require('../../../models/userModel');
@@ -49,6 +50,7 @@ router.get('/:id/messages', authenticationCheck, getUserMessages)
   .get('/:id/bids', authenticationCheck, ownershipCheck, getUserBids)
   .get('/:id/name', authenticationCheck, getUserName)
   .get('/:id/history', authenticationCheck, ownershipCheck, getUserHistories)
-  .get('/:id/profile', authenticationCheck, ownershipCheck, getUserProfile);
+  .get('/:id/profile', authenticationCheck, ownershipCheck, getUserProfile)
+  .post('/:id/profile', authenticationCheck, ownershipCheck, updateUserProfile);
 
 module.exports = router;
