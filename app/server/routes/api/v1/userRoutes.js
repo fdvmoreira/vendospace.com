@@ -11,6 +11,7 @@ const {
   getUserBids,
   setUser,
   getUserHistories,
+  getUserProfile,
   deleteUserById
 } = require('../../../controllers/userController');
 const User = require('../../../models/userModel');
@@ -47,6 +48,7 @@ router.get('/:id/messages', authenticationCheck, getUserMessages)
   .get('/:id/auctions', authenticationCheck, ownershipCheck, getUserAuctions)
   .get('/:id/bids', authenticationCheck, ownershipCheck, getUserBids)
   .get('/:id/name', authenticationCheck, getUserName)
-  .get('/:id/history', authenticationCheck, ownershipCheck, getUserHistories);
+  .get('/:id/history', authenticationCheck, ownershipCheck, getUserHistories)
+  .get('/:id/profile', authenticationCheck, ownershipCheck, getUserProfile);
 
 module.exports = router;
