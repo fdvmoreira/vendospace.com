@@ -1,60 +1,42 @@
-require('colors');
 const asyncHandler = require('express-async-handler');
-const bcrypt = require('bcrypt');
 const Account = require('../models/accountModel');
 
-// TODO - implement this controller with its data
-
-// find a user by its _id
 const getAccount = asyncHandler(async (req, res) => {
-    Account.findById(req.params.id, (error, result) => {
-        if (error) return res.status(400).json({ message: `${error}` });
-
-        res.status(200).json(result);
-    });
+  Account.findById(req?.params?.id, (error, account) => {
+    if (error) return res.status(400).json({ success: false, message: `Error: ${error.message}`, data: error });
+    if (!account) return res.status(404).json({ success: false, message: "Account not found", data: null });
+    res.json({ success: true, message: "Account found", data: account });
+  });
 });
-
-// create new account
 
 const setAccount = asyncHandler(async (req, res) => {
-    let { user, type, status } = req.body;
-
-    HASH_ROUND = 7;
-    let passwordHash = "";
-
-    if (signUpMethod == "Email") {
-        // create password hash
-        const passwordHash = await bcrypt.hash(password, HASH_ROUND);
-        if (!passwordHash) {
-            res.status(400).json({ message: `${err.message}` });
-        }
-    }
-
-    Account.create({ user, type, status }, (error, result) => {
-        if (error) return res.status(400).json({ message: `${error.message}` });
-        res.status(201).json({ message: " Account created", user: result });
-    });
+  let { user, type, status } = req.body;
+  Account.create({ user, type, status }, (error, account) => {
+    if (error) return res.status(400).json({ success: false, message: `Error: ${error.message}`, data: error });
+    res.status(201).json({ success: true, message: " Account created", data: account });
+  });
 });
 
-// delete Account
+const updateAccount = asyncHandler(async (req, res) => {
+  let { type } = req.body;
+  Account.findByIdAndUpdate(req?.params?.id, { type }, (error, account) => {
+    if (error) return res.status(400).json({ success: false, message: `Error: ${error.message}`, data: error });
+    if (!account) return res.status(400).json({ success: true, message: "User not found", data: null });
+    res.json({ success: true, message: "Account updated", data: account });
+  });
+});
+
 const deleteAccount = asyncHandler(async (req, res) => {
-    const { id } = req.params;
-
-    Account.findByIdAndDelete(id, (error, doc, result) => {
-        if (error) return res.status(400).json({ message: `${error.message}`.red.bold.underline });
-
-        if (!doc) return res.status(202).json({ message: `${id} not found.` });
-
-        res.status(200).json({
-            message: `Account ${doc?._id} removed.`, result: `${result}`
-        });
-
-    });
+  Account.findByIdAndDelete(req?.params?.id, (error, account) => {
+    if (error) return res.status(400).json({ success: false, message: `Error: ${error.message}`, data: error });
+    if (!account) return res.status(404).json({ success: false, message: `${id} not found.`, data: null });
+    res.status(200).json({ success: true, message: `Account ${account?._id} removed.`, data: null });
+  });
 });
 
 module.exports = {
-    getAccount,
-    setAccount,
-    //updateAccount,
-    deleteAccount
+  getAccount,
+  setAccount,
+  updateAccount,
+  deleteAccount
 }

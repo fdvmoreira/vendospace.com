@@ -1,19 +1,27 @@
-const express = require('express');
-const asynHandler = require("express-async-handler");
-const router = express.Router();
-const { getAccount, setAccount, deleteAccount } = require('../../../controllers/accountController');
+const asyncHandler = require("express-async-handler");
+const router = require('express').Router();
+const {
+  getAccount,
+  setAccount,
+  updateAccount,
+  deleteAccount
+} = require('../../../controllers/accountController');
 const Account = require('../../../models/accountModel');
+const authenticationCheck = require('../../../middlewares/auth/authenticationCheck');
+const ownershipCheck = require('../../../middlewares/auth/ownershipCheck');
 
-router.route("/").get(asynHandler(async (req, res) => { // todo - remove this route
-    Account.find((err, doc) => {
-        if (err) res.status(400).json({ error: `You've messed up: ${err.message}` });
-        res.status(200).json(doc);
-    });
+router.route("/").get(asyncHandler(async (req, res) => { // todo - remove this route
+  Account.find((error, accounts) => {
+    if (error) res.status(400).json({ success: false, error: `You've messed up: ${error.message}`, data: error });
+    if (!accounts?.length) res.status(404).json({ success: false, message: `Found ${accounts.length}`, data: error });
+    res.json({ success: true, message: `Found ${accounts.length} accounts`, data: accounts });
+  });
 
 })).post(setAccount);
 
-// todo -remove delete route because the database must keep history 
-// only deactive the account when the use requests delete account
-router.route('/:id').get(getAccount).delete(deleteAccount);
+router.route('/:id')
+  .get(authenticationCheck, ownershipCheck, getAccount)
+  .post(authenticationCheck, ownershipCheck, updateAccount)
+  .delete(authenticationCheck, ownershipCheck, deleteAccount);
 
 module.exports = router;
