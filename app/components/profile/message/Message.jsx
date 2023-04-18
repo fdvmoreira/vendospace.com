@@ -54,11 +54,11 @@ const Message = () =>{
       }
     })
     .then(response => response.json())
-    .then(data => setMessages(data.data))
+    .then(data => setMessages(data?.data))
     .catch(console.error);
   },[]);
 
-  if(!messages?.length) return <p className="text-muted">No new messages</p>
+  if(!messages?.length) return <p className="alert text-muted lead">No new messages</p>
   return (
     <ul className="list-unstyled">
       {
