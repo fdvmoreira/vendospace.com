@@ -2,7 +2,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { ToastContainer } from "react-toastify";
 import * as yup from "yup";
 import { useAuth } from "../../../context/authContext";
 import notify from "../../../utils/notify";
@@ -90,7 +89,6 @@ const Profile = ()=> {
           <button type="submit" className="btn btn-primary">Save changes</button>
         </div>
       </form>
-      <ToastContainer/>
     </div>
   );
 }

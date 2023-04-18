@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { ToastContainer } from "react-toastify";
 import History from "../../../components/profile/history/History";
 import Message from "../../../components/profile/message/Message";
 import Profile from "../../../components/profile/profile/Profile";
@@ -97,6 +98,7 @@ export default function MyAccount(props) {
           </div>
         </div>
       </div>
+      <ToastContainer/>
     </div>
   );
 }
