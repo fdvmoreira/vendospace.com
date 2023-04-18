@@ -40,7 +40,7 @@ router.route('/:id').get((req, res, next) => {
     next();
   })(req, res, next)
 }, getUserById)
-  .delete(deleteUserById);// TODO -remove delete route because the database must keep history
+  .delete(authenticationCheck, ownershipCheck, deleteUserById);// TODO -remove delete route because the database must keep history
 
 /** common requests by authenticated users */
 router.get('/:id/messages', authenticationCheck, getUserMessages)
