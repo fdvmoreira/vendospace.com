@@ -6,6 +6,7 @@ const Space = require('../models/spaceModel');
 const Listing = require('../models/listingModel');
 const Auction = require('../models/auctionModel');
 const Profile = require('../models/profileModel');
+const Account = require('../models/accountModel');
 
 const getUserById = asyncHandler(async (req, res) => {
   User.findById(req?.params?.id, (error, user) => {
@@ -160,14 +161,26 @@ const setUser = asyncHandler(async (req, res) => {
 });
 
 const deleteUserById = asyncHandler(async (req, res) => {
+  //TODO: use transaction to delete user
   const { id } = req.params;
+  let session = User.db.startSession();
+  try {
+    (await session).startTransaction();
 
-  //TODO: delete profile and accounts as well
-  User.findByIdAndDelete(id, (error, user) => {
-    if (error) return res.status(400).json({ success: false, message: `${error.message}`, data: err });
-    if (!doc) return res.status(404).json({ success: false, message: `User ${id} not found.`, data: null });
-    res.status(200).json({ success: true, message: `User ${user?._id} deleted.`, data: { ...user._doc, passwordHash: "" } });
-  });
+    await Account.deleteOne({ user: id }, { session });
+    await Profile.deleteOne({ user: id }, { session });
+    await User.findByIdAndDelete(id, { session });
+
+    (await session).commitTransaction();
+    (await session).endSession();
+
+    res.status(200).json({ success: true, message: `User ${id} deleted.`, data: null });
+
+  } catch (error) {
+    (await session).abortTransaction();
+    if (error) return res.status(400).json({ success: false, message: `${error.message}`, data: error });
+  }
+
 });
 
 module.exports = {
