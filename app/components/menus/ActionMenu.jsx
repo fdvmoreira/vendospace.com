@@ -4,14 +4,14 @@ const ActionMenu = ()=> {
 
   return (
     <div className="dropdown">
-      <button className="btn btn-primary dropdown-toggle" 
+      <button className="btn btn-sm btn-outline-primary dropdown-toggle" 
         type="button" 
         id="dropdownMenuButton" 
         data-bs-toggle="dropdown" 
         aria-haspopup="true" 
         aria-expanded="false"
         >
-        create new
+        Create new
       </button>
       <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
         <Link className="dropdown-item" href="/adspaces/new">Ad space</Link>
