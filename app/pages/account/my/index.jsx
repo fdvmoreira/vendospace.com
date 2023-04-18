@@ -21,7 +21,7 @@ export default function MyAccount(props) {
             type='a'
             role='tab'
             aria-controls='v-pills-profile'
-            aria-selected='false'>
+            aria-selected='true'>
             Profile
           </a>
           <a
@@ -48,29 +48,20 @@ export default function MyAccount(props) {
           </a>
           <a
             className='nav-item nav-link btn'
-            id='v-pills-home-tab'
+            id='v-pills-history-tab'
             data-bs-toggle='pill'
-            data-bs-target='#v-pills-home'
+            data-bs-target='#v-pills-history'
             type='a'
             role='tab'
-            aria-controls='v-pills-home'
-            aria-selected='true'>
+            aria-controls='v-pills-history'
+            aria-selected='false'>
             Account history
           </a>
           
         </nav>
         <div className='tab-content' id='v-pills-tabContent'>
           <div
-            className='tab-pane fade show active'
-            id='v-pills-home'
-            role='tabpanel'
-            aria-labelledby='v-pills-home-tab'>
-              <Suspense fallback={<p>Loading History ...</p>}>
-                <History />
-              </Suspense>
-          </div>
-          <div
-            className='tab-pane fade'
+            className='tab-pane show active'
             id='v-pills-profile'
             role='tabpanel'
             aria-labelledby='v-pills-profile-tab'>
@@ -94,6 +85,15 @@ export default function MyAccount(props) {
             aria-labelledby='v-pills-settings-tab'>
               <Suspense fallback={<p>Loading Settings ...</p>}>
                 <Setting />
+              </Suspense>
+          </div>
+          <div
+            className='tab-pane fade'
+            id='v-pills-history'
+            role='tabpanel'
+            aria-labelledby='v-pills-history-tab'>
+              <Suspense fallback={<p>Loading History ...</p>}>
+                <History />
               </Suspense>
           </div>
         </div>
