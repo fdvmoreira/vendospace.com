@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../context/authContext";
+import MessageReplyButton from "./MessageReplyButton";
+
 const USERS_API = '/api/v1/users';
 
 const MessageCard = ({from, subject, message, createdAt}) =>{
@@ -24,7 +26,7 @@ const MessageCard = ({from, subject, message, createdAt}) =>{
       <span className="text-muted">From: {(name)??"..."}</span>
       <p className="fw-bold">{subject.toUpperCase()}</p>
       </div>
-    <div className="card-body">{message}</div>
+    <div className="card-body"><p>{message}</p> {!message&&<MessageReplyButton to={from}/>}</div>
     <div className="card-footer text-muted">{new Date(createdAt).toLocaleString('en-GB')}</div>
   </div>
   )
