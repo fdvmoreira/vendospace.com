@@ -7,15 +7,23 @@ import ActionMenu from "./menus/ActionMenu";
 const Navbar = ({ props }) => {
   const [auth, updateAuth] = useAuth();
 
+  const logOut = (event) =>{
+    updateAuth({
+      isAuthenticated: false,
+      user: null,
+      token: null 
+    });
+  }
+
   return (
-    <nav className='navbar navbar-expand-lg shadow'>
-      <div className='container'>
-        <Link href='/' className='navbar-brand cursor-pointer'>
+    <nav className='navbar navbar-expand-lg'>
+      <div className='container d-flex flex-row justify-content-between'>
+        <Link href='/' className='navbar-brand alg'>
           <Image src='/logo.jpeg' alt='logo' width='48' height='48' />
         </Link>
-        
+        <div className="d-flex gap-2">
         <a
-          className='navbar-toggler'
+          className='navbar-toggler order-2'
           href='#'
           data-bs-toggle='collapse'
           data-bs-target='#navbarSupportedContent'
@@ -24,21 +32,22 @@ const Navbar = ({ props }) => {
           aria-label='Toggle navigation'>
           <span className='bi bi-list'></span>
         </a>
+        <div className="d-flex justify-content-end">
         <div className='collapse navbar-collapse' id='navbarSupportedContent'>
-          {!auth.isAuthenticated ? (
-            <div className='d-flex'>
-              <Link href='/login' className='btn btn-sm btn-outline-primary mx-1'>
+            {!auth?.isAuthenticated ? (
+            <div className='d-flex flex-row gap-2'>
+              <Link href='/login' className='btn btn-sm btn-outline-primary'>
                 Login
               </Link>
-              <Link href='/register' className='btn btn-sm btn-primary mx-1'>
+              <Link href='/register' className='btn btn-sm btn-primary'>
                 SignUp
               </Link>
             </div>
           ) : (
-            <div className='dropdown'>
+            <div className='dropdown d-flex gap-2'>
               <ActionMenu />
               <a
-                className='btn navbar-btn btn-secondary dropdown-toggle'
+                className='btn navbar-btn btn-sm btn-secondary dropdown-toggle'
                 id='dropdownMenuButton'
                 data-bs-toggle='dropdown'
                 aria-expanded='false'>
@@ -55,20 +64,16 @@ const Navbar = ({ props }) => {
                 </li>
                 <div className="separator"></div>
                 <li>
-                  <Link
-                    href='/'
-                    onClick={(e) => {
-                      updateAuth({isAuthenticated: false, token: null, user: null });
-                    }}
-                    className='dropdown-item'
-                    >
-                    Logout&nbsp;<i className='bi bi-box-arrow-right'></i>
-
-                  </Link>
+                  <Link href='/' className='dropdown-item' onClick={logOut}>
+                    Logout&nbsp;
+                    <i className='bi bi-box-arrow-right'></i>
+                    </Link>
                 </li>
               </ul>
             </div>
           )}
+          </div>
+          </div>
         </div>
       </div>
     </nav>
