@@ -1,4 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -7,13 +8,13 @@ import notify from "../../../utils/notify";
 
 const Setting = () =>{
 
+  const router = useRouter();
   let [auth, updateAuth] = useAuth();
   let [account, setAccount] = useState({});
 
   let {register, handleSubmit, formState:{errors}} = useForm({
     resolver: yupResolver(yup.object().shape({
       type: yup.string().required(),
-      status: yup.string().required()
     }))
   });
 
@@ -41,7 +42,7 @@ const Setting = () =>{
     })
     .then(res => res.json())
     .then(data => {
-      if(data?.success) updateAuth({});
+      if(data?.success) setAccount(data?.data);
       notify(data?.message, data?.success);
     })
     .catch(console.error);
@@ -57,19 +58,22 @@ const Setting = () =>{
     })
     .then(res => res.json())
     .then(data => {
-      if(data?.success) updateAuth({});
       notify(data?.message, data?.success);
+      if(data?.success){
+        updateAuth({});
+        setTimeout(()=> router.push('/'), 3000);
+      }
     })
     .catch(console.error);
   }
 
-  const enableSelect = (event)=>{
+  const enableAccountTypeChange = (event)=>{
     const SELECT = 1;
     event.target.parentNode.childNodes[SELECT].removeAttribute("disabled");
   }
 
   const enableSubmitButton = (event)=>{
-    const SUBMIT_BUTTON_PARENT = 2;
+    const SUBMIT_BUTTON_PARENT = 1;
     const SUBMIT_BUTTON = 0;
 
     event
@@ -81,6 +85,10 @@ const Setting = () =>{
 
   return (
     <div className="container d-flex flex-column">
+      <fieldset>
+        <legend>Account Status</legend>
+        <p className="text">{account?.status??"active"}</p>
+      </fieldset>
       <form onSubmit={handleSubmit(onSubmitHandle)}>
         <fieldset>
           <legend>Account Type</legend>
@@ -91,19 +99,7 @@ const Setting = () =>{
               <option value={"professional"}>Professional</option>
               <option value={"business"}>Business</option>
             </select>
-            <small className="bi bi-pen btn btn-sm" onClick={enableSelect}>&nbsp;change type</small>
-          </div>
-        </fieldset>
-        <fieldset>
-          <legend>Account Status</legend>
-          <div className="form-group">
-            <label htmlFor="status" className="sr-only">Account Status</label>
-            <select className="form-select" {...register('status')} id="status" onChange={enableSubmitButton} disabled>
-              <option value={"active"}>Active</option>
-              <option value={"disabled"}>Disabled</option>
-              <option value={"pending"}>Pending</option>
-            </select>
-            <small className="bi bi-pen btn btn-sm" onClick={enableSelect}>&nbsp;change status</small>
+            <small className="bi bi-pen btn btn-sm" onClick={enableAccountTypeChange}>&nbsp;change type</small>
           </div>
         </fieldset>
         <div className="d-flex justify-content-end">
