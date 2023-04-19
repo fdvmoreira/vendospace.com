@@ -45,6 +45,15 @@ const getUserSpaces = asyncHandler(async (req, res) => {
   });
 });
 
+const deleteUserSpaceById = asyncHandler(async (req, res) => {
+  let { id: user, spaceId: _id } = req.params;
+  Space.findOneAndDelete({ _id, user }, (error, space) => {
+    if (error) return res.status(400).json({ success: false, message: `Error: ${error.message}`, data: error });
+    if (!space.success) return res.status(404).json({ success: false, message: "space not found", data: null });
+    res.json({ success: true, message: "space deleted", data: space });
+  });
+});
+
 const getUserAuctions = asyncHandler(async (req, res) => {
   Auction.find({ user: req?.params?.id }, (error, auctions) => {
     if (error) return res.status(404).json({ success: false, message: `Error: ${error.message}`, data: error });
@@ -123,7 +132,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 });
 
 const getUserAccount = asyncHandler(async (req, res) => {
-    Account.findOne({user:req?.params?.id}, (error, account) => {
+  Account.findOne({ user: req?.params?.id }, (error, account) => {
     if (error) return res.status(400).json({ success: false, message: `Error: ${error.message}`, data: error });
     if (!account) return res.status(404).json({ success: false, message: "Account not found", data: null });
     res.json({ success: true, message: "Account found", data: account });
@@ -197,6 +206,7 @@ module.exports = {
   getUserMessages,
   getUserListings,
   getUserSpaces,
+  deleteUserSpaceById,
   getUserAuctions,
   getUserBids,
   setUser,
