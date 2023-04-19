@@ -7,10 +7,10 @@ const spaceSchema = new mongoose.Schema({
     enum: {
       values: [
         'stunt ',
-        'lamp-Post',
+        'lamp-post',
         'bridge',
         'guerrilla',
-        'point-of-Sale',
+        'point-of-sale',
         'transit',
         'outdoor',
         'other',
