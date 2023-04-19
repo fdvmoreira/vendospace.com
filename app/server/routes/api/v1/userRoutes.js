@@ -7,6 +7,7 @@ const {
   getUserMessages,
   getUserListings,
   getUserSpaces,
+  deleteUserSpaceById,
   getUserAuctions,
   getUserBids,
   setUser,
@@ -47,6 +48,7 @@ router.route('/:id').get((req, res, next) => {
 router.get('/:id/messages', authenticationCheck, getUserMessages)
   .get('/:id/listings', authenticationCheck, ownershipCheck, getUserListings)
   .get('/:id/spaces', authenticationCheck, ownershipCheck, getUserSpaces)
+  .delete('/:id/spaces/:spaceId', authenticationCheck, ownershipCheck, deleteUserSpaceById)
   .get('/:id/auctions', authenticationCheck, ownershipCheck, getUserAuctions)
   .get('/:id/bids', authenticationCheck, ownershipCheck, getUserBids)
   .get('/:id/name', authenticationCheck, getUserName)
