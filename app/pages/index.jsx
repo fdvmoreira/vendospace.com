@@ -12,11 +12,20 @@ export default (props) => {
   let [auctions, setAuctions] = useState([]);
   let [listings, setListings] = useState([]);
 
-  let param = useRouter();
+  let params = useRouter();
   let [auth, updateAuth] = useAuth();
 
   useEffect(() => {
-    
+    const urlSearchParams = new URLSearchParams(params.asPath);
+    let auth_success = urlSearchParams.get("/?auth_success"); //TODO: parameter name corrupted. Check the origin  
+    let data = urlSearchParams.get("data");
+
+    //TODO: DO NOT USE ''NEXT_PUBLIC_JWT_SECRET'' env IN PRODUCTION
+    if(!auth?.isAuthenticated && data && auth_success) {
+      data = JSON.parse(CryptoJS.AES.decrypt(data, process.env.NEXT_PUBLIC_JWT_SECRET).toString(CryptoJS.enc.Utf8));
+      updateAuth(data);
+    }
+
     /** Auctions */
     fetch(AUCTIONS_API_URL)
       .then((res) => res.json())
@@ -32,18 +41,8 @@ export default (props) => {
         setListings(data);
       })
       .catch(console.error);
-
-    let {data, auth_success} = param.query;
     
-    //TODO: DO NOT USE this env IN PRODUCTION
-    if(data && auth_success) {
-      data = JSON.parse(CryptoJS.AES.decrypt(data, process.env.NEXT_PUBLIC_JWT_SECRET).toString(CryptoJS.enc.Utf8));
-    }
     
-    /** Authenticate the user */
-    if(auth_success&& data&&!auth?.isAuthenticated) {
-      updateAuth(data);
-    }
       
   }, []);
 
@@ -51,7 +50,7 @@ export default (props) => {
     <div className='container'>
       <hr />
       {
-        //TODO: display the listings and auctions according to the current sort order
+        //TODO: display the listings and auctions according to the selected sorting order
       }
       <ul className='list-group'>
         {
