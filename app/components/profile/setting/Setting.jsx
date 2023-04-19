@@ -19,7 +19,7 @@ const Setting = () =>{
   });
 
   useEffect(() =>{
-    fetch(`/api/v1/accounts/${auth?.user?._id??0}`,{
+    fetch(`/api/v1/users/${auth?.user?._id??0}/account`,{
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -29,7 +29,7 @@ const Setting = () =>{
     .then(res => res.json())
     .then(data => setAccount(data?.data))
     .catch(console.error);
-  });
+  },[]);
 
   const onSubmitHandle = (data)=>{
     fetch(`/api/v1/accounts/${account?._id??0}`,{
