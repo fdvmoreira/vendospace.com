@@ -1,59 +1,67 @@
 import Image from "next/legacy/image";
-/**
- * _id
- * type
- * location (gps coords)
- * dimension(w*h)
- * imagesURL
- * address
- * date
- */
-export default function AdSpaceCard({ data }) {
-  const [...images] = data.images;
+
+const AdSpaceCard = ({ data }) =>{
+
   const {
     type,
-    location: { latitude, longitude },
-    dimension: { width, height },
+    location:{latitude:latitude},
+    location:{longitude:longitude},
+    dimension:{width:width}, 
+    dimension:{height:height},
+    dimension:{unit:unit},
     address,
-    date,
+    createdAt,
+    images,
   } = data;
 
+
   return (
-    <div className='card border' style={{ width: "50%" }}>
+    <div className='card bg-light d-flex gap-2 flex-row'>
       <div className='card-header'>
         <div className='card-img-top'>
           <Image
-            src={images[0]}
+            src={images[0]??"/face.jpeg"}
             alt={`${type}-${address}`}
-            width={96}
-            height={96}
+            width={200}
+            height={200}
           />
         </div>
       </div>
-      <div className='card-body'>
-        <ul>
-          <li>
-            <ul className='d-flex'>
-              <li className='font-weight-bolder'>{type}</li>
-              <li className='text-secondary'>{date}</li>
-            </ul>
-          </li>
-          <li>{address}</li>
-          <li>
-            <ul className='d-flex'>
-              <li>W:{width}</li>
-              <li>H:{height}</li>
-            </ul>
-          </li>
-          <li>
-            <ul className='d-flex'>
-              <li>Lat:{latitude}</li>
-              <li>Lng:{longitude}</li>
-            </ul>
-          </li>
-        </ul>
+      <div className="d-block flex-column">
+        <div className='card-body'>
+          <ul className=" list-unstyled">
+            <li>
+              <ul className='d-flex list-unstyled'>
+                <li className='lead fw-bolder'>{type}</li>
+              </ul>
+            </li>
+            <li className="fw-light fs-5">{address}</li>
+            <li className="d-flex justify-content-between">
+              <span>Dimensions&nbsp;</span>
+              <ul className='d-flex list-unstyled justify-content-around fw-light'>
+                <li>{width}</li>
+                <li className="bi bi-x"></li>
+                <li>{height}</li>
+                <li className="text-uppercase fw-light">&nbsp;{unit}</li>
+              </ul>
+            </li>
+            <li className="d-flex justify-content-between">
+              <p className="text-nowrap">GPS Coords&nbsp;</p>
+              <ul className='d-flex list-unstyled justify-content-end fw-light'>
+                <li>{latitude}</li>
+                <li>&nbsp;&bull;&nbsp;</li>
+                <li>{longitude}</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div className='card-footer d-flex justify-content-between'>
+          <span className="text-muted">Last update</span>
+          <span className="text-muted fw-light">{new Date(createdAt).toLocaleDateString('en-GB')}</span>
+        </div>
       </div>
-      <div className='card-footer'></div>
     </div>
   );
 }
+
+export default AdSpaceCard;
