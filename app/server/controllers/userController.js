@@ -72,22 +72,22 @@ const getUserHistories = asyncHandler(async (req, res) => {
   let [listingCount, bidCount, spaceCount, auctionCount] = [0, 0, 0, 0];
   let errors = [];
 
-  Auction.countDocuments({ _id: req?.params?.id }, (error, count) => {
+  await Auction.countDocuments({ user: req?.params?.id }, (error, count) => {
     if (error) return errors.push(error);
     auctionCount = count;
   });
 
-  Listing.countDocuments({ _id: req?.params?.id }, (error, count) => {
+  await Listing.countDocuments({ user: req?.params?.id }, (error, count) => {
     if (error) return errors.push(error);
     listingCount = count;
   });
 
-  Space.countDocuments({ _id: req?.params?.id }, (error, count) => {
+  await Space.countDocuments({ user: req?.params?.id }, (error, count) => {
     if (error) return errors.push(error);
     spaceCount = count;
   });
 
-  Bid.countDocuments({ _id: req?.params?.id }, (error, count) => {
+  await Bid.countDocuments({ bidder: req?.params?.id }, (error, count) => {
     if (error) return errors.push(error);
     bidCount = count;
   });
