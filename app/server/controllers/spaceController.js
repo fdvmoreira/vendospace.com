@@ -14,8 +14,9 @@ const getSpace = asyncHandler(async (req, res) => {
 const setSpace = asyncHandler(async (req, res) => {
   const { type, user, location, dimension, imagesURL, address } = req.body;
 
-  Space.create({ type, location, dimension, imagesURL, address }, (err, space) => {
+  Space.create({ type, user, location, dimension, imagesURL, address }, (err, space) => {
     if (err) return res.status(400).json({ success: false, message: `${err.message}`, data: err });
+    if (!space) return res.status(404).json({ success: false, message: `No space created`, data: null });
     res.status(201).json({ success: true, message: "Ad Space created", data: space });
   });
 });
