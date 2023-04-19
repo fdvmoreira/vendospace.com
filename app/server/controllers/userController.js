@@ -122,6 +122,14 @@ const getUserProfile = asyncHandler(async (req, res) => {
   });
 });
 
+const getUserAccount = asyncHandler(async (req, res) => {
+    Account.findOne({user:req?.params?.id}, (error, account) => {
+    if (error) return res.status(400).json({ success: false, message: `Error: ${error.message}`, data: error });
+    if (!account) return res.status(404).json({ success: false, message: "Account not found", data: null });
+    res.json({ success: true, message: "Account found", data: account });
+  });
+});
+
 const updateUserProfile = asyncHandler(async (req, res) => {
 
   // Get the type of email used to create the account
@@ -195,6 +203,7 @@ module.exports = {
   getUserHistories,
   getUserProfile,
   updateUserProfile,
+  getUserAccount,
   // updateUser, //TODO: implement password update
   deleteUserById
 };
