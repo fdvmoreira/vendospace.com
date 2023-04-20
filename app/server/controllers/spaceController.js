@@ -5,7 +5,15 @@ const Space = require('../models/spaceModel')
 const getSpaceById = asyncHandler(async (req, res) => {
   Space.findById(req?.params?.id, (error, space) => {
     if (error) return res.status(500).json({ success: false, message: `Error: ${error.message}`, data: error });
-    if (!space) return res.status(404).json({ success: false, message: `Error: ${error.message}`, data: null });
+    if (!space) return res.status(404).json({ success: false, message: 'No space found', data: null });
+    res.status(200).json({ success: true, message: "Found space", data: space });
+  });
+});
+
+const getSpaceByIdPublic = asyncHandler(async (req, res) => {
+  Space.findById(req?.params?.id, { "user": 0 }, (error, space) => {
+    if (error) return res.status(500).json({ success: false, message: `Error: ${error?.message}`, data: error });
+    if (!space) return res.status(404).json({ success: false, message: 'No space found', data: null });
     res.status(200).json({ success: true, message: "Found space", data: space });
   });
 });
@@ -47,6 +55,7 @@ const deleteSpace = asyncHandler(async (req, res) => {
 
 module.exports = {
   getSpaceById,
+  getSpaceByIdPublic,
   setSpace,
   updateSpaceById,
   deleteSpace
