@@ -21,13 +21,13 @@ const setSpace = asyncHandler(async (req, res) => {
   });
 });
 
-// update ad-space
-const updateSpace = asyncHandler(async (req, res) => {
-  const { id } = req.params.id;
-  const space = req.body; // TODO - field to update
+// update ad space
+const updateSpaceById = asyncHandler(async (req, res) => {
+  const { id } = req?.params;
+  const { space } = req.body; // TODO - field to update
 
-  Space.findByIdAndUpdate(id, { space }, (err, space) => {
-    if (err) return res.status(400).json({ success: false, message: `${err.message}` });
+  Space.findByIdAndUpdate(id, { ...space }, (error, space) => {
+    if (error) return res.status(400).json({ success: false, message: `${error.message}`, data: error });
     if (!space) return res.status(404).json({ success: false, message: "Space not found", data: null });
     res.json({ success: true, message: `Ad Space ${space} updated`, data: space });
   });
@@ -48,6 +48,6 @@ const deleteSpace = asyncHandler(async (req, res) => {
 module.exports = {
   getSpaceById,
   setSpace,
-  updateSpace,
+  updateSpaceById,
   deleteSpace
 }

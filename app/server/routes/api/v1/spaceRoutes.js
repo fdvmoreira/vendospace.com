@@ -3,6 +3,7 @@ const asynHandler = require("express-async-handler");
 const router = express.Router();
 const {
   getSpaceById,
+  updateSpaceById,
   setSpace,
   deleteSpace
 } = require('../../../controllers/spaceController');
@@ -22,7 +23,7 @@ router.route("/").get(asynHandler(async (req, res) => { // todo - remove this ro
 // only deactive the account when the use requests delete account
 router.route('/:id')
   .get(authenticationCheck, getSpaceById)
-  // .patch(authenticationCheck, ownershipCheck, updateSpaceById)
+  .patch(authenticationCheck, ownershipCheck, updateSpaceById)
   .delete(authenticationCheck, ownershipCheck, deleteSpace);
 
 module.exports = router;
