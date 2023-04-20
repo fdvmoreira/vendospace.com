@@ -18,7 +18,7 @@ router.route("/").get(asynHandler(async (req, res) => { // todo - remove this ro
     res.status(200).json(doc);
   });
 
-})).post(setSpace);
+})).post(authenticationCheck, setSpace);
 
 router.route('/:id')
   .get(authenticationCheck, getSpaceById)
