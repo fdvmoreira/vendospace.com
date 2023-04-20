@@ -2,10 +2,10 @@ const asyncHandler = require('express-async-handler')
 const Space = require('../models/spaceModel')
 
 // find space by ID
-const getSpace = asyncHandler(async (req, res) => {
-  Space.findById(req.params.id, (err, space) => {
-    if (err) return res.status().json({ success: false, message: `${err.message}`, data: err });
-    if (!space) return res.status(404).json({ success: false, message: `${err.message}`, data: err });
+const getSpaceById = asyncHandler(async (req, res) => {
+  Space.findById(req?.params?.id, (error, space) => {
+    if (error) return res.status(500).json({ success: false, message: `Error: ${error.message}`, data: error });
+    if (!space) return res.status(404).json({ success: false, message: `Error: ${error.message}`, data: null });
     res.status(200).json({ success: true, message: "Found space", data: space });
   });
 });
@@ -45,4 +45,9 @@ const deleteSpace = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { getSpace, setSpace, updateSpace, deleteSpace }
+module.exports = {
+  getSpaceById,
+  setSpace,
+  updateSpace,
+  deleteSpace
+}
