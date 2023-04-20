@@ -11,7 +11,7 @@ const AdSpaceCard = ({ data }) =>{
     dimension:{unit:unit},
     address,
     createdAt,
-    images,
+    imagesURL:images,
   } = data;
 
 
@@ -20,7 +20,7 @@ const AdSpaceCard = ({ data }) =>{
       <div className='card-header'>
         <div className='card-img-top'>
           <Image
-            src={images[0]??"/face.jpeg"}
+            src={images?.[0]??"/face.jpeg"}
             alt={`${type}-${address}`}
             width={200}
             height={200}
