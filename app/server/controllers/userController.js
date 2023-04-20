@@ -49,7 +49,7 @@ const deleteUserSpaceById = asyncHandler(async (req, res) => {
   let { id: user, spaceId: _id } = req.params;
   Space.findOneAndDelete({ _id, user }, (error, space) => {
     if (error) return res.status(400).json({ success: false, message: `Error: ${error.message}`, data: error });
-    if (!space.success) return res.status(404).json({ success: false, message: "space not found", data: null });
+    if (!space) return res.status(404).json({ success: false, message: "space not found", data: null });
     res.json({ success: true, message: "space deleted", data: space });
   });
 });
@@ -69,45 +69,31 @@ const getUserBids = asyncHandler(async (req, res) => {
 });
 
 const getUserHistories = asyncHandler(async (req, res) => {
-  let [listingCount, bidCount, spaceCount, auctionCount] = [0, 0, 0, 0];
-  let errors = [];
-
-  await Auction.countDocuments({ user: req?.params?.id }, (error, count) => {
-    if (error) return errors.push(error);
-    auctionCount = count;
-  });
-
-  await Listing.countDocuments({ user: req?.params?.id }, (error, count) => {
-    if (error) return errors.push(error);
-    listingCount = count;
-  });
-
-  await Space.countDocuments({ user: req?.params?.id }, (error, count) => {
-    if (error) return errors.push(error);
-    spaceCount = count;
-  });
-
-  await Bid.countDocuments({ bidder: req?.params?.id }, (error, count) => {
-    if (error) return errors.push(error);
-    bidCount = count;
-  });
-
-  if (errors.length > 0) return res.status(500).json({
-    success: false,
-    message: `Error: ${errors?.[0].message}`,
-    data: errors
-  });
-
-  res.json({
-    success: true,
-    message: "Here are the history summary",
-    data: {
-      listings: { count: listingCount },
-      auctions: { count: auctionCount },
-      bids: { count: bidCount },
-      spaces: { count: spaceCount }
-    }
-  });
+  Promise.all([
+    Listing.countDocuments({ user: req?.params?.id }).exec(),
+    Auction.countDocuments({ user: req?.params?.id }).exec(),
+    Bid.countDocuments({ bidder: req?.params?.id }).exec(),
+    Space.countDocuments({ user: req?.params?.id }).exec()
+  ])
+    .then(([listingCount, auctionCount, bidCount, spaceCount]) => {
+      res.json({
+        success: true,
+        message: "Here are the history summary",
+        data: {
+          listings: { count: listingCount },
+          auctions: { count: auctionCount },
+          bids: { count: bidCount },
+          spaces: { count: spaceCount }
+        }
+      });
+    })
+    .catch(error => {
+      return res.status(500).json({
+        success: false,
+        message: `Error: ${error?.message}`,
+        data: error
+      });
+    });
 
 });
 
