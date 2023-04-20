@@ -9,6 +9,14 @@ const getAllListings = asyncHandler(async (req, res) => {
   });
 });
 
+const getAllListingsPublic = asyncHandler(async (req, res) => {
+  Listing.find({ "status": "active" }, { "user": 0 }, (error, listings) => {
+    if (error) return res.status(500).json({ success: false, message: `Error: ${error.message}`, data: error });
+    if (!listings.length > 0) return res.status(404).json({ success: false, message: 'Listings Not Found', data: null });
+    res.json({ success: true, message: `Found ${listings.length} listings`, data: listings });
+  });
+});
+
 const getListingById = asyncHandler(async (req, res) => {
   Listing.findById(req?.params?.id, (error, listing) => {
     if (error) return res.status(500).json({ success: false, message: `Error: ${error.message}`, data: error });
@@ -43,6 +51,7 @@ const deleteListing = asyncHandler(async (req, res) => {
   });
 });
 module.exports = {
+  getAllListingsPublic,
   getAllListings,
   getListingById,
   setListing,

@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const authenticationCheck = require("../../../middlewares/auth/authenticationCheck");
 const {
+  getAllListingsPublic,
   getAllListings,
   getListingById,
   setListing,
@@ -15,5 +16,8 @@ router.route("/")
 router.route('/:id')
   .get(authenticationCheck, getListingById)
   .delete(ownershipCheck, authenticationCheck, deleteListing);
+
+router
+  .get('/public', getAllListingsPublic);
 
 module.exports = router;
