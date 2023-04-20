@@ -1,6 +1,6 @@
 import Image from "next/legacy/image";
 
-const AdSpaceCard = ({ data }) =>{
+const SpaceCard = ({ data }) =>{
 
   const {
     type,
@@ -64,4 +64,4 @@ const AdSpaceCard = ({ data }) =>{
   );
 }
 
-export default AdSpaceCard;
+export default SpaceCard;
