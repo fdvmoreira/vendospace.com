@@ -40,8 +40,19 @@ const getUserListings = asyncHandler(async (req, res) => {
 
 const getUserSpaces = asyncHandler(async (req, res) => {
   Space.find({ user: req?.params?.id }, (error, spaces) => {
-    if (error) return res.status(404).json({ success: false, message: `Error: ${error.message}`, data: error });
+    if (error) return res.status(500).json({ success: false, message: `Error: ${error.message}`, data: error });
+    if (!spaces) return res.status(404).json({ success: false, message: `No spaces found`, data: error });
     res.json({ success: true, message: `Found ${spaces.length} spaces`, data: spaces });
+  });
+});
+
+const updateUserSpaceById = asyncHandler(async (req, res) => {
+  let { type, user, location, dimension, address } = req.body;
+  //TODO: handle the images update
+  Space.findByIdAndUpdate(req?.params?.spaceId, { type, user, location, dimension, address }, (error, space) => {
+    if (error) return res.status(500).json({ success: false, message: `Error: ${error.message}`, data: error });
+    if (!space) return res.status(404).json({ success: false, message: `Could not find space`, data: null });
+    res.json({ success: true, message: "Space updated", data: space });
   });
 });
 
@@ -192,6 +203,7 @@ module.exports = {
   getUserMessages,
   getUserListings,
   getUserSpaces,
+  updateUserSpaceById,
   deleteUserSpaceById,
   getUserAuctions,
   getUserBids,

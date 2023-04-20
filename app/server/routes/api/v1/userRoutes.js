@@ -7,6 +7,7 @@ const {
   getUserMessages,
   getUserListings,
   getUserSpaces,
+  updateUserSpaceById,
   deleteUserSpaceById,
   getUserAuctions,
   getUserBids,
@@ -48,6 +49,7 @@ router.route('/:id').get((req, res, next) => {
 router.get('/:id/messages', authenticationCheck, getUserMessages)
   .get('/:id/listings', authenticationCheck, ownershipCheck, getUserListings)
   .get('/:id/spaces', authenticationCheck, ownershipCheck, getUserSpaces)
+  .patch('/:id/spaces/:spaceId', authenticationCheck, ownershipCheck, updateUserSpaceById)
   .delete('/:id/spaces/:spaceId', authenticationCheck, ownershipCheck, deleteUserSpaceById)
   .get('/:id/auctions', authenticationCheck, ownershipCheck, getUserAuctions)
   .get('/:id/bids', authenticationCheck, ownershipCheck, getUserBids)
