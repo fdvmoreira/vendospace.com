@@ -1,48 +1,51 @@
 const asyncHandler = require('express-async-handler');
 const Listing = require('./../models/listingModel');
-const mongoose = require('mongoose');
 
-// get Listing by id
-const getListing = asyncHandler(async (req, res) => {
-    Listing.findById(req.params.id, (err, doc) => {
-        if (err) res.status(400).json({ Error: `${err.message}` });
-
-        res.status(200).json(doc);
-    });
+const getAllListings = asyncHandler(async (req, res) => {
+  Listing.find({ "status": "active" }, (error, listings) => {
+    if (error) return res.status(500).json({ success: false, message: `Error: ${error.message}`, data: error });
+    if (!listings.length > 0) return res.status(404).json({ success: false, message: 'Listings Not Found', data: null });
+    res.json({ success: true, message: `Found ${listings.length} listings`, data: listings });
+  });
 });
 
-// create Listing
+const getListingById = asyncHandler(async (req, res) => {
+  Listing.findById(req?.params?.id, (error, listing) => {
+    if (error) return res.status(500).json({ success: false, message: `Error: ${error.message}`, data: error });
+    if (!listing) return res.status(404).json({ success: false, message: 'Listing Not Found', data: null });
+    res.json({ success: true, message: 'Listing Found', data: listing });
+  });
+});
+
 const setListing = asyncHandler(async (req, res) => {
-    const { space, user, status } = req.body;
-
-    Listing.create({ space: mongoose.Types.ObjectId(space), user: mongoose.Types.ObjectId(user), status }, (err, doc) => {
-        if (err) res.status(400).json({ Error: `${err.message}` });
-
-        res.status(201).json({ message: `Listing ${doc.id} created` });
-    });
+  const { space, user, status } = req.body;
+  Listing.create({ space, user, status }, (error, listing) => {
+    if (error) return res.status(500).json({ success: false, message: `Error: ${error.message}`, data: error });
+    if (!listing) return res.status(404).json({ success: false, message: 'Listing Not created', data: null });
+    res.status(201).json({ success: true, message: `Listing created`, data: listing });
+  });
 });
 
-//update  Listing
 const updateListing = asyncHandler(async (req, res) => {
-    const body = req.body;
-    Listing.findByIdAndUpdate(req.params.id, { body }, (err, doc) => {
-        if (err) res.status(400).json({ Error: `${err.message}` });
-
-        res.status(201).json({ message: `Listing ${doc._id} updated` });
-    });
+  const body = req.body;
+  Listing.findByIdAndUpdate(req?.params?.id, { ...body }, (error, listing) => {
+    if (error) return res.status(500).json({ success: false, message: `Error: ${error.message}`, data: error });
+    if (!listing) return res.status(404).json({ success: false, message: 'Listing Not created', data: null });
+    res.json({ success: true, message: `Listing updated`, data: listing });
+  });
 });
 
-// delete Listing
 const deleteListing = asyncHandler(async (req, res) => {
-    Listing.findByIdAndDelete(req.params.id, (err, doc) => {
-        if (err) res.status(400).json({ Error: `${err.message}` });
-
-        res.status().json({ message: `Listing ${doc?.id} deleted` });
-    });
+  Listing.findByIdAndDelete(req?.params?.id, (error, listing) => {
+    if (error) return res.status(500).json({ success: false, message: `Error: ${error.message}`, data: error });
+    if (!listing) return res.status(404).json({ success: false, message: 'Listing Not deleted', data: null });
+    res.json({ success: true, message: `Listing deleted`, data: listing });
+  });
 });
 module.exports = {
-    getListing,
-    setListing,
-    updateListing,
-    deleteListing
+  getAllListings,
+  getListingById,
+  setListing,
+  updateListing,
+  deleteListing
 }
