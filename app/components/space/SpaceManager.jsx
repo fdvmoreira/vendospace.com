@@ -10,14 +10,13 @@ import notify from "../../utils/notify";
 
 const SpaceManager =({spaceAPI, requestMethod, space}) => {
   
-  const imageButton = useRef();
+  const imageButton = useRef(null);
   const [imageSrc, setImageSrc] = useState("/upload-icon.png");
   const [selectImage, setSelectImage] = useState("Select Images");
-  const [otherType, setOtherType] = useState({ display: "none" });
 
   const [auth, _] = useAuth();
 
-  const {register,handleSubmit,formState: { errors },} = useForm({
+  const {register,handleSubmit,formState: { errors },watch} = useForm({
     resolver: yupResolver(yup.object().shape({
       file: yup.mixed(),
       user: yup.string().required("Authentication required"),
@@ -32,8 +31,14 @@ const SpaceManager =({spaceAPI, requestMethod, space}) => {
         height: yup.number().required('Height is not set'),
         unit: yup.string().required('Select the unit'),
       }),
+      otherType: yup.string().when('type',{
+        is: (type)=> type == 'other',
+        then: ()=> yup.string().required('Describe the type'),
+      })
     }))
   });
+
+  let type = watch('type');
 
     /**
    * Handle the submit event
@@ -41,6 +46,7 @@ const SpaceManager =({spaceAPI, requestMethod, space}) => {
    */
   const onSubmitHandler = async(data, event) =>{
     event.preventDefault();
+    console.log(data);
     let uploadedImageFiles = [];
     if (data?.file?.length > 0){
       uploadedImageFiles = await uploadImageFiles(data?.file);
@@ -135,9 +141,7 @@ const SpaceManager =({spaceAPI, requestMethod, space}) => {
           }
           
           <figure
-            className='border border-secondary d-inline-block cursor-hand p-4'
-            style={{ cursor: "pointer" }}
-            onClick={(e) => imageButton?.current?.click()}>
+            className='border border-secondary d-inline-block cursor-hand p-4'>
             <Image
               src={imageSrc}
               width={96}
@@ -154,10 +158,8 @@ const SpaceManager =({spaceAPI, requestMethod, space}) => {
             id='file'
             accept='image/*'
             onChange={(e) => {
-              handleImageChange;
               setImageSrc(()=> URL.createObjectURL(e.target.files[0]));
             }}
-            ref={imageButton} 
             multiple {...register('file')}/>
           {errors.file?.message && <p className='alert alert-danger'>{errors?.file?.message}</p>}
           
@@ -166,13 +168,6 @@ const SpaceManager =({spaceAPI, requestMethod, space}) => {
             <select
               className='form-select'
               defaultValue={space?.type??""}
-              onChange={(event) => {
-                if (event?.target?.value === "other") {
-                  setOtherType(()=>{ display: "block" });
-                  return;
-                }
-                setOtherType(()=>{ display: "none" });
-              }}
               {...register("type")}>
               <option value=''>Select ad space type</option>
               <option value='billboard'>Billboard</option>
@@ -195,20 +190,20 @@ const SpaceManager =({spaceAPI, requestMethod, space}) => {
             {errors.type && <p className='alert alert-warning'>{errors.type.message}</p>}
           </div>
           {/** Other types */}
-          <input
+          {type === 'other' && (<input
             type='text'
-            id='typeDescription'
-            style={otherType}
+            style={type === 'other' ?{display:'block'}:{display:'none'}}
             className='form-control mb-2'
             placeholder={space?.otherType??'Type other ad space here ...'}
             defaultValue={space?.otherType??""}
-            {...register("typeDescription")} />
+            {...register("otherType")} />)}
             {/** other type error */}
-            {errors.typeDescription?.message && (
+            {errors.otherType?.message && (
               <p className='alert alert-warning'>
-                {errors.typeDescription.message}
+                {errors.otherType.message}
               </p>
             )}
+          
           {/** Location */}
           <fieldset className='form-group'>
             <legend className='font-weight-bold'>Location</legend>
