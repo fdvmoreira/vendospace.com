@@ -38,6 +38,31 @@ const getUserListings = asyncHandler(async (req, res) => {
   });
 });
 
+const getUserListingById = asyncHandler(async (req, res) => {
+  Listing.findById({ _id: req?.params?.listingId }, (error, listing) => {
+    if (error) return res.status(500).json({ success: false, message: `Error ${error.message}`, data: err });
+    if (!listing) return res.status(404).json({ success: false, message: `No listing found`, data: error });
+    res.json({ success: true, message: 'Listing found', data: listing });
+  });
+});
+
+const updateUserListingById = asyncHandler(async (req, res) => {
+  let { user, space, status } = req?.body;
+  Listing.findByIdAndUpdate({ _id: req?.params?.listingId }, { user, space, status }, (error, listing) => {
+    if (error) return res.status(500).json({ success: false, message: `Error ${error.message}`, data: err });
+    if (!listing) return res.status(404).json({ success: false, message: `No listing found`, data: error });
+    res.json({ success: true, message: 'Listing updated', data: listing });
+  });
+});
+
+const deleteUserListingById = asyncHandler(async (req, res) => {
+  Listing.findByIdAndDelete({ _id: req?.params?.listingId }, (error, listing) => {
+    if (error) return res.status(500).json({ success: false, message: `Error ${error.message}`, data: err });
+    if (!listing) return res.status(404).json({ success: false, message: `No listing found`, data: error });
+    res.json({ success: true, message: 'Listing deleted', data: listing });
+  });
+});
+
 const getUserSpaces = asyncHandler(async (req, res) => {
   Space.find({ user: req?.params?.id }, (error, spaces) => {
     if (error) return res.status(500).json({ success: false, message: `Error: ${error.message}`, data: error });
@@ -202,6 +227,9 @@ module.exports = {
   getUserName,
   getUserMessages,
   getUserListings,
+  getUserListingById,
+  updateUserListingById,
+  deleteUserListingById,
   getUserSpaces,
   updateUserSpaceById,
   deleteUserSpaceById,
