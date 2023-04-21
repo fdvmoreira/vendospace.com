@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const authenticationCheck = require("../../../middlewares/auth/authenticationCheck");
+const ownershipCheck = require('../../../middlewares/auth/ownershipCheck');
 const {
   getAllListingsPublic,
   getAllListings,
@@ -7,7 +8,6 @@ const {
   setListing,
   deleteListing
 } = require('../../../controllers/listingController');
-const ownershipCheck = require('../../../middlewares/auth/ownershipCheck');
 
 router.route("/")
   .get(getAllListings)
