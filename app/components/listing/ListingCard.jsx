@@ -1,25 +1,19 @@
 import Image from "next/legacy/image";
 import { useEffect, useState } from "react";
-import NewMessage from "./NewMessage";
+import NewMessage from "../NewMessage";
 
 export default function ListingCard({ listing }) {
   const { _id, space: spaceId, createdAt, user, status } = listing;
   let [space, setSpace] = useState();
-  const SPACE_API_URL = `/api/v1/spaces/${spaceId}`;
-  /**
-   * _id,
-   * space-url,location,size,
-   * user - name,
-   * status,
-   * timestamp
-   */
+  
   useEffect(() => {
+    const SPACE_API_URL = `/api/v1/spaces/${spaceId}/public`;
     fetch(SPACE_API_URL)
       .then((res) => res.json())
       .then((data) => {
-        setSpace(data.data);
+        setSpace(()=>data?.data);
       })
-      .catch((err) => console.error(err));
+      .catch(console.error);
   }, []);
   return (
     <div className='card'>
