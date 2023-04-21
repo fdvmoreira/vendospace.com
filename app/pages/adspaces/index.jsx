@@ -57,7 +57,7 @@ const SpaceList = ()=> {
 
   if(!auth?.isAuthenticated) return <RestrictedArea/>
   
-  if(!adspaces.length) return (
+  if(!adspaces?.length) return (
   <div className="lead d-flex flex-column align-items-center gap-2">
     <p>You haven't created any ad space yet.</p>
     <p>
