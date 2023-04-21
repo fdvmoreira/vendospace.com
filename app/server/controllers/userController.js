@@ -71,6 +71,14 @@ const getUserSpaces = asyncHandler(async (req, res) => {
   });
 });
 
+const getUserSpaceById = asyncHandler(async (req, res) => {
+  Space.findById(req?.params?.spaceId, (error, space) => {
+    if (error) return res.status(500).json({ success: false, message: `Error: ${error.message}`, data: error });
+    if (!space) return res.status(404).json({ success: false, message: `Could not find space`, data: null });
+    res.json({ success: true, message: "Space found", data: space });
+  });
+});
+
 const updateUserSpaceById = asyncHandler(async (req, res) => {
   let { type, user, location, dimension, address } = req.body;
   //TODO: handle the images update
@@ -231,6 +239,7 @@ module.exports = {
   updateUserListingById,
   deleteUserListingById,
   getUserSpaces,
+  getUserSpaceById,
   updateUserSpaceById,
   deleteUserSpaceById,
   getUserAuctions,

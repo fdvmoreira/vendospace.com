@@ -13,6 +13,7 @@ const {
   updateUserListingById,
   deleteUserListingById,
   getUserSpaces,
+  getUserSpaceById,
   updateUserSpaceById,
   deleteUserSpaceById,
   getUserAuctions,
@@ -54,6 +55,7 @@ router.get('/:id/messages', authenticationCheck, getUserMessages)
   .patch('/:id/listings/:listingId', authenticationCheck, ownershipCheck, updateUserListingById)
   .delete('/:id/listings/:listingId', authenticationCheck, ownershipCheck, deleteUserListingById)
   .get('/:id/spaces', authenticationCheck, ownershipCheck, getUserSpaces)
+  .get('/:id/spaces/:spaceId', authenticationCheck, ownershipCheck, getUserSpaceById)
   .patch('/:id/spaces/:spaceId', authenticationCheck, ownershipCheck, updateUserSpaceById)
   .delete('/:id/spaces/:spaceId', authenticationCheck, ownershipCheck, deleteUserSpaceById)
   .get('/:id/auctions', authenticationCheck, ownershipCheck, getUserAuctions)
