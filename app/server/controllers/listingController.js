@@ -26,7 +26,7 @@ const getListingById = asyncHandler(async (req, res) => {
 });
 
 const setListing = asyncHandler(async (req, res) => {
-  const { space, user, status } = req.body;
+  const { space, user, status } = req?.body;
   Listing.create({ space, user, status }, (error, listing) => {
     if (error) return res.status(500).json({ success: false, message: `Error: ${error.message}`, data: error });
     if (!listing) return res.status(404).json({ success: false, message: 'Listing Not created', data: null });
