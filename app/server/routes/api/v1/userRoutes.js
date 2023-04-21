@@ -1,11 +1,17 @@
 const asyncHandler = require("express-async-handler");
 const passport = require('passport');
 const router = require('express').Router();
+const User = require('../../../models/userModel');
+const authenticationCheck = require("../../../middlewares/auth/authenticationCheck");
+const ownershipCheck = require("../../../middlewares/auth/ownershipCheck");
 const {
   getUserById,
   getUserName,
   getUserMessages,
   getUserListings,
+  getUserListingById,
+  updateUserListingById,
+  deleteUserListingById,
   getUserSpaces,
   updateUserSpaceById,
   deleteUserSpaceById,
@@ -18,9 +24,6 @@ const {
   getUserAccount,
   deleteUserById
 } = require('../../../controllers/userController');
-const User = require('../../../models/userModel');
-const authenticationCheck = require("../../../middlewares/auth/authenticationCheck");
-const ownershipCheck = require("../../../middlewares/auth/ownershipCheck");
 
 passport.use(require("../../../authStrategies/jwtStrategy"));
 
@@ -32,7 +35,6 @@ router.route("/").get(passport.authenticate('jwt', { session: false }), asyncHan
   });
 
 })).post(setUser);
-
 
 router.route('/:id').get((req, res, next) => {
   passport.authenticate('jwt', (err, user, info) => {
@@ -48,6 +50,9 @@ router.route('/:id').get((req, res, next) => {
 /** common requests by authenticated users */
 router.get('/:id/messages', authenticationCheck, getUserMessages)
   .get('/:id/listings', authenticationCheck, ownershipCheck, getUserListings)
+  .get('/:id/listings/:listingId', authenticationCheck, ownershipCheck, getUserListingById)
+  .patch('/:id/listings/:listingId', authenticationCheck, ownershipCheck, updateUserListingById)
+  .delete('/:id/listings/:listingId', authenticationCheck, ownershipCheck, deleteUserListingById)
   .get('/:id/spaces', authenticationCheck, ownershipCheck, getUserSpaces)
   .patch('/:id/spaces/:spaceId', authenticationCheck, ownershipCheck, updateUserSpaceById)
   .delete('/:id/spaces/:spaceId', authenticationCheck, ownershipCheck, deleteUserSpaceById)
