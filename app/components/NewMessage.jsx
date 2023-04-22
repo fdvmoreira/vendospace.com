@@ -1,8 +1,3 @@
-//TODO: ensure that the message is in the correct format before sending it to the server
-//TODO: redesign the message form to present the form in better way
-//TODO: Add character count to alert the user that the message size is limited
-
-
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
@@ -11,15 +6,15 @@ import * as yup from "yup";
 import { useAuth } from "../context/authContext";
 import notify from "../utils/notify";
 
-export default function NewMessage({ recipient: to, subject }) {
+const NewMessage = ({ recipient: to, subject }) =>{
   const [auth, _] = useAuth();
   const closeModalButton = useRef({});
 
   const schema = yup.object().shape({
-    from: yup.string().required(),
-    to: yup.string().required(),
-    subject: yup.string().max(50).required(),
-    message: yup.string().max(200).required(),
+    from: yup.string().required('Authentication required'),
+    to: yup.string().required('Authentication required'),
+    subject: yup.string().max(50).required('Subject line'),
+    message: yup.string().max(200).required('What you want to say'),
   });
 
   const {
@@ -29,6 +24,27 @@ export default function NewMessage({ recipient: to, subject }) {
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  const onSubmit = (data, event) => {
+  event.preventDefault();
+  const MESSAGE_API = "/api/v1/messages";
+
+  fetch(MESSAGE_API, {
+    method: "POST",
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization':`Bearer ${auth?.token??null}`
+    },
+    body: JSON.stringify({ text: data.message, ...data }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      notify("Message sent successfuly!");
+      closeModalButton.current.click();
+    })
+    .catch(console.error);
+  }
 
   return (
     <form onSubmit={handleSubmit((data, event) => onSubmit(data, event))}>
@@ -65,7 +81,7 @@ export default function NewMessage({ recipient: to, subject }) {
               />
               {/** from error check */}
               {errors.from?.message && (
-                <span className='alert alert-danger'>
+                <span className='alert text-warning'>
                   {errors.from.message}
                 </span>
               )}
@@ -73,7 +89,7 @@ export default function NewMessage({ recipient: to, subject }) {
             {/** to */}
             <div className='m-1'>
               <input
-                type='text'
+                type='hidden'
                 className='form-control'
                 placeholder='to'
                 defaultValue={to}
@@ -82,7 +98,7 @@ export default function NewMessage({ recipient: to, subject }) {
               />
               {/** to error check */}
               {errors.to?.message && (
-                <span className='text-danger'>{errors.to.message}</span>
+                <span className='alert text-warning'>{errors.to.message}</span>
               )}
             </div>
             {/** subject */}
@@ -96,7 +112,7 @@ export default function NewMessage({ recipient: to, subject }) {
               />
               {/** subject error check */}
               {errors.subject?.message && (
-                <span className='text-danger'>{errors.subject.message}</span>
+                <span className='alert text-warning'>{errors.subject.message}</span>
               )}
             </div>
             {/** message */}
@@ -110,7 +126,7 @@ export default function NewMessage({ recipient: to, subject }) {
               />
               {/** message error check */}
               {errors.message?.message && (
-                <span className='text-danger'>{errors.message.message}</span>
+                <span className='alert text-warning'>{errors.message.message}</span>
               )}
             </div>
             <div className='modal-footer'>
@@ -130,27 +146,6 @@ export default function NewMessage({ recipient: to, subject }) {
       <ToastContainer />
     </form>
   );
-
-  /**
-   * submit the message to the server
-   * @param {objexxt} data to be sent to the server
-   * @param {Event} event default event object of the form submitHandler
-   */
-  function onSubmit(data, event) {
-    event.preventDefault();
-    const API_NEWMESSAGE = "/api/v1/messages";
-
-    fetch(API_NEWMESSAGE, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: data.message, ...data }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (!data.success) return console.log(data?.message);
-        notify("Message sent successfuly");
-        closeModalButton.current.click();
-      })
-      .catch(console.error);
-  }
 }
+
+export default NewMessage;
