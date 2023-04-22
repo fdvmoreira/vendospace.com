@@ -18,6 +18,6 @@ router.route('/:id')
   .delete(ownershipCheck, authenticationCheck, deleteListing);
 
 router
-  .get('/public', getAllListingsPublic);
+  .get('/public/:no', getAllListingsPublic);
 
 module.exports = router;
