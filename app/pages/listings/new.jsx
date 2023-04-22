@@ -7,76 +7,6 @@ import RestrictedArea from "../../components/RestrictedArea";
 import { useAuth } from "../../context/authContext";
 import notify from "../../utils/notify";
 
-// let dummy = [  
-//   {type: "furniture", 
-//   _id: "624f0d0979313c9e4389c8b7",
-//   address: "123 Main St",
-//   dimension: { width: 60,height: 80, unit: "cm" },
-//    location: { latitude: 37.7749,longitude: -122.4194 },    
-//    imagesURL: ["https://example.com/image1.jpg", "https://example.com/image2.jpg"]
-//   },
-//   {
-//     type: "electronics",
-//     _id: "514f0d0979313c9e4389c8b7",
-//     address: "456 Elm St",
-//     dimension: {
-//       width: 20,
-//       height: 40,
-//       unit: "in"
-//     },
-//     location: {
-//       latitude: 37.7749,
-//       longitude: -122.4194
-//     },
-//     imagesURL: ["https://example.com/image3.jpg", "https://example.com/image4.jpg"]
-//   },
-//   {
-//     type: "clothing",
-//     _id: "614f0d0979313c9e4389c878",
-//     address: "789 Oak St",
-//     dimension: {
-//       width: 50,
-//       height: 70,
-//       unit: "cm"
-//     },
-//     location: {
-//       latitude: 37.7749,
-//       longitude: -122.4194
-//     },
-//     imagesURL: ["https://example.com/image5.jpg"]
-//   },
-//   {
-//     type: "books",
-//     _id: "694f0d0979313c9e4389c8b7",
-//     address: "1010 Pine St",
-//     dimension: {
-//       width: 15,
-//       height: 20,
-//       unit: "cm"
-//     },
-//     location: {
-//       latitude: 37.7749,
-//       longitude: -122.4194
-//     },
-//     imagesURL: ["https://example.com/image6.jpg"]
-//   },
-//   {
-//     type: "household",
-//     _id: "614f0a0979313c9e4389c8b7",
-//     address: "1111 Market St",
-//     dimension: {
-//       width: 30,
-//       height: 40,
-//       unit: "in"
-//     },
-//     location: {
-//       latitude: 37.7749,
-//       longitude: -122.4194
-//     },
-//     imagesURL: ["https://example.com/image7.jpg", "https://example.com/image8.jpg"]
-//   }
-// ];
-
 const ListingCreate = () => {
 
   let router = useRouter();
@@ -118,7 +48,7 @@ const ListingCreate = () => {
 
   if(!auth?.isAuthenticated) return <RestrictedArea/>
 
-  if(auth?.isAuthenticated && !spaces.length) {
+  if(auth?.isAuthenticated && !spaces?.length) {
     return (
       <div className="lead text-center">
         <p>You have not create any space</p>
@@ -146,7 +76,7 @@ const ListingCreate = () => {
                       })}>Use this space to create listing</button>
                   </div>
                   <div className="d-flex fw-light btn p-2" >
-                    <Image src={`${space?.imagesURL?.[5]??"/logo.jpeg"}`} alt="space image" width={150} height={150}/>
+                    <Image src={`${space?.imagesURL?.[0]??"/logo.jpeg"}`} alt="space image" width={150} height={150}/>
                     <div className="d-flex flex-column align-items-start p-2">
                       <p className="fs-2 text-capitalize">{space?.type}</p>
                       <p className="d-flex w-100 justify-content-between">
