@@ -69,7 +69,7 @@ const SpaceList = ()=> {
 
   return (
     <div className='container'>
-      <ul className="list-unstyled d-flex gap-2 justify-content-center">
+      <ul className="list-unstyled d-flex flex-column gap-5 justify-content-center">
         {
           adspaces?.map(space =>{
             return (
