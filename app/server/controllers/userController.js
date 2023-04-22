@@ -40,16 +40,16 @@ const getUserListings = asyncHandler(async (req, res) => {
 
 const getUserListingById = asyncHandler(async (req, res) => {
   Listing.findById({ _id: req?.params?.listingId }, (error, listing) => {
-    if (error) return res.status(500).json({ success: false, message: `Error ${error.message}`, data: err });
+    if (error) return res.status(500).json({ success: false, message: `Error ${error.message}`, data: error });
     if (!listing) return res.status(404).json({ success: false, message: `No listing found`, data: error });
     res.json({ success: true, message: 'Listing found', data: listing });
   });
 });
 
 const updateUserListingById = asyncHandler(async (req, res) => {
-  let { user, space, status } = req?.body;
-  Listing.findByIdAndUpdate({ _id: req?.params?.listingId }, { user, space, status }, (error, listing) => {
-    if (error) return res.status(500).json({ success: false, message: `Error ${error.message}`, data: err });
+  let body = req?.body;
+  Listing.findByIdAndUpdate({ _id: req?.params?.listingId }, { ...body },{new:true}, (error, listing) => {
+    if (error) return res.status(500).json({ success: false, message: `Error ${error.message}`, data: error });
     if (!listing) return res.status(404).json({ success: false, message: `No listing found`, data: error });
     res.json({ success: true, message: 'Listing updated', data: listing });
   });
@@ -57,7 +57,7 @@ const updateUserListingById = asyncHandler(async (req, res) => {
 
 const deleteUserListingById = asyncHandler(async (req, res) => {
   Listing.findByIdAndDelete({ _id: req?.params?.listingId }, (error, listing) => {
-    if (error) return res.status(500).json({ success: false, message: `Error ${error.message}`, data: err });
+    if (error) return res.status(500).json({ success: false, message: `Error ${error.message}`, data: error });
     if (!listing) return res.status(404).json({ success: false, message: `No listing found`, data: error });
     res.json({ success: true, message: 'Listing deleted', data: listing });
   });
