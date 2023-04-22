@@ -8,7 +8,7 @@ import Setting from "../../../components/profile/setting/Setting";
 export default function MyAccount(props) {
   return (
     <div className='container'>
-      <div className='d-flex align-items-start flex-column'>
+      <div className='d-flex align-items-center flex-column'>
         <nav
           className='nav nav-pills me-3'
           id='v-pills-tab'
