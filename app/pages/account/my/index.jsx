@@ -1,11 +1,17 @@
 import { Suspense } from "react";
 import { ToastContainer } from "react-toastify";
+import RestrictedArea from "../../../components/RestrictedArea";
 import History from "../../../components/profile/history/History";
 import Message from "../../../components/profile/message/Message";
 import Profile from "../../../components/profile/profile/Profile";
 import Setting from "../../../components/profile/setting/Setting";
+import { useAuth } from "../../../context/authContext";
 
 export default function MyAccount(props) {
+  let [auth] = useAuth();
+
+  if(!auth?.isAuthenticated) return <RestrictedArea/>
+
   return (
     <div className='container'>
       <div className='d-flex align-items-center flex-column'>
