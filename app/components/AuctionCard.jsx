@@ -15,27 +15,25 @@ export default function AuctionCard({ auction }) {
     status,
   } = auction;
 
-  const [auth, updateAuth] = useAuth();
+  const [auth, _] = useAuth();
   let [space, setSpace] = useState();
   let [highestBid, setHighestBid] = useState(0);
   let [remainingTime, setRemainingTime] = useState(
     (Number(new Date(end).getTime()) - Number(Date.now())) / (1000 * 60 * 60),
   );
 
-  // TODO: fetch the highest price from every minute
+  const SPACE_PUBLIC_API = `/api/v1/spaces/${spaceId}/public/1`;
+  const SPACE_AUTH_API = `/api/v1/spaces/${spaceId}`;
+  const BID_PUBLIC_API = `/api/v1/bids/${spaceId}/public/1`;
 
-  // const BIDS_URL = "/api/v1/bids/${auctionId}";
-  // const fetcher = (...args) => fetch(...args).then((res) => res.json());
-  // const { data, error } = useSWR(BIDS_URL, fetcher, { refreshInterval: 1000 });
-  // setHighestBid(data?.highestBid);
-
-  const SPACE_API_URL = `/api/v1/spaces/${spaceId}`;
-  const BID_API_URL = `/api/v1/bids/${spaceId}`;
-
-  // TODO: fetch thhe data with the swr hook
   useEffect(() => {
     // fetch space data
-    fetch(SPACE_API_URL)
+    fetch((auth?.isAuthenticated)? SPACE_AUTH_API:SPACE_PUBLIC_API,{
+      headers:{
+        'Accept':'application/json',
+        'Authorization': `Bearer ${auth?.token}`,
+      }
+    })
       .then((res) => res.json())
       .then((data) => {
         setSpace(data.data);
@@ -57,6 +55,10 @@ export default function AuctionCard({ auction }) {
       Number(new Date(end).getTime()),
     );
   }, []);
+
+  // const getHighestBid = () =>{
+  //   const BID_API = `/api/v1/bids/${auction?._id}`;
+  // }
 
   return (
     <div className='card'>
