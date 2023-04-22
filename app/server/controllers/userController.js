@@ -48,7 +48,7 @@ const getUserListingById = asyncHandler(async (req, res) => {
 
 const updateUserListingById = asyncHandler(async (req, res) => {
   let body = req?.body;
-  Listing.findByIdAndUpdate({ _id: req?.params?.listingId }, { ...body },{new:true}, (error, listing) => {
+  Listing.findByIdAndUpdate({ _id: req?.params?.listingId }, { ...body }, { new: true }, (error, listing) => {
     if (error) return res.status(500).json({ success: false, message: `Error ${error.message}`, data: error });
     if (!listing) return res.status(404).json({ success: false, message: `No listing found`, data: error });
     res.json({ success: true, message: 'Listing updated', data: listing });
@@ -102,6 +102,31 @@ const getUserAuctions = asyncHandler(async (req, res) => {
   Auction.find({ user: req?.params?.id }, (error, auctions) => {
     if (error) return res.status(404).json({ success: false, message: `Error: ${error.message}`, data: error });
     res.json({ success: true, message: `Found ${auctions.length} auctions`, data: auctions });
+  });
+});
+
+const getUserAuctionById = asyncHandler(async (req, res) => {
+  Auction.findById({ _id: req?.params?.auctionId }, (error, auction) => {
+    if (error) return res.status(500).json({ success: false, message: `Error ${error.message}`, data: error });
+    if (!auction) return res.status(404).json({ success: false, message: `No auction found`, data: error });
+    res.json({ success: true, message: 'auction found', data: auction });
+  });
+});
+
+const updateUserAuctionById = asyncHandler(async (req, res) => {
+  let body = req?.body;
+  Auction.findByIdAndUpdate({ _id: req?.params?.auctionId }, { ...body }, { new: true }, (error, auction) => {
+    if (error) return res.status(500).json({ success: false, message: `Error ${error.message}`, data: error });
+    if (!auction) return res.status(404).json({ success: false, message: `No auction found`, data: error });
+    res.json({ success: true, message: 'auction updated', data: auction });
+  });
+});
+
+const deleteUserAuctionById = asyncHandler(async (req, res) => {
+  Auction.findByIdAndDelete({ _id: req?.params?.auctionId }, (error, auction) => {
+    if (error) return res.status(500).json({ success: false, message: `Error ${error.message}`, data: error });
+    if (!auction) return res.status(404).json({ success: false, message: `No auction found`, data: error });
+    res.json({ success: true, message: 'auction deleted', data: auction });
   });
 });
 
@@ -243,6 +268,9 @@ module.exports = {
   updateUserSpaceById,
   deleteUserSpaceById,
   getUserAuctions,
+  getUserAuctionById,
+  updateUserAuctionById,
+  deleteUserAuctionById,
   getUserBids,
   setUser,
   getUserHistories,

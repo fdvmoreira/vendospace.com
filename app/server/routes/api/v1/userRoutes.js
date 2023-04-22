@@ -17,6 +17,9 @@ const {
   updateUserSpaceById,
   deleteUserSpaceById,
   getUserAuctions,
+  getUserAuctionById,
+  updateUserAuctionById,
+  deleteUserAuctionById,
   getUserBids,
   setUser,
   getUserHistories,
@@ -59,6 +62,9 @@ router.get('/:id/messages', authenticationCheck, getUserMessages)
   .patch('/:id/spaces/:spaceId', authenticationCheck, ownershipCheck, updateUserSpaceById)
   .delete('/:id/spaces/:spaceId', authenticationCheck, ownershipCheck, deleteUserSpaceById)
   .get('/:id/auctions', authenticationCheck, ownershipCheck, getUserAuctions)
+  .get('/:id/auctions/:auctionId', authenticationCheck, ownershipCheck, getUserAuctionById)
+  .patch('/:id/auctions/:auctionId', authenticationCheck, ownershipCheck, updateUserAuctionById)
+  .delete('/:id/auctions/:auctionId', authenticationCheck, ownershipCheck, deleteUserAuctionById)
   .get('/:id/bids', authenticationCheck, ownershipCheck, getUserBids)
   .get('/:id/name', authenticationCheck, getUserName)
   .get('/:id/history', authenticationCheck, ownershipCheck, getUserHistories)
