@@ -16,7 +16,7 @@ const SpaceCard = ({ data }) =>{
 
 
   return (
-    <div className='card bg-light d-flex gap-2 flex-row'>
+    <div className='bg-light d-flex gap-2 flex-row'>
       <div className='card-header'>
         <div className='card-img-top'>
           <Image
@@ -32,12 +32,12 @@ const SpaceCard = ({ data }) =>{
           <ul className=" list-unstyled">
             <li>
               <ul className='d-flex list-unstyled'>
-                <li className='lead fw-bolder'>{type}</li>
+                <li className='lead fw-bolder text-uppercase'>{type}</li>
               </ul>
             </li>
             <li className="fw-light fs-5">{address}</li>
             <li className="d-flex justify-content-between">
-              <span>Dimensions&nbsp;</span>
+              <span>Dimensions:&nbsp;</span>
               <ul className='d-flex list-unstyled justify-content-around fw-light'>
                 <li>{width}</li>
                 <li className="bi bi-x"></li>
@@ -46,7 +46,7 @@ const SpaceCard = ({ data }) =>{
               </ul>
             </li>
             <li className="d-flex justify-content-between">
-              <p className="text-nowrap">GPS Coords&nbsp;</p>
+              <p className="text-nowrap">GPS Coords (DD):&nbsp;</p>
               <ul className='d-flex list-unstyled justify-content-end fw-light'>
                 <li>{latitude}</li>
                 <li>&nbsp;&bull;&nbsp;</li>
@@ -55,7 +55,7 @@ const SpaceCard = ({ data }) =>{
             </li>
           </ul>
         </div>
-        <div className='card-footer d-flex justify-content-between'>
+        <div className='card-footer d-flex justify-content-between bg-light'>
           <span className="text-muted">Last update</span>
           <span className="text-muted fw-light">{new Date(createdAt).toLocaleDateString('en-GB')}</span>
         </div>
