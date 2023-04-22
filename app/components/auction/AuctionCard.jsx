@@ -1,7 +1,7 @@
 import Image from "next/legacy/image";
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/authContext";
-import NewBid from "./NewBid";
+import { useAuth } from "../../context/authContext";
+import NewBid from "../NewBid";
 
 export default function AuctionCard({ auction }) {
   const {
