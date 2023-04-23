@@ -133,7 +133,7 @@ const deleteUserAuctionById = asyncHandler(async (req, res) => {
 const getUserAuctionBids = asyncHandler(async (req, res) => {
   Bid.find({ auction: req?.params?.auctionId }, (error, bids) => {
     if (error) return res.status(500).json({ success: false, message: `Error ${error.message}`, data: error });
-    if (!bids.length) return res.status(404).json({ success: false, message: `No bids found`, data: error });
+    if (!bids.length) return res.status(404).json({ success: false, message: `No bids found`, data: null });
     res.json({ success: true, message: `Found ${bids.length} bids`, data: bids });
   });
 });
