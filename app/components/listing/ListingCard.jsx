@@ -65,7 +65,7 @@ const ListingCard = ({ listing }) => {
         </div>
       </div>
       <div className='card-footer'>
-        {(!auth?.isAuthenticated)? <button
+        {(auth?.isAuthenticated)? <button
           type='button'
           className='btn btn-primary'
           data-bs-toggle='modal'
