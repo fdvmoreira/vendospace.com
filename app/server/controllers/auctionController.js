@@ -5,7 +5,7 @@ const getAllActiveAuctions = asyncHandler(async (req, res) => {
   Auction.find({ status: "open" }, (error, auctions) => {
     if (error) return res.status(500).json({ success: false, message: `Error: ${error.message}`, data: error });
     if (!auctions) return res.status(404).json({ success: false, message: 'Auction not found', data: null });
-    res.json({ success: true, message: `Found ${actions?.length ?? 0} auctions`, data: auctions });
+    res.json({ success: true, message: `Found ${auctions?.length ?? 0} auctions`, data: auctions });
   });
 });
 
