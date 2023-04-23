@@ -11,15 +11,15 @@ const ListBidsModal = ({bids}) =>{
             </button>
           </div>
           <div className="modal-body">
-            <ul>
+            <ul className="list-unstyled">
               {
                 bids?(bids?.map(bid =>{
                   return (
-                    <li key={bid?._id}>
-                      <ul className="list-unstyled d-flex">
+                    <li key={bid?._id} className="m-2">
+                      <ul className="list-unstyled card p-2">
                         <li>Auction: {bid?.auction}</li>
                         <li>Bidder: {bid?.bidder}</li>
-                        <li>BID: {bid?.price}</li>
+                        <li>BID: {bid?.price}&pound;</li>
                       </ul>
                     </li>
                   )
