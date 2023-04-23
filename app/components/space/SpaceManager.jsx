@@ -16,7 +16,7 @@ const SpaceManager =({spaceAPI, requestMethod, space}) => {
 
   const [auth, _] = useAuth();
 
-  const {register,handleSubmit,formState: { errors },watch} = useForm({
+  const {register,handleSubmit,formState: { errors },watch, reset} = useForm({
     resolver: yupResolver(yup.object().shape({
       file: yup.mixed(),
       user: yup.string().required("Authentication required"),
@@ -124,6 +124,7 @@ const SpaceManager =({spaceAPI, requestMethod, space}) => {
       notify(data?.message, data?.success);
       if (data?.success){
         createdAdSpaceId = data?.data?._id;
+        reset();
       } 
     })
     .catch(console.error);
