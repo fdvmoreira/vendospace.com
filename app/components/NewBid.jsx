@@ -2,20 +2,21 @@
 //TODO: show the current price in the form
 //TODO: redesign new bid form to present all info required before bid is submitted
 
-import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import notify from "../utils/notify";
 import { useRef } from "react";
+import { useForm } from "react-hook-form";
 import { ToastContainer } from "react-toastify";
+import * as yup from "yup";
+import { useAuth } from "../context/authContext";
+import notify from "../utils/notify";
 
-export default function NewBid({ data: { bidderId, auctionId } }) {
-  const closeModalButton = useRef(undefined);
+const NewBid = ({ data: { bidderId, auctionId } }) => {
+  let [auth, _] = useAuth();
+  const closeModalButton = useRef();
 
   const schema = yup.object().shape({
-    bidder: yup.string().required(),
+    bidder: yup.string().required("Authentication required"),
     auction: yup.string().required(),
-
     price: yup
       .number()
       .min(1, "Bid should be > 0")
@@ -36,6 +37,25 @@ export default function NewBid({ data: { bidderId, auctionId } }) {
     },
   });
 
+  const onSubmit = (data, event) => {
+    event.preventDefault();
+    const BID_API = `/api/v1/bids`;
+
+    fetch(BID_API, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+        Authorization: `Bearer ${auth?.token}`,
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        notify(data?.message, data?.success);
+        closeModalButton?.current?.click();
+      });
+  };
+
   return (
     <form onSubmit={handleSubmit((data, event) => onSubmit(data, event))}>
       <div
@@ -47,7 +67,7 @@ export default function NewBid({ data: { bidderId, auctionId } }) {
         <div className='modal-dialog'>
           <div className='modal-content'>
             <div className='modal-header'>
-              <h5 className='modal-title'>New bid</h5>
+              <h5 className='modal-title'>Place your bid</h5>
               {/** close modal button */}
               <button
                 ref={closeModalButton}
@@ -63,7 +83,7 @@ export default function NewBid({ data: { bidderId, auctionId } }) {
               {/** bidder */}
               <div className='m-1'>
                 <input
-                  type='text'
+                  type='hidden'
                   className='form-control'
                   placeholder='Bidder ID'
                   readOnly={true}
@@ -77,7 +97,7 @@ export default function NewBid({ data: { bidderId, auctionId } }) {
               {/** auction */}
               <div className='m-1'>
                 <input
-                  type='text'
+                  type='hidden'
                   className='form-control'
                   placeholder='Auction ID'
                   readOnly={true}
@@ -119,30 +139,6 @@ export default function NewBid({ data: { bidderId, auctionId } }) {
       <ToastContainer />
     </form>
   );
+};
 
-  function onSubmit(data, event) {
-    event.preventDefault();
-    const BID_URL = `/api/v1/bids`;
-
-    fetch(BID_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (!data.success) {
-          notify("Operation has failed", false);
-          console.log(data.message);
-          return;
-        }
-
-        notify("Bid placed successfuly");
-
-        // close the modal if successfuly
-        closeModalButton?.current?.click();
-      });
-  }
-}
+export default NewBid;
