@@ -74,6 +74,9 @@ export default (props) => {
     }
   };
 
+  if (auctions.length == 0 && listings.length == 0)
+    return <div className='lead text-center'>No Data</div>;
+
   return (
     <div className='container'>
       <hr />
