@@ -59,7 +59,6 @@ const AuctionList = () =>{
     })
     .then(res=>res.json())
     .then(data=>{
-      notify(data?.message, data?.success);
       if(data?.success) setAuctionBids(data?.data);
     })
     .catch(console.error);
