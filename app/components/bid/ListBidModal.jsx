@@ -5,15 +5,15 @@ const ListBidsModal = ({bids}) =>{
       <div className="modal-dialog" role="document">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
-            <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
+            <h5 className="modal-title" id="exampleModalLabel">Found {bids?.length??0} bids</h5>
+            <button type="button" className="btn close" data-bs-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div className="modal-body">
             <ul>
               {
-                bids?.map(bid =>{
+                bids?(bids?.map(bid =>{
                   return (
                     <li key={bid?._id}>
                       <ul className="list-unstyled d-flex">
@@ -23,7 +23,7 @@ const ListBidsModal = ({bids}) =>{
                       </ul>
                     </li>
                   )
-                })
+                })):(<div className="d-flex text-center">No bids yet</div>)
               }
             </ul>
           </div>
