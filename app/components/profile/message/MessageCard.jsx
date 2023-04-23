@@ -26,7 +26,7 @@ const MessageCard = ({from, subject, message, createdAt}) =>{
       <span className="text-muted">From: {(name)??"..."}</span>
       <p className="fw-bold">{subject.toUpperCase()}</p>
       </div>
-    <div className="card-body"><p>{message}</p> {!message&&<MessageReplyButton to={from}/>}</div>
+    <div className="card-body"><p>{message}</p> {message&&<MessageReplyButton to={from}/>}</div>
     <div className="card-footer text-muted">{new Date(createdAt).toLocaleString('en-GB')}</div>
   </div>
   )
