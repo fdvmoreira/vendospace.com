@@ -43,6 +43,7 @@
     "yup": "^1.0.1"
   },
   "devDependencies": {
+    "@testing-library/react": "^14.0.0",
     "@types/jest": "^29.5.0",
     "colors": "^1.4.0",
     "cypress": "^12.9.0",
