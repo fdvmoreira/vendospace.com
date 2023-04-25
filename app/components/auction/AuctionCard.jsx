@@ -51,11 +51,11 @@ const AuctionCard = ({ auction }) => {
       <div className='card-header d-flex flex-column'>
         <div className='d-flex justify-content-between'>
           <small className='text-uppercase'>{auction?.status}&nbsp;</small>
-          <h6>
-            <small className='text-muted'>
+          <span>
+            <small className='text-muted fw-normal'>
               Posted&nbsp;{new Date(auction?.start).toLocaleDateString()}
             </small>
-          </h6>
+          </span>
         </div>
         <div>
           <small className='text-muted text-uppercase'> {auction?.user} </small>
