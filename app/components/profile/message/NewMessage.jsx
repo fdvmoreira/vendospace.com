@@ -3,18 +3,18 @@ import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { ToastContainer } from "react-toastify";
 import * as yup from "yup";
-import { useAuth } from "../context/authContext";
-import notify from "../utils/notify";
+import { useAuth } from "../../../context/authContext";
+import notify from "../../../utils/notify";
 
-const NewMessage = ({ recipient: to, subject }) =>{
+const NewMessage = ({ recipient: to, subject }) => {
   const [auth, _] = useAuth();
   const closeModalButton = useRef({});
 
   const schema = yup.object().shape({
-    from: yup.string().required('Authentication required'),
-    to: yup.string().required('Authentication required'),
-    subject: yup.string().max(50).required('Subject line'),
-    message: yup.string().max(200).required('What you want to say'),
+    from: yup.string().required("Authentication required"),
+    to: yup.string().required("Authentication required"),
+    subject: yup.string().max(50).required("Subject line"),
+    message: yup.string().max(200).required("What you want to say"),
   });
 
   const {
@@ -26,25 +26,25 @@ const NewMessage = ({ recipient: to, subject }) =>{
   });
 
   const onSubmit = (data, event) => {
-  event.preventDefault();
-  const MESSAGE_API = "/api/v1/messages";
+    event.preventDefault();
+    const MESSAGE_API = "/api/v1/messages";
 
-  fetch(MESSAGE_API, {
-    method: "POST",
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization':`Bearer ${auth?.token??null}`
-    },
-    body: JSON.stringify({ text: data.message, ...data }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      notify("Message sent successfuly!");
-      closeModalButton.current.click();
+    fetch(MESSAGE_API, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth?.token ?? null}`,
+      },
+      body: JSON.stringify({ text: data.message, ...data }),
     })
-    .catch(console.error);
-  }
+      .then((res) => res.json())
+      .then((data) => {
+        notify("Message sent successfuly!");
+        closeModalButton.current.click();
+      })
+      .catch(console.error);
+  };
 
   return (
     <form onSubmit={handleSubmit((data, event) => onSubmit(data, event))}>
@@ -112,7 +112,9 @@ const NewMessage = ({ recipient: to, subject }) =>{
               />
               {/** subject error check */}
               {errors.subject?.message && (
-                <span className='alert text-warning'>{errors.subject.message}</span>
+                <span className='alert text-warning'>
+                  {errors.subject.message}
+                </span>
               )}
             </div>
             {/** message */}
@@ -126,7 +128,9 @@ const NewMessage = ({ recipient: to, subject }) =>{
               />
               {/** message error check */}
               {errors.message?.message && (
-                <span className='alert text-warning'>{errors.message.message}</span>
+                <span className='alert text-warning'>
+                  {errors.message.message}
+                </span>
               )}
             </div>
             <div className='modal-footer'>
@@ -146,6 +150,6 @@ const NewMessage = ({ recipient: to, subject }) =>{
       <ToastContainer />
     </form>
   );
-}
+};
 
 export default NewMessage;

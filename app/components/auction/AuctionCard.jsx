@@ -2,7 +2,7 @@ import Image from "next/legacy/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/authContext";
-import NewBid from "../NewBid";
+import NewBid from "../bid/NewBid";
 
 const AuctionCard = ({ auction }) => {
   const [auth, _] = useAuth();
