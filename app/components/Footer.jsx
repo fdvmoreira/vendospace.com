@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <footer className='text-decoration-none mt-auto container-fluid row bg-light d-flex justify-content-between'>
+    <footer className='text-decoration-none mt-5 container-fluid row bg-light d-flex justify-content-between'>
       <div className='col'>
         <h6>Contact</h6>
         <ul className='nav'>
