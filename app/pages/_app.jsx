@@ -2,7 +2,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/css/bootstrap.css";
 import { useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import Layout from "../components/layout";
+import Layout from "../components/Layout";
 import { AuthProvider } from "../context/authContext";
 import "../styles/globals.css";
 
