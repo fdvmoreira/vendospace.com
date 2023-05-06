@@ -32,13 +32,14 @@ userSchema.methods.isPasswordValid = function (password) {
 userSchema.pre('save', function (next) {
   let user = this;
   const SALT_ROUNDS = 10;
-  if (user.signUpMethod == 'email') {
-    bcrypt.hash(user.passwordHash, SALT_ROUNDS, (err, hash) => {
-      if (err) next(new Error(err));
-      if (hash) user.passwordHash = hash;
-    });
-  }
-  next();
+
+  if (user.signUpMethod != 'email') return next();
+
+  bcrypt.hash(user.passwordHash, SALT_ROUNDS, (err, hash) => {
+    if (err) next(new Error(err));
+    if (hash) user.passwordHash = hash;
+    next();
+  });
 });
 
 userSchema.pre('save', function (next) {
