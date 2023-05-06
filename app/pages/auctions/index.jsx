@@ -76,6 +76,8 @@ const AuctionList = () =>{
 
   return (
     <div className='container justify-content-center'>
+      <h6 className="lead text-center">My Auctions</h6>
+      <hr />
       <ul className="list-unstyled d-flex flex-column align-items-center">
         {
           auctions?.map(auction => {
