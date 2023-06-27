@@ -2,6 +2,7 @@ import CryptoJS from "crypto-js";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import AuctionCard from "../components/auction/AuctionCard";
+import NewBid from "../components/bid/NewBid";
 import ListingCard from "../components/listing/ListingCard";
 import { useAuth } from "../context/authContext";
 
@@ -13,6 +14,7 @@ const LISTINGS_AUTH_API = "/api/v1/listings";
 export default (props) => {
   let [auctions, setAuctions] = useState([]);
   let [listings, setListings] = useState([]);
+  let [selectedAuction, setSelectedAuction] = useState("");
   let params = useRouter();
   let [auth, updateAuth] = useAuth();
 
@@ -74,6 +76,10 @@ export default (props) => {
     }
   };
 
+  const handleNewBidSelection = (auction) => {
+    setSelectedAuction(auction);
+  };
+
   if (auctions.length == 0 && listings.length == 0)
     return <div className='lead text-center'>No Data</div>;
 
@@ -84,7 +90,10 @@ export default (props) => {
         {auctions?.map((auction) => {
           return (
             <li key={auction?._id} className='list-group-item list-group-flush'>
-              <AuctionCard auction={auction} />
+              <AuctionCard
+                auction={auction}
+                onNewBidSelected={handleNewBidSelection}
+              />
             </li>
           );
         })}
@@ -97,6 +106,10 @@ export default (props) => {
           );
         })}
       </ul>
+      <NewBid
+        selectedAuction={selectedAuction}
+        data={{ bidderId: auth?.user?._id, auctionId: selectedAuction }}
+      />
     </div>
   );
 };
