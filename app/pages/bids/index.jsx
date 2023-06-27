@@ -44,14 +44,13 @@ const ListBids = () => {
     <>
       <h6 className='lead text-center'>My Bids</h6>
       <hr />
-      <ul className='list-unstyled container d-flex gap-5 justify-content-center'>
+      <ul className='list-unstyled container'>
         {bids?.map((bid) => {
           return (
-            <li key={bid?._id} className='d-block card p-4'>
+            <li key={bid?._id} className='d-block border p-4 my-2'>
               <ul className='list-unstyled'>
-                <li>{new Date(bid?.createdAt).toLocaleDateString()}</li>
+                <li>{new Date(bid?.createdAt).toUTCString()}</li>
                 <li>Auction: {bid?.auction}</li>
-                <li>Bidder: {bid?.bidder}</li>
                 <li className='lead'>value: {bid?.price}</li>
               </ul>
             </li>
