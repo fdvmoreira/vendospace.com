@@ -26,7 +26,7 @@ describe("<NewBid>", () => {
   it("Should render the NewBid", async () => {
     render(
       <AuthProvider>
-        <NewBid data={{ bidderId: "aaa", auctionId: "aaa" }} />
+        <NewBid data={{ bidderId: "aaa", auctionId: "aaa" }} selectedAuction={"AAA"} />
       </AuthProvider>);
     expect(await screen?.findByText('Place your bid')).exist;
   });
