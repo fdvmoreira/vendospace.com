@@ -31,6 +31,7 @@ const NewBid = ({ data: { bidderId, auctionId }, selectedAuction }) => {
     handleSubmit,
     formState: { errors },
     setValue,
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -53,8 +54,10 @@ const NewBid = ({ data: { bidderId, auctionId }, selectedAuction }) => {
       .then((res) => res.json())
       .then((data) => {
         notify(data?.message, data?.success);
+        reset();
         closeModalButton?.current?.click();
-      });
+      })
+      .catch(console.err);
   };
 
   useEffect(() => {
@@ -107,7 +110,7 @@ const NewBid = ({ data: { bidderId, auctionId }, selectedAuction }) => {
               {/** auction */}
               <div className='m-1'>
                 <input
-                  type='text'
+                  type='hidden'
                   className='form-control'
                   placeholder='Auction ID'
                   value={auction}
