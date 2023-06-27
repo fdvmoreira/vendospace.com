@@ -2,9 +2,8 @@ import Image from "next/legacy/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/authContext";
-import NewBid from "../bid/NewBid";
 
-const AuctionCard = ({ auction }) => {
+const AuctionCard = ({ auction, onNewBidSelected }) => {
   const [auth, _] = useAuth();
   let [space, setSpace] = useState();
   let [bidStat, setBidStat] = useState(0);
@@ -120,6 +119,9 @@ const AuctionCard = ({ auction }) => {
       <div className='card-footer'>
         {auth?.isAuthenticated ? (
           <button
+            onClick={(e) => {
+              onNewBidSelected(auction?._id);
+            }}
             type='button'
             className='btn btn-primary'
             data-bs-toggle='modal'
@@ -131,7 +133,6 @@ const AuctionCard = ({ auction }) => {
             Authenticate to place a bid
           </Link>
         )}
-        <NewBid data={{ bidderId: auth?.user?._id, auctionId: auction?._id }} />
       </div>
     </div>
   );
