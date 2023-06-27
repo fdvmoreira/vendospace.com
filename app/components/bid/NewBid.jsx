@@ -3,15 +3,16 @@
 //TODO: redesign new bid form to present all info required before bid is submitted
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ToastContainer } from "react-toastify";
 import * as yup from "yup";
 import { useAuth } from "../../context/authContext";
 import notify from "../../utils/notify";
 
-const NewBid = ({ data: { bidderId, auctionId } }) => {
+const NewBid = ({ data: { bidderId, auctionId }, selectedAuction }) => {
   let [auth, _] = useAuth();
+  let [auction, setAuction] = useState(auctionId);
   const closeModalButton = useRef();
 
   const schema = yup.object().shape({
@@ -29,11 +30,11 @@ const NewBid = ({ data: { bidderId, auctionId } }) => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       bidder: bidderId,
-      auction: auctionId,
     },
   });
 
@@ -55,6 +56,15 @@ const NewBid = ({ data: { bidderId, auctionId } }) => {
         closeModalButton?.current?.click();
       });
   };
+
+  useEffect(() => {
+    setAuction(selectedAuction);
+    /*
+     * update internal state of react-hook-form
+     * to prevent it from erroring out the first time the component is rendered
+     */
+    setValue("auction", selectedAuction);
+  }, [selectedAuction]);
 
   return (
     <form onSubmit={handleSubmit((data, event) => onSubmit(data, event))}>
@@ -97,10 +107,14 @@ const NewBid = ({ data: { bidderId, auctionId } }) => {
               {/** auction */}
               <div className='m-1'>
                 <input
-                  type='hidden'
+                  type='text'
                   className='form-control'
                   placeholder='Auction ID'
-                  readOnly={true}
+                  value={auction}
+                  onChange={(e) => {
+                    setAuction(e.target.value);
+                  }}
+                  // readOnly={true}
                   {...register("auction")}
                 />
                 {/** check auction error  */}
