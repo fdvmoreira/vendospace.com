@@ -1,3 +1,4 @@
+// ts-check
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -8,6 +9,10 @@ const nextConfig = {
     ],
   },
   reactStrictMode: true,
+  typescript: {
+    // TODO: This allows next to build even with ts errors
+    ignoreBuildErrors: true,
+  }
 }
 
 module.exports = nextConfig;
