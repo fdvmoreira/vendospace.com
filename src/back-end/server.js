@@ -30,7 +30,7 @@ nextApp.prepare().then(async () => {
   // passport auth strategies
   require("./config/passport.config");
 
-  // parse the incoming request and respost to json format
+  // parse the incoming request and response to json format
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   // protect the application against well-known vulnerabilities
@@ -38,11 +38,6 @@ nextApp.prepare().then(async () => {
   // app.disable("x-powered-by");
   app.use(helmet.hidePoweredBy());
 
-  //serve static files from views folder
-  app.use(express.static(path.join(__dirname, 'views')));
-
-  // vendospace routes
-  app.use(require('./routes/vendoSpaceRoutes'));
   // auth routes
   app.use(require("./routes/authRoutes"));
 

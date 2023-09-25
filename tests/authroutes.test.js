@@ -1,5 +1,5 @@
-const { getAuthType } = require("../server/config/auth.type");
-const { getAuthOrigin, extractAuthTypeMiddleware } = require("../server/middlewares/lib/extractAuthTypeFromReqHeader");
+import { getAuthType } from '@/server/config/auth.type';
+import { extractAuthTypeMiddleware, getAuthOrigin } from "@/server/middlewares/lib/extractAuthTypeFromReqHeader";
 
 describe("Get Authentication origin from a string ", () => {
 

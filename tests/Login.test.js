@@ -9,8 +9,8 @@ import { expect } from 'chai';
 import 'next/dist/server/base-http';
 import { useRouter } from 'next/router';
 import 'whatwg-fetch';
-import { AuthProvider } from '../context/authContext';
-import Login from '../pages/login';
+import { AuthProvider } from '../src/context/authContext';
+import Login from '../src/pages/login';
 
 jest.mock('next/router', () => ({
   useRouter: jest.fn(),

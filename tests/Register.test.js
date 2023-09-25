@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 
+import { AuthProvider } from '@/context/authContext';
 import '@testing-library/jest-dom';
 import { render, screen } from "@testing-library/react";
 import 'chai';
@@ -9,15 +10,14 @@ import { expect } from 'chai';
 import 'next/dist/server/base-http';
 import { useRouter } from 'next/router';
 import 'whatwg-fetch';
-import Navbar from '../components/Navbar';
-import { AuthProvider } from '../context/authContext';
+import Register from '../pages/register';
 
 jest.mock('next/router', () => ({
   useRouter: jest.fn(),
 }));
 
-describe("<Navbar>", () => {
-  it("Should render the Navbar", async () => {
+describe("<Register>", () => {
+  it("Should render the Registration page", async () => {
 
     useRouter.mockImplementation(() => {
       let router = jest.fn();
@@ -26,9 +26,9 @@ describe("<Navbar>", () => {
 
     render(
       <AuthProvider>
-        <Navbar />
+        <Register />
       </AuthProvider>);
 
-    expect(await screen?.getByText('SignUp')).exist;
+    expect(await screen?.getByPlaceholderText('Email address')).exist;
   });
 });

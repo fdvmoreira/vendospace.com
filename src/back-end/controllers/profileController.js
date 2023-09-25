@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const Profile = require('./../models/profileModel');
+const Profile = require('../models/profileModel');
 
 // get Profile by id
 const getProfile = asyncHandler(async (req, res) => {
