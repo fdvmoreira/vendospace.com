@@ -2,15 +2,15 @@
  * @jest-environment jsdom
  */
 
+import AuctionCard from "@/components/auction/AuctionCard";
+import AuctionForm from '@/components/auction/AuctionForm';
+import AuctionItem from '@/components/auction/AuctionItem';
+import { AuthProvider } from '@/context/authContext';
 import '@testing-library/jest-dom';
 import { render, screen } from "@testing-library/react";
 import 'chai';
 import { expect } from 'chai';
 import 'whatwg-fetch';
-import AuctionCard from "../../components/auction/AuctionCard";
-import AuctionForm from '../../components/auction/AuctionForm';
-import AuctionItem from '../../components/auction/AuctionItem';
-import { AuthProvider } from '../../context/authContext';
 
 describe("<AuctionCreate>", () => {
   it("Should render the AuctionCreate", async () => {

@@ -2,15 +2,15 @@
  * @jest-environment jsdom
  */
 
+import SpaceCard from '@/components/space/SpaceCard';
+import SpaceManager from '@/components/space/SpaceManager';
+import { AuthProvider } from '@/context/authContext';
 import '@testing-library/jest-dom';
 import { render, screen } from "@testing-library/react";
 import 'chai';
 import { expect } from 'chai';
 import 'next/dist/server/base-http';
 import 'whatwg-fetch';
-import SpaceCard from '../../components/space/SpaceCard';
-import SpaceManager from '../../components/space/SpaceManager';
-import { AuthProvider } from '../../context/authContext';
 
 describe("<SpaceManager>", () => {
   it("Should render the SpaceManager", async () => {

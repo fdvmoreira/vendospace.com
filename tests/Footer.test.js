@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { Footer } from "@/components/Footer";
+import Footer from '@/components/Footer';
 import { AuthProvider } from '@/context/authContext';
 import '@testing-library/jest-dom';
 import { render, screen } from "@testing-library/react";

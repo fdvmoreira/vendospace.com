@@ -2,20 +2,20 @@
  * @jest-environment jsdom
  */
 
+import History from '@/components/profile/history/History';
+import HistoryItemCard from '@/components/profile/history/HistoryItemCard';
+import Message from '@/components/profile/message/Message';
+import MessageCard from '@/components/profile/message/MessageCard';
+import MessageReplyButton from '@/components/profile/message/MessageReplyButton';
+import NewMessage from '@/components/profile/message/NewMessage';
+import Profile from '@/components/profile/profile/Profile';
+import { AuthProvider } from '@/context/authContext';
 import '@testing-library/jest-dom';
 import { render, screen } from "@testing-library/react";
 import 'chai';
 import { expect } from 'chai';
 import 'next/dist/server/base-http';
 import 'whatwg-fetch';
-import History from '../../components/profile/history/History';
-import HistoryItemCard from '../../components/profile/history/HistoryItemCard';
-import Message from '../../components/profile/message/Message';
-import MessageCard from '../../components/profile/message/MessageCard';
-import MessageReplyButton from '../../components/profile/message/MessageReplyButton';
-import NewMessage from '../../components/profile/message/NewMessage';
-import Profile from '../../components/profile/profile/Profile';
-import { AuthProvider } from '../../context/authContext';
 
 describe("<History>", () => {
   it("Should render the History", async () => {

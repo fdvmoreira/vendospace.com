@@ -2,15 +2,15 @@
  * @jest-environment jsdom
  */
 
+import ListingCard from '@/components/listing/ListingCard';
+import ListingItem from '@/components/listing/ListingItem';
+import { AuthProvider } from '@/context/authContext';
 import '@testing-library/jest-dom';
 import { render, screen } from "@testing-library/react";
 import 'chai';
 import { expect } from 'chai';
 import 'next/dist/server/base-http';
 import 'whatwg-fetch';
-import ListingCard from '../../components/listing/ListingCard';
-import ListingItem from '../../components/listing/ListingItem';
-import { AuthProvider } from '../../context/authContext';
 
 const space = [{
   imagesURL: [],
