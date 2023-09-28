@@ -1,7 +1,7 @@
+import RestrictedArea from "@/components/RestrictedArea";
+import { useAuth } from "@/context/authContext";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import RestrictedArea from "../../components/RestrictedArea";
-import { useAuth } from "../../context/authContext";
 
 const ListBids = () => {
   let [bids, setBids] = useState();

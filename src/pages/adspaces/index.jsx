@@ -1,11 +1,11 @@
+import RestrictedArea from "@/components/RestrictedArea";
+import SpaceCard from "@/components/space/SpaceCard";
+import { useAuth } from "@/context/authContext";
+import notify from "@/utils/notify";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
-import RestrictedArea from "../../components/RestrictedArea";
-import SpaceCard from "../../components/space/SpaceCard";
-import { useAuth } from "../../context/authContext";
-import notify from "../../utils/notify";
 
 const SpaceList = () => {
   let router = useRouter();

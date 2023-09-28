@@ -1,3 +1,5 @@
+import { useAuth } from "@/context/authContext";
+import notify from "@/utils/notify";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -5,8 +7,6 @@ import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { ToastContainer } from "react-toastify";
 import * as yup from "yup";
-import { useAuth } from "../context/authContext";
-import notify from "../utils/notify";
 
 let registerForm;
 
@@ -54,29 +54,28 @@ const Register = () => {
       <h1 className='lead text-center'>Register</h1>
       <hr />
       <form
-        onSubmit={handleSubmit( data => {
-          data['signup-method'] = 'email';
-          fetch('/auth/signup',{
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+        onSubmit={handleSubmit((data) => {
+          data["signup-method"] = "email";
+          fetch("/auth/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
           })
-          .then((data) => data.json())
-          .then(res=>{
-            notify(res.message, res.success);
-            if(res.success){
-              updateAuth({
-                isAuthenticated: res.success,
-                user: res.data,
-                token: res.token
-              });
-            
-              router.push('/');
-            }
-          })
-          .catch(console.error);
-        })}
+            .then((data) => data.json())
+            .then((res) => {
+              notify(res.message, res.success);
+              if (res.success) {
+                updateAuth({
+                  isAuthenticated: res.success,
+                  user: res.data,
+                  token: res.token,
+                });
 
+                router.push("/");
+              }
+            })
+            .catch(console.error);
+        })}
         ref={registerForm}>
         {/** Full name */}
         <div className='form-group '>
@@ -199,7 +198,7 @@ const Register = () => {
           sign in
         </Link>
       </p>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 };

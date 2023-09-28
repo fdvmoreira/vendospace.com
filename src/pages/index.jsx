@@ -1,10 +1,10 @@
+import AuctionCard from "@/components/auction/AuctionCard";
+import NewBid from "@/components/bid/NewBid";
+import ListingCard from "@/components/listing/ListingCard";
+import { useAuth } from "@/context/authContext";
 import CryptoJS from "crypto-js";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import AuctionCard from "../components/auction/AuctionCard";
-import NewBid from "../components/bid/NewBid";
-import ListingCard from "../components/listing/ListingCard";
-import { useAuth } from "../context/authContext";
 
 const AUCTIONS_PUBLIC_API = "/api/v1/auctions/public/1";
 const AUCTIONS_AUTH_API = "/api/v1/auctions";
